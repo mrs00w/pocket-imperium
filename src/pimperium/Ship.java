@@ -11,6 +11,7 @@ public class Ship {
 		
 	}
 	public void updatePosition(Hex h) {
+
 		this.position = h;
 	}
 }

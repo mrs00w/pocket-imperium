@@ -1,5 +1,6 @@
 package pimperium;
 
+import java.util.Scanner;
 import java.util.*;
 
 public class Game {
@@ -31,22 +32,52 @@ public class Game {
 		
 	}
 	public void nextRound() {
-		
+		round++;
+		int turnCard = 0;
+		for (Player p : players){
+			p.plan();
+		}
+		for (Player p : players) {
+			compareOrder(turnCard);
+			p.perform(turnCard);
+		}
+		sustainShips();
+		calculScore();
+
 	}
 	
 	public void main(String[] args) {
 		getInstance(game);
 		//Initialisation du terrain
 		game.ground = new Ground();
+		String player;
 		//Instanciation des joueurs
 		for (int i=0;i<3;i++) {
 			Player p = new Player();
+			p.setPlayerName();
 			game.players.add(p);
 		}
 		while (game.round<9 || game.players.size()!=0) {
-			game.round++;
 			game.nextRound();
 		}
+		Map<String, Integer> tableauScores = new HashMap<>();
+		for (Player p : players){
+			tableauScores.put(p.name, Integer.valueOf(p.score));
+		}
+
+		String gagnant = null;
+		int scoreMax = 0;
+
+		for (Map.Entry<String, Integer> entry : tableauScores.entrySet()) {
+			String joueur = entry.getKey();
+			int score = entry.getValue();
+
+			if (score > scoreMax) {
+				scoreMax = score;
+				gagnant = joueur;
+			}
+		}
+		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
 		//fin de partie, annoncer vainqueur
 	}
 }
