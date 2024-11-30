@@ -36,8 +36,6 @@ public class ExploreCard implements CommandCard{
 			Scanner reader = new Scanner(System.in); // Reading from System.in
 			System.out.println("Quel vaisseau voulez-vous déplacer n°" + i + " ? :");
 			int idVaisseau = reader.nextInt();
-
-			currentShip.updatePosition(hex);
 			reader.close();
 		}
 	}
