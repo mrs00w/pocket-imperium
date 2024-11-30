@@ -1,8 +1,7 @@
 package pimperium;
 
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Player {
 	public String name;
@@ -10,7 +9,8 @@ public class Player {
 	private boolean isAlive;
 	private int idPlayer;
 	private int couleurVaisseau;
-	private Set<Ship> ships;
+	private Stack<Ship> shipsHorsPlateau;
+	private Stack<Ship> shipsSurPlateau;
 //	private Set<CommandCard> cards;
 	private CommandCard [] cardOrder;
 	private ExpandCard expand;
@@ -25,17 +25,36 @@ public class Player {
 		this.name = null;
 		nombrePlayer++;
 		this.choisirCouleurVaisseau();
-		Set<Ship> ships = new HashSet<Ship>();
-		this.ships = ships;
+		Stack<Ship> ships = new Stack<>();
 		for (int i=0;i<15;i++) {
-			ships.add(new Ship());
+			ships.push(new Ship());
 		}
-		this.cardOrder = null;
+		this.shipsHorsPlateau = ships;
+		this.cardOrder = new CommandCard[3]; // Initialisation avec 3 emplacements
+		this.expand = new ExpandCard(this);
+		this.explore = new ExploreCard(this);
+		this.exterminate = new ExterminateCard(this);
 //		Set<CommandCard> cards = new HashSet<CommandCard>();
 //		cards.add(new ExpandCard());
 //		cards.add(new ExploreCard());
 //		cards.add(new ExterminateCard());
 //		this.cards = cards;
+	}
+
+	public Stack<Ship> getShipsHorsPlateau() {
+		return this.shipsHorsPlateau;
+	}
+
+	public Stack<Ship> getShipsSurPlateau() {
+		return this.shipsSurPlateau;
+	}
+
+	public CommandCard[] getCardOrder() {
+		return this.cardOrder;
+	}
+
+	public CommandCard getCard(int i) {
+		return this.cardOrder[i];
 	}
 
 	public void setPlayerName() {
@@ -64,13 +83,17 @@ public class Player {
 				cardOrder[i] = expand;
 			} else if (r.toLowerCase() == "explore") {
 				cardOrder[i] = explore;
-			} else {
+			} else if (r.equalsIgnoreCase("exterminate")) {
 				cardOrder[i] = exterminate;
+			} else {
+				System.out.println("Choix invalide. Veuillez recommencer.");
+				i--; // Refaire la même position si l'entrée est invalide
 			}
 		}
 		
 	}
-	public void perform(int i) {
-		
+	public void perform(int currentRound) {
+		cardOrder[currentRound].execute(currentRound);
 	}
+
 }

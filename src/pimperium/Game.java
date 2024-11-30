@@ -5,14 +5,21 @@ import java.util.*;
 
 public class Game {
 	private static Game game = null;
-	private Set<Player> players;
+	private List<Player> players;
 	private Ground ground;
 	private static int round = 0;
+	public CommandCard [] cardGameOrder;
 	
 	private Game(Game game) {
 		this.game = game;
-		Set<Player> setPlayers = new HashSet<Player>();
-		this.players=setPlayers;
+		// CommandCard [] cardGameOrder = {new ExpandCard(), new ExploreCard(), new ExterminateCard()};
+		this.cardGameOrder = cardGameOrder;
+        List<Player> players = new ArrayList<>();
+		this.players= players;
+	}
+
+	public List<Player> getPlayers() {
+		return this.players;
 	}
 	
 	public static Game getInstance(Game game) {
@@ -22,10 +29,12 @@ public class Game {
 		return game;
 	}
 	
-	public void compareOrder(int i) {
-		
+	public void compareOrder(int entier) {
+		players.sort(Comparator.comparingInt(player -> player.getCard(entier).getPriority()));
+		// La liste est trié pour le tour
+		// Il faut prendre en compte le cas où deux joueurs ont choisi la même carte
 	}
-	public void sustainShips() {
+		public void sustainShips() {
 		
 	}
 	public void calculScore() {
@@ -37,8 +46,8 @@ public class Game {
 		for (Player p : players){
 			p.plan();
 		}
+		compareOrder(turnCard);
 		for (Player p : players) {
-			compareOrder(turnCard);
 			p.perform(turnCard);
 		}
 		sustainShips();
@@ -78,6 +87,5 @@ public class Game {
 			}
 		}
 		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
-		//fin de partie, annoncer vainqueur
 	}
 }

@@ -10,8 +10,8 @@ public class Ship {
 	public void invadeSystem(Hex h) {
 		
 	}
-	public void updatePosition(Hex h) {
+	public void updatePosition(int idHex) {
 
-		this.position = h;
+//		this.position = h;
 	}
 }
