@@ -6,8 +6,8 @@ public class Hex {
 	private int levelSystem;
 	private boolean isTriPrime;
 	
-	public Hex(Player p, int id, int lvl, boolean tp) {
-		this.currentOccupant = p;
+	public Hex(int id, int lvl, boolean tp) {
+		this.currentOccupant = null;
 		//implémenter l'id en fonction du nombre d'Hex créés précédemment
 		this.idHex = id;
 		//Vérifier que bien compris entre 0 et 3

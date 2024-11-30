@@ -9,9 +9,11 @@ public class Game {
 	private Ground ground;
 	private static int round = 0;
 	public CommandCard [] cardGameOrder;
+	private List<Hex> hexes;
 	
 	private Game(Game game) {
 		this.game = game;
+		this.ground = ground;
 		// CommandCard [] cardGameOrder = {new ExpandCard(), new ExploreCard(), new ExterminateCard()};
 		this.cardGameOrder = cardGameOrder;
         List<Player> players = new ArrayList<>();
@@ -40,6 +42,19 @@ public class Game {
 	public void calculScore() {
 		
 	}
+
+//	public Hex getHexById(int id) {
+//		if (id >= 0 && id < ground.getHexes().size()) {
+//			hexes = ground.getHexes();
+//			return hexes.get(id);  // Retourner l'Hex à l'index correspondant à l'ID
+//		}
+//		return null;  // Retourner null si l'ID est invalide
+//	}
+
+	public Ground getGround() {
+		return ground;
+	}
+
 	public void nextRound() {
 		round++;
 		int turnCard = 0;
