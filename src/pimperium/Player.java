@@ -2,6 +2,7 @@ package pimperium;
 
 import java.util.Scanner;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player {
 	public String name;
@@ -55,6 +56,29 @@ public class Player {
 
 	public CommandCard getCard(int i) {
 		return this.cardOrder[i];
+	}
+
+	public List<Ship> findShipsByHexId(int hexId) {
+		// Filtre tous les vaisseaux correspondant à l'ID de l'Hex
+		return shipsSurPlateau.stream()
+				.filter(s -> s.getPosition() != null && s.getPosition().getIdHex() == hexId)
+				.collect(Collectors.toList());
+	}
+
+	public List<Ship> chooseShipsToMove(List<Ship> shipsInHex) {
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.println("Il y a " + shipsInHex.size() + " vaisseaux dans cet Hex.");
+		System.out.print("Combien de vaisseaux souhaitez-vous déplacer ? ");
+
+		int count = scanner.nextInt();
+		while (count < 1 || count > shipsInHex.size()) {
+			System.out.println("Nombre invalide. Veuillez choisir entre 1 et " + shipsInHex.size() + " vaisseaux.");
+			// On peut gérer cette erreur autrement par la suite
+			count = scanner.nextInt();
+		}
+
+		return shipsInHex.subList(0, count); // Retourne les n premiers vaisseaux choisis
 	}
 
 	public void setPlayerName() {

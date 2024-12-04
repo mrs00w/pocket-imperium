@@ -37,7 +37,8 @@ public class ExpandCard implements CommandCard{
 			Scanner reader = new Scanner(System.in); // Reading from System.in
 			System.out.println("Où voulez-vous placer votre vaisseau n°" + i + " :");
 			int hex = reader.nextInt();
-			currentShip.updatePosition(hex);
+			currentShip.updatePosition(game.getGround().getHexById(hex));
+			// Introduire condition : seulement 2 Hex
 			reader.close();
 		}
 

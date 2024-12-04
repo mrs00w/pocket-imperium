@@ -16,9 +16,7 @@ public class Ship {
 
 	}
 
-	public void updatePosition(int idHex) {
-		Hex targetHex = Game.getInstance(null).getGround().getHexById(idHex);
-
+	public void updatePosition(Hex h) {
 //		this.position = h;
 	}
 
