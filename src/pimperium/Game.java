@@ -8,35 +8,42 @@ public class Game {
 	private List<Player> players;
 	private Ground ground;
 	private static int round = 0;
-	public CommandCard [] cardGameOrder;
+	public CommandCard[] cardGameOrder;
 	private List<Hex> hexes;
 	
 	private Game(Game game) {
 		this.game = game;
-		this.ground = ground;
-		// CommandCard [] cardGameOrder = {new ExpandCard(), new ExploreCard(), new ExterminateCard()};
-		this.cardGameOrder = cardGameOrder;
+		this.ground = new Ground();
+		// CommandCard[] cardGameOrder = {new ExpandCard(), new ExploreCard(), new ExterminateCard()};
+		//this.cardGameOrder = cardGameOrder;
+		//j'ai mis la ligne du dessus en com car on
         List<Player> players = new ArrayList<>();
 		this.players= players;
 	}
 
-	public List<Player> getPlayers() {
-		return this.players;
-	}
-	
 	public static Game getInstance(Game game) {
 		if (game==null) {
 			game = new Game(game);
 		}
 		return game;
 	}
-	
-	public void compareOrder(int entier) {
-		players.sort(Comparator.comparingInt(player -> player.getCard(entier).getPriority()));
+
+	public List<Player> getPlayers() {
+		return this.players;
+	}
+
+	public Ground getGround() { return ground; }
+
+	public List<Player> compareOrder(int indiceCard) {
+		List<Player> copie = new List<Player>(players);
+		return copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+		//Est-ce que c'est player ? Player ? copie ?
+
 		// La liste est trié pour le tour
 		// Il faut prendre en compte le cas où deux joueurs ont choisi la même carte
 	}
-		public void sustainShips() {
+
+	public void sustainShips() {
 		
 	}
 	public void calculScore() {
@@ -51,19 +58,16 @@ public class Game {
 //		return null;  // Retourner null si l'ID est invalide
 //	}
 
-	public Ground getGround() {
-		return ground;
-	}
-
 	public void nextRound() {
 		round++;
-		int turnCard = 0;
 		for (Player p : players){
 			p.plan();
 		}
-		compareOrder(turnCard);
-		for (Player p : players) {
-			p.perform(turnCard);
+		for (int iCard = 0; iCard<3; iCard++) {
+			copie = compareOrder(iCard);
+			for (Player p : copie) {
+				p.perform(iCard);
+			}
 		}
 		sustainShips();
 		calculScore();
@@ -81,7 +85,7 @@ public class Game {
 			p.setPlayerName();
 			game.players.add(p);
 		}
-		while (game.round<9 || game.players.size()!=0) {
+		while (game.round<9 || game.players.size()!=1) {
 			game.nextRound();
 		}
 		Map<String, Integer> tableauScores = new HashMap<>();
