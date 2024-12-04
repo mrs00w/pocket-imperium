@@ -11,30 +11,22 @@ public class Player {
 	private int idPlayer;
 	private int couleurVaisseau;
 	private Stack<Ship> shipsHorsPlateau;
-	private Stack<Ship> shipsSurPlateau;
+	private List<Ship> shipsSurPlateau;
 //	private Set<CommandCard> cards;
 	private CommandCard [] cardOrder;
-	private ExpandCard expand;
-	private ExploreCard explore;
-	private ExterminateCard exterminate;
-	public int score = 0;
+	public int score;
 	
 	public Player() {
 		this.isAlive = true;
-		this.score = score;
+		this.score = 0;
 		this.idPlayer = nombrePlayer;
-		this.name = null;
 		nombrePlayer++;
+		this.name = "Player"+nombrePlayer;
 		this.choisirCouleurVaisseau();
-		Stack<Ship> ships = new Stack<>();
+		this.shipsHorsPlateau = new Stack<Ships>();
 		for (int i=0;i<15;i++) {
-			ships.push(new Ship());
+			shipsHorsPlateau.push(new Ship());
 		}
-		this.shipsHorsPlateau = ships;
-		this.cardOrder = new CommandCard[3]; // Initialisation avec 3 emplacements
-		this.expand = new ExpandCard(this);
-		this.explore = new ExploreCard(this);
-		this.exterminate = new ExterminateCard(this);
 //		Set<CommandCard> cards = new HashSet<CommandCard>();
 //		cards.add(new ExpandCard());
 //		cards.add(new ExploreCard());
@@ -46,7 +38,7 @@ public class Player {
 		return this.shipsHorsPlateau;
 	}
 
-	public Stack<Ship> getShipsSurPlateau() {
+	public List<Ship> getShipsSurPlateau() {
 		return this.shipsSurPlateau;
 	}
 
@@ -116,6 +108,7 @@ public class Player {
 		}
 		
 	}
+
 	public void perform(int currentRound) {
 		cardOrder[currentRound].execute(currentRound);
 	}

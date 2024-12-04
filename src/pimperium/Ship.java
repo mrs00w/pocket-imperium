@@ -1,15 +1,11 @@
 package pimperium;
 
 public class Ship {
-	private int positionHex;
 	private Hex position;
-	private Player player;
 
 	public Ship() {
 		//début partie, ship en dehors du terrain de jeu
 		this.position = null;
-		this.positionHex = 0;
-		this.player = player;
 	}
 
 	public void invadeSystem(Hex h) {
