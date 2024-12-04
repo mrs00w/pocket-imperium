@@ -16,13 +16,14 @@ public class Game {
 		this.ground = new Ground();
 		// CommandCard[] cardGameOrder = {new ExpandCard(), new ExploreCard(), new ExterminateCard()};
 		//this.cardGameOrder = cardGameOrder;
-		//j'ai mis la ligne du dessus en com car on
+		//j'ai mis la ligne du dessus en com car on fait ça ailleurs dans joueur
         List<Player> players = new ArrayList<>();
 		this.players= players;
 	}
 
 	public static Game getInstance(Game game) {
 		if (game==null) {
+			System.out.println();
 			game = new Game(game);
 		}
 		return game;
@@ -85,26 +86,26 @@ public class Game {
 			p.setPlayerName();
 			game.players.add(p);
 		}
-		while (game.round<9 || game.players.size()!=1) {
-			game.nextRound();
-		}
-		Map<String, Integer> tableauScores = new HashMap<>();
-		for (Player p : players){
-			tableauScores.put(p.name, Integer.valueOf(p.score));
-		}
-
-		String gagnant = null;
-		int scoreMax = 0;
-
-		for (Map.Entry<String, Integer> entry : tableauScores.entrySet()) {
-			String joueur = entry.getKey();
-			int score = entry.getValue();
-
-			if (score > scoreMax) {
-				scoreMax = score;
-				gagnant = joueur;
-			}
-		}
-		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
+//		while (game.round<9 || game.players.size()!=1) {
+//			game.nextRound();
+//		}
+//		Map<String, Integer> tableauScores = new HashMap<>();
+//		for (Player p : players){
+//			tableauScores.put(p.name, Integer.valueOf(p.score));
+//		}
+//
+//		String gagnant = null;
+//		int scoreMax = 0;
+//
+//		for (Map.Entry<String, Integer> entry : tableauScores.entrySet()) {
+//			String joueur = entry.getKey();
+//			int score = entry.getValue();
+//
+//			if (score > scoreMax) {
+//				scoreMax = score;
+//				gagnant = joueur;
+//			}
+//		}
+//		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
 	}
 }
