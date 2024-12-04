@@ -1,6 +1,5 @@
 package pimperium;
 
-import java.util.Scanner;
 import java.util.*;
 
 public class Game {
@@ -8,7 +7,6 @@ public class Game {
 	private List<Player> players;
 	private Ground ground;
 	private static int round = 0;
-	public CommandCard[] cardGameOrder;
 	private List<Hex> hexes;
 	
 	private Game(Game game) {
@@ -36,8 +34,9 @@ public class Game {
 	public Ground getGround() { return ground; }
 
 	public List<Player> compareOrder(int indiceCard) {
-		List<Player> copie = new List<Player>(players);
-		return copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+		List<Player> copie = new ArrayList<>(players);
+		copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+		return copie;
 		//Est-ce que c'est player ? Player ? copie ?
 
 		// La liste est trié pour le tour

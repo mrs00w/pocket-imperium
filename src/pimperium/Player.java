@@ -12,7 +12,8 @@ public class Player {
 	private Stack<Ship> shipsHorsPlateau;
 	private List<Ship> shipsSurPlateau;
 //	private Set<CommandCard> cards;
-	private CommandCard [] cardOrder;
+	private CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
+	private CommandCard[] cardOrder;
 	public int score;
 	
 	public Player() {
@@ -20,9 +21,10 @@ public class Player {
 		this.score = 0;
 		this.idPlayer = nombrePlayer;
 		nombrePlayer++;
-		this.name = "Player"+nombrePlayer;
+		this.name = "Player" + nombrePlayer;
 		this.choisirCouleurVaisseau();
-		this.shipsHorsPlateau = new Stack<Ships>();
+		this.cardOrder = new CommandCard[3];
+		this.shipsHorsPlateau = new Stack<Ship>();
 		for (int i=0;i<15;i++) {
 			shipsHorsPlateau.push(new Ship());
 		}
@@ -42,11 +44,11 @@ public class Player {
 	}
 
 	public CommandCard[] getCardOrder() {
-		return this.cardOrder;
+		return this.commandCards;
 	}
 
 	public CommandCard getCard(int i) {
-		return this.cardOrder[i];
+		return this.commandCards[i];
 	}
 
 	public void setPlayerName() {
@@ -72,17 +74,17 @@ public class Player {
 			String r = reader.next();
 			// L'ordre est à surveiller, il y a souvent des erreurs de ce côté là
 			if (r.toLowerCase() == "expand") {
-				cardOrder[i] = expand;
+				cardOrder[i] = commandCards[0];
 			} else if (r.toLowerCase() == "explore") {
-				cardOrder[i] = explore;
+				cardOrder[i] = commandCards[1];
 			} else if (r.equalsIgnoreCase("exterminate")) {
-				cardOrder[i] = exterminate;
+				cardOrder[i] = commandCards[2];
 			} else {
 				System.out.println("Choix invalide. Veuillez recommencer.");
 				i--; // Refaire la même position si l'entrée est invalide
 			}
 		}
-		
+
 	}
 
 	public void perform(int currentRound) {
