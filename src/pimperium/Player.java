@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.*;
 
 public class Player {
-	public String name;
+	private String name;
 	private static int nombrePlayer = 0;
 	private boolean isAlive;
 	private int idPlayer;
@@ -14,7 +14,7 @@ public class Player {
 //	private Set<CommandCard> cards;
 	private CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
 	private CommandCard[] cardOrder;
-	public int score;
+	private int score;
 	
 	public Player() {
 		this.isAlive = true;
@@ -23,11 +23,13 @@ public class Player {
 		nombrePlayer++;
 		this.name = "Player" + nombrePlayer;
 		this.choisirCouleurVaisseau();
-		this.cardOrder = new CommandCard[3];
-		this.shipsHorsPlateau = new Stack<Ship>();
-		for (int i=0;i<15;i++) {
-			shipsHorsPlateau.push(new Ship());
-		}
+		//this.cardOrder = new CommandCard[3];
+		//this.shipsHorsPlateau = new Stack<Ship>();
+//		for (int i=0;i<15;i++) {
+//			shipsHorsPlateau.push(new Ship());
+//		}
+		//le temps des tests
+
 //		Set<CommandCard> cards = new HashSet<CommandCard>();
 //		cards.add(new ExpandCard());
 //		cards.add(new ExploreCard());
@@ -91,4 +93,8 @@ public class Player {
 		cardOrder[currentRound].execute(currentRound);
 	}
 
+	@Override
+	public String toString() {
+		return "Player name : "+name;
+	}
 }

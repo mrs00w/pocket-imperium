@@ -31,15 +31,16 @@ public class ExpandCard implements CommandCard{
 			default -> 1; // Si expandCount est autre chose, on retourne 1
 		};
 
-		for (int i=0; i < shipsToMove; i++) {
-			Ship currentShip = player.getShipsHorsPlateau().pop();
-			player.getShipsSurPlateau().push(currentShip);
-			Scanner reader = new Scanner(System.in); // Reading from System.in
-			System.out.println("Où voulez-vous placer votre vaisseau n°" + i + " :");
-			int hex = reader.nextInt();
-			currentShip.updatePosition(hex);
-			reader.close();
-		}
+//		for (int i=0; i < shipsToMove; i++) {
+//			Ship currentShip = player.getShipsHorsPlateau().pop();
+//			player.getShipsSurPlateau().push(currentShip);
+//			Scanner reader = new Scanner(System.in); // Reading from System.in
+//			System.out.println("Où voulez-vous placer votre vaisseau n°" + i + " :");
+//			int hex = reader.nextInt();
+//			currentShip.updatePosition(hex);
+//			reader.close();
+//		}
+		//en commentaires pour tests
 
 	}
 }

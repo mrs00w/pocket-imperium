@@ -1,4 +1,4 @@
-package com.example.pocketimperium;
+package main.java.com.example.pocketimperium;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

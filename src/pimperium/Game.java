@@ -64,7 +64,7 @@ public class Game {
 			p.plan();
 		}
 		for (int iCard = 0; iCard<3; iCard++) {
-			copie = compareOrder(iCard);
+			List<Player> copie = compareOrder(iCard);
 			for (Player p : copie) {
 				p.perform(iCard);
 			}
@@ -74,17 +74,22 @@ public class Game {
 
 	}
 	
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		getInstance(game);
+		System.out.println("Création de la partie");
 		//Initialisation du terrain
 		game.ground = new Ground();
-		String player;
+		System.out.println("Création du terrain");
+//		String player;
 		//Instanciation des joueurs
 		for (int i=0;i<3;i++) {
 			Player p = new Player();
 			p.setPlayerName();
 			game.players.add(p);
 		}
+        for (Player player : game.players) {
+            System.out.println(player.toString());
+        }
 //		while (game.round<9 || game.players.size()!=1) {
 //			game.nextRound();
 //		}
@@ -106,5 +111,6 @@ public class Game {
 //			}
 //		}
 //		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
+
 	}
 }

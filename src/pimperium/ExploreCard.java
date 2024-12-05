@@ -31,7 +31,7 @@ public class ExploreCard implements CommandCard{
 			default -> 1; // Si exploreCount est autre chose, on retourne 1
 		};
 
-		Stack<Ship> currentShips = player.getShipsSurPlateau();
+		//Stack<Ship> currentShips = player.getShipsSurPlateau();
 		for (int i=0; i < shipsToMove; i++) {
 			Scanner reader = new Scanner(System.in); // Reading from System.in
 			System.out.println("Quel vaisseau voulez-vous déplacer n°" + i + " ? :");
