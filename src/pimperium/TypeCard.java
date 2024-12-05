@@ -1,5 +1,5 @@
 package pimperium;
 
 public enum TypeCard {
-	CENTRALE, lATERALE, AUTRE
+	CENTRALE, lATERALE, AUTRE;
 }

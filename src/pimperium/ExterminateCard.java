@@ -1,8 +1,9 @@
 package pimperium;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ExterminateCard implements CommandCard{
+public class ExterminateCard implements CommandCard {
 
 	private Player player;
 
@@ -19,16 +20,17 @@ public class ExterminateCard implements CommandCard{
 
 	}
 
-	public void invade(ArrayList<Ship> ships, int idhex) {
-		Game game = Game.getInstance(null);
+	public void invade(List<Ship> ships, int idhex) {
+		Game game = Game.getInstance();
 		Hex hexToGo = game.getGround().getHexById(idhex);
 		// Prendre en compte le fait que le Hex ne doit pas appartenir au joueur
-		if (hexToGo.getCurrentOccupant() == "") {
-
-		}
+//		if (hexToGo.getCurrentOccupant().equals()) {
+//			// Regarder parmi les voisins du Hex
 	}
+//
 
-	public void execute(int currentRound) {
-
+		public void execute(int currentRound) {
+			System.out.println(player.name + " envahit un système"); // Pour le débuggage
+//			invade(player.getShipsSurPlateau(), currentRound);
 	}
 }

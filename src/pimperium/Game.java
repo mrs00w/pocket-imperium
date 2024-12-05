@@ -1,6 +1,5 @@
 package pimperium;
 
-import java.util.Scanner;
 import java.util.*;
 
 public class Game {
@@ -14,14 +13,11 @@ public class Game {
 	private Game(Game game) {
 		this.game = game;
 		this.ground = new Ground();
-		// CommandCard[] cardGameOrder = {new ExpandCard(), new ExploreCard(), new ExterminateCard()};
-		//this.cardGameOrder = cardGameOrder;
-		//j'ai mis la ligne du dessus en com car on fait ça ailleurs dans joueur
         List<Player> players = new ArrayList<>();
 		this.players= players;
 	}
 
-	public static Game getInstance(Game game) {
+	public static Game getInstance() {
 		if (game==null) {
 			System.out.println();
 			game = new Game(game);
@@ -36,8 +32,9 @@ public class Game {
 	public Ground getGround() { return ground; }
 
 	public List<Player> compareOrder(int indiceCard) {
-		List<Player> copie = new List<Player>(players);
-		return copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+		List<Player> copie = new ArrayList<>(players);
+		copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+		return copie;
 		//Est-ce que c'est player ? Player ? copie ?
 
 		// La liste est trié pour le tour
@@ -51,22 +48,18 @@ public class Game {
 		
 	}
 
-//	public Hex getHexById(int id) {
-//		if (id >= 0 && id < ground.getHexes().size()) {
-//			hexes = ground.getHexes();
-//			return hexes.get(id);  // Retourner l'Hex à l'index correspondant à l'ID
-//		}
-//		return null;  // Retourner null si l'ID est invalide
-//	}
-
 	public void nextRound() {
 		round++;
 		for (Player p : players){
+			System.out.println("Le joueur " + p.name + " planifie son tour");
 			p.plan();
 		}
 		for (int iCard = 0; iCard<3; iCard++) {
-			copie = compareOrder(iCard);
+			List<Player> copie = compareOrder(iCard);
 			for (Player p : copie) {
+				// Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
+				// Expand en premier
+				// Il faut aussi prendre en compte l'ordre des cartes.
 				p.perform(iCard);
 			}
 		}
@@ -75,20 +68,20 @@ public class Game {
 
 	}
 	
-	public void main(String[] args) {
-		getInstance(game);
+	public static void main(String[] args) {
+		Game game = Game.getInstance();
 		//Initialisation du terrain
 		game.ground = new Ground();
 		String player;
 		//Instanciation des joueurs
 		for (int i=0;i<3;i++) {
 			Player p = new Player();
-			p.setPlayerName();
+//			p.setPlayerName(); // Débuggage
 			game.players.add(p);
 		}
-//		while (game.round<9 || game.players.size()!=1) {
-//			game.nextRound();
-//		}
+		while (game.round<9 || game.players.size()!=1) {
+			game.nextRound();
+		}
 //		Map<String, Integer> tableauScores = new HashMap<>();
 //		for (Player p : players){
 //			tableauScores.put(p.name, Integer.valueOf(p.score));

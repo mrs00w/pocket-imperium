@@ -34,6 +34,7 @@ public class Hex {
 	}
 
 	public List<Hex> getNeightbors() {
+
 		return neighbors;
 	}
 }

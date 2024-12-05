@@ -11,10 +11,11 @@ public class Player {
 	private int idPlayer;
 	private int couleurVaisseau;
 	private Stack<Ship> shipsHorsPlateau;
-	private List<Ship> shipsSurPlateau;
+	private List<Ship> shipsSurPlateau = new ArrayList<Ship>();
 //	private Set<CommandCard> cards;
 	private CommandCard [] cardOrder;
 	public int score;
+	private CommandCard[] commandCards;
 	
 	public Player() {
 		this.isAlive = true;
@@ -23,10 +24,13 @@ public class Player {
 		nombrePlayer++;
 		this.name = "Player"+nombrePlayer;
 		this.choisirCouleurVaisseau();
-		this.shipsHorsPlateau = new Stack<Ships>();
+		this.shipsHorsPlateau = new Stack<Ship>();
 		for (int i=0;i<15;i++) {
-			shipsHorsPlateau.push(new Ship());
+			shipsHorsPlateau.push(new Ship(this));
 		}
+		CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
+		this.commandCards = commandCards;
+		this.cardOrder = new CommandCard[3];
 //		Set<CommandCard> cards = new HashSet<CommandCard>();
 //		cards.add(new ExpandCard());
 //		cards.add(new ExploreCard());
@@ -68,6 +72,7 @@ public class Player {
 			System.out.println("Nombre invalide. Veuillez choisir entre 1 et " + shipsInHex.size() + " vaisseaux.");
 			// On peut gérer cette erreur autrement par la suite
 			count = scanner.nextInt();
+//			scanner.close();
 		}
 
 		return shipsInHex.subList(0, count); // Retourne les n premiers vaisseaux choisis
@@ -77,7 +82,7 @@ public class Player {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
 		System.out.println("Enter a player name: ");
 		this.name = reader.next(); // Scans the next token of the input as an int
-		reader.close();
+//		reader.close();
 	}
 	
 	public void choisirCouleurVaisseau() {
@@ -92,15 +97,16 @@ public class Player {
 	public void plan() {
 		for (int i=0; i<3; i++) {
 			Scanner reader = new Scanner(System.in); // Reading from System.in
-			System.out.println("Quelle carte voulez-vous jouez en" + i + "(Expand, Explore ou Exterminate) :");
+			System.out.println("Quelle carte voulez-vous jouez en " + i + "(Expand, Explore ou Exterminate) :");
 			String r = reader.next();
+//			reader.close();
 			// L'ordre est à surveiller, il y a souvent des erreurs de ce côté là
-			if (r.toLowerCase() == "expand") {
-				cardOrder[i] = expand;
-			} else if (r.toLowerCase() == "explore") {
-				cardOrder[i] = explore;
+			if (r.equalsIgnoreCase("expand")) {
+				cardOrder[i] = commandCards[0];
+			} else if (r.equalsIgnoreCase("explore")) {
+				cardOrder[i] = commandCards[1];
 			} else if (r.equalsIgnoreCase("exterminate")) {
-				cardOrder[i] = exterminate;
+				cardOrder[i] = commandCards[2];
 			} else {
 				System.out.println("Choix invalide. Veuillez recommencer.");
 				i--; // Refaire la même position si l'entrée est invalide
@@ -110,6 +116,9 @@ public class Player {
 	}
 
 	public void perform(int currentRound) {
+		// Il faut aussi prendre en compte l'ordre dans lequel les joueurs doivent jouer les cartes ici et regarder si
+		// d'autres joueurs ont joué cette carte.
+
 		cardOrder[currentRound].execute(currentRound);
 	}
 
