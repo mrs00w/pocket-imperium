@@ -1,5 +1,6 @@
 package pimperium;
 
+import java.util.Scanner;
 import java.util.*;
 
 public class Game {
@@ -63,19 +64,23 @@ public class Game {
 //	}
 
 	public void nextRound() {
-		this.round++;/*
+		round++;
 		for (Player p : players){
+			System.out.println("Le joueur " + p.name + " planifie son tour");
 			p.plan();
 		}
 		for (int iCard = 0; iCard<3; iCard++) {
 			List<Player> copie = compareOrder(iCard);
 			for (Player p : copie) {
+				// Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
+				// Expand en premier
+				// Il faut aussi prendre en compte l'ordre des cartes.
 				p.perform(iCard);
 			}
 		}
 		sustainShips();
 		calculScore();
-*/
+
 	}
 	
 	public static void main(String[] args) {
@@ -88,8 +93,10 @@ public class Game {
 		//Instanciation des joueurs
 		for (int i=0;i<3;i++) {
 			Player p = new Player();
+//			p.setPlayerName(); // Débuggage
 			game.players.add(p);
 		}
+        //On lit l'ensemble des joueurs pour vérifier qu'ils ont bien été créés
         for (Player player : game.players) {
             System.out.println(player.toString());
         }
@@ -115,7 +122,5 @@ public class Game {
 //			}
 //		}
 //		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
-		System.out.println("Fin de la partie");
-
 	}
 }

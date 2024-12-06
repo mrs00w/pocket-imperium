@@ -2,6 +2,7 @@ package pimperium;
 
 import java.util.Scanner;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Player {
 	private String name;
@@ -10,29 +11,25 @@ public class Player {
 	private int idPlayer;
 	private int couleurVaisseau;
 	private Stack<Ship> shipsHorsPlateau;
-	private List<Ship> shipsSurPlateau;
+	private List<Ship> shipsSurPlateau = new ArrayList<Ship>();
 //	private Set<CommandCard> cards;
 	private CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
 	private CommandCard[] cardOrder;
 	private int score;
-	
+
 	public Player() {
 		this.isAlive = true;
 		this.score = 0;
 		this.idPlayer = nombrePlayer;
 		nombrePlayer++;
-		this.name = "Player" + nombrePlayer;
-		this.couleurVaisseau = this.idPlayer;
-		//this.choisirCouleurVaisseau();
-		//imposer la couleur aux joueurs finalement
+		this.name = "Player"+nombrePlayer;
+        //this.choisirCouleurVaisseau();
+        //imposer la couleur aux joueurs finalement
 
-		//this.cardOrder = new CommandCard[3];
-		//this.shipsHorsPlateau = new Stack<Ship>();
-//		for (int i=0;i<15;i++) {
-//			shipsHorsPlateau.push(new Ship());
-//		}
-		//le temps des tests
-
+        this.shipsHorsPlateau = new Stack<Ship>();
+		for (int i=0;i<15;i++) {
+			shipsHorsPlateau.push(new Ship(this));
+		}
 //		Set<CommandCard> cards = new HashSet<CommandCard>();
 //		cards.add(new ExpandCard());
 //		cards.add(new ExploreCard());
@@ -49,11 +46,35 @@ public class Player {
 	}
 
 	public CommandCard[] getCardOrder() {
-		return this.commandCards;
+		return this.cardOrder;
 	}
 
 	public CommandCard getCard(int i) {
-		return this.commandCards[i];
+		return this.cardOrder[i];
+	}
+
+	public List<Ship> findShipsByHexId(int hexId) {
+		// Filtre tous les vaisseaux correspondant à l'ID de l'Hex
+		return shipsSurPlateau.stream()
+				.filter(s -> s.getPosition() != null && s.getPosition().getIdHex() == hexId)
+				.collect(Collectors.toList());
+	}
+
+	public List<Ship> chooseShipsToMove(List<Ship> shipsInHex) {
+		Scanner scanner = new Scanner(System.in);
+
+		System.out.println("Il y a " + shipsInHex.size() + " vaisseaux dans cet Hex.");
+		System.out.print("Combien de vaisseaux souhaitez-vous déplacer ? ");
+
+		int count = scanner.nextInt();
+		while (count < 1 || count > shipsInHex.size()) {
+			System.out.println("Nombre invalide. Veuillez choisir entre 1 et " + shipsInHex.size() + " vaisseaux.");
+			// On peut gérer cette erreur autrement par la suite
+			count = scanner.nextInt();
+//			scanner.close();
+		}
+
+		return shipsInHex.subList(0, count); // Retourne les n premiers vaisseaux choisis
 	}
 
 	public void setPlayerName() {
@@ -75,24 +96,28 @@ public class Player {
 	public void plan() {
 		for (int i=0; i<3; i++) {
 			Scanner reader = new Scanner(System.in); // Reading from System.in
-			System.out.println("Quelle carte voulez-vous jouez en" + i + "(Expand, Explore ou Exterminate) :");
+			System.out.println("Quelle carte voulez-vous jouez en " + i + "(Expand, Explore ou Exterminate) :");
 			String r = reader.next();
+//			reader.close();
 			// L'ordre est à surveiller, il y a souvent des erreurs de ce côté là
-			if (r.toLowerCase() == "expand") {
+			if (r.equalsIgnoreCase("expand")) {
 				cardOrder[i] = commandCards[0];
-			} else if (r.toLowerCase() == "explore") {
+			} else if (r.equalsIgnoreCase("explore")) {
 				cardOrder[i] = commandCards[1];
 			} else if (r.equalsIgnoreCase("exterminate")) {
-				cardOrder[i] = commandCards[2];
+                cardOrder[i] = commandCards[2];
 			} else {
 				System.out.println("Choix invalide. Veuillez recommencer.");
 				i--; // Refaire la même position si l'entrée est invalide
 			}
 		}
-
+		
 	}
 
 	public void perform(int currentRound) {
+		// Il faut aussi prendre en compte l'ordre dans lequel les joueurs doivent jouer les cartes ici et regarder si
+		// d'autres joueurs ont joué cette carte.
+
 		cardOrder[currentRound].execute(currentRound);
 	}
 
