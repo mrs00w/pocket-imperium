@@ -22,7 +22,10 @@ public class Player {
 		this.idPlayer = nombrePlayer;
 		nombrePlayer++;
 		this.name = "Player" + nombrePlayer;
-		this.choisirCouleurVaisseau();
+		this.couleurVaisseau = this.idPlayer;
+		//this.choisirCouleurVaisseau();
+		//imposer la couleur aux joueurs finalement
+
 		//this.cardOrder = new CommandCard[3];
 		//this.shipsHorsPlateau = new Stack<Ship>();
 //		for (int i=0;i<15;i++) {

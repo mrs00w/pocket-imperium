@@ -33,6 +33,10 @@ public class Game {
 
 	public Ground getGround() { return ground; }
 
+	public static int getRound() {
+		return round;
+	}
+
 	public List<Player> compareOrder(int indiceCard) {
 		List<Player> copie = new ArrayList<>(players);
 		copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
@@ -59,7 +63,7 @@ public class Game {
 //	}
 
 	public void nextRound() {
-		round++;
+		this.round++;/*
 		for (Player p : players){
 			p.plan();
 		}
@@ -71,11 +75,11 @@ public class Game {
 		}
 		sustainShips();
 		calculScore();
-
+*/
 	}
 	
 	public static void main(String[] args) {
-		getInstance(game);
+		game = getInstance(game);
 		System.out.println("Création de la partie");
 		//Initialisation du terrain
 		game.ground = new Ground();
@@ -84,15 +88,15 @@ public class Game {
 		//Instanciation des joueurs
 		for (int i=0;i<3;i++) {
 			Player p = new Player();
-			p.setPlayerName();
 			game.players.add(p);
 		}
         for (Player player : game.players) {
             System.out.println(player.toString());
         }
-//		while (game.round<9 || game.players.size()!=1) {
-//			game.nextRound();
-//		}
+
+		while ((getRound() < 9) && (game.players.size() != 1)) {
+			game.nextRound();
+		}
 //		Map<String, Integer> tableauScores = new HashMap<>();
 //		for (Player p : players){
 //			tableauScores.put(p.name, Integer.valueOf(p.score));
@@ -111,6 +115,7 @@ public class Game {
 //			}
 //		}
 //		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
+		System.out.println("Fin de la partie");
 
 	}
 }

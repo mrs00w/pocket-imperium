@@ -1,5 +1,6 @@
 package pimperium;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ground {
@@ -9,6 +10,7 @@ public class Ground {
 	
 	public Ground() {
 		//Mise en place du terrain au moment de l'initialisation
+		List<Hex> hexes = new ArrayList<>();
 		for (int i=0;i<23;i++) {
 			hexes.add(new Hex(i, 0, false));
 		}
