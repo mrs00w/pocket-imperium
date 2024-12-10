@@ -17,7 +17,7 @@ public class ExpandCard implements CommandCard{
 	}
 
 	public void execute(int currentRound) {
-		System.out.println(player.name + " ajoute de nouveaux vaisseaux sur le plateau");
+		System.out.println(player.getName() + " ajoute de nouveaux vaisseaux sur le plateau");
 //		Game game = Game.getInstance();
 //		List<Player> players = new ArrayList<>(game.getPlayers());
 //		List<Player> expandPlayers = players.stream()

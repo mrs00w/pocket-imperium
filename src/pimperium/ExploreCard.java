@@ -17,7 +17,7 @@ public class ExploreCard implements CommandCard{
 	}
 
 	public void execute(int currentRound) {
-		System.out.println(player.name + " explore d'autres systèmes avec ses vaisseaux");
+		System.out.println(player.getName() + " explore d'autres systèmes avec ses vaisseaux");
 //		Game game = Game.getInstance();
 //		List<Player> players = new ArrayList<>(game.getPlayers());
 //		List<Player> explorePlayers = players.stream()

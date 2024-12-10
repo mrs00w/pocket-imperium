@@ -53,6 +53,8 @@ public class Player {
 		return this.cardOrder[i];
 	}
 
+	public String getName(){return this.name;}
+
 	public List<Ship> findShipsByHexId(int hexId) {
 		// Filtre tous les vaisseaux correspondant à l'ID de l'Hex
 		return shipsSurPlateau.stream()

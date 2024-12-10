@@ -13,16 +13,13 @@ public class Game {
 	private Game(Game game) {
 		this.game = game;
 		this.ground = new Ground();
-		// CommandCard[] cardGameOrder = {new ExpandCard(), new ExploreCard(), new ExterminateCard()};
-		//this.cardGameOrder = cardGameOrder;
-		//j'ai mis la ligne du dessus en com car on fait ça ailleurs dans joueur
         List<Player> players = new ArrayList<>();
 		this.players= players;
 	}
 
-	public static Game getInstance(Game game) {
+	public static Game getInstance() {
 		if (game==null) {
-			System.out.println();
+			System.out.println("Création d'une partie");
 			game = new Game(game);
 		}
 		return game;
@@ -66,7 +63,7 @@ public class Game {
 	public void nextRound() {
 		round++;
 		for (Player p : players){
-			System.out.println("Le joueur " + p.name + " planifie son tour");
+			System.out.println("Le joueur " + p.getName() + " planifie son tour");
 			p.plan();
 		}
 		for (int iCard = 0; iCard<3; iCard++) {
@@ -84,7 +81,7 @@ public class Game {
 	}
 	
 	public static void main(String[] args) {
-		game = getInstance(game);
+		Game game = getInstance();
 		System.out.println("Création de la partie");
 		//Initialisation du terrain
 		game.ground = new Ground();
