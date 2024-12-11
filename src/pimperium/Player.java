@@ -23,6 +23,7 @@ public class Player {
 		this.idPlayer = nombrePlayer;
 		nombrePlayer++;
 		this.name = "Player"+nombrePlayer;
+		this.cardOrder = new CommandCard[3];
         //this.choisirCouleurVaisseau();
         //imposer la couleur aux joueurs finalement
 
@@ -30,11 +31,6 @@ public class Player {
 		for (int i=0;i<15;i++) {
 			shipsHorsPlateau.push(new Ship(this));
 		}
-//		Set<CommandCard> cards = new HashSet<CommandCard>();
-//		cards.add(new ExpandCard());
-//		cards.add(new ExploreCard());
-//		cards.add(new ExterminateCard());
-//		this.cards = cards;
 	}
 
 	public Stack<Ship> getShipsHorsPlateau() {
