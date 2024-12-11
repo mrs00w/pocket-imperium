@@ -110,8 +110,27 @@ public class Game {
 		}
 
 		// Sélectionner un hex disponible pour le placement
+		
+		Scanner reader = new Scanner(System.in);
+		Hex targetHex;
+		// Il faut mettre des do partout pour permettre aux joueurs de refaire leurs actions
+		do {
+			System.out.println("Où voulez-vous placer vos vaisseaux ? (Entrez l'ID d'un Hex disponible)");
+			int idHex = reader.nextInt();
 
-		Hex targetHex = availableHexes.getFirst(); // Il faut ajouter la logique de choix là
+			targetHex = availableHexes.stream()
+					.filter(hex -> hex.getIdHex() == idHex)
+					.findFirst()
+					.orElse(null);
+
+			if (targetHex == null) {
+				System.out.println("Erreur : Aucun Hex disponible avec cet ID. Réessayez.");
+			}
+		} while (targetHex == null);
+
+// Une fois sorti, targetHex est valide
+		
+		System.out.println("Hex sélectionné : " + targetHex);
 
 		// Place 2 vaisseaux du joueur
 		List<Ship> shipsToDeploy = player.getShipsHorsPlateau().stream()
@@ -164,6 +183,7 @@ public class Game {
 		game.getGround().setupGround(); // En vrai on peut tout mettre dans le constructeur direct
 		System.out.println("Initialisation du terrain");
 		game.initialShipDeployment();
+		System.out.println("On place les vaisseaux pour commencer");
 //		String player;
 		//Instanciation des joueurs
 		for (int i = 0; i < 3; i++) {
