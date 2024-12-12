@@ -2,7 +2,6 @@ package pimperium;
 
 import java.util.Scanner;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game {
 	private static Game game = null;
@@ -38,12 +37,9 @@ public class Game {
 
 	public List<Player> compareOrder(int indiceCard) {
 		List<Player> copie = new ArrayList<>(players);
-		copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+		copie.sort(Comparator.comparingInt((Player player) -> player.getCard(indiceCard).getPriority())
+				.thenComparingInt(Player::getPriority)); // Comparer la priorité des joueurs en cas d'égalité);
 		return copie;
-		//Est-ce que c'est player ? Player ? copie ?
-
-		// La liste est trié pour le tour
-		// Il faut prendre en compte le cas où deux joueurs ont choisi la même carte
 	}
 
 	public void sustainShips() {
@@ -75,8 +71,11 @@ public class Game {
 
 	public void calculScore() {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
-		// Ne peux pas encore être fait car version sans carte
-		// On peut faire une version avec les Hex seuls à la limite
+		//Demande à chaque joueur de choisir une sectorCard
+		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
+		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
+		//Personne ne peut sélectionner le TriPrime
+		//Pour chaque sectorCard, si des systemes sont controlés, le joueur qui le controle gagne autant de point que le niveau du systeme (peut importe qui a choisi la carte)
 	}
 
 	public void initialShipDeployment() {
@@ -170,9 +169,16 @@ public class Game {
 				//p.perform(iCard);
 			}
 		}
-		sustainShips();
-		calculScore();
+		//sustainShips();
+		//calculScore();
+		updatePriority();
 
+	}
+
+	private void updatePriority() {
+		for (Player p: players){
+			p.updatePrio();
+		}
 	}
 
 	public static void main(String[] args) {
@@ -181,7 +187,7 @@ public class Game {
 		//Initialisation du terrain
 		game.ground = new Ground();
 		System.out.println("Création du terrain");
-		game.getGround().setupGround(); // En vrai on peut tout mettre dans le constructeur direct
+		//game.ground.setupGround(); // En vrai on peut tout mettre dans le constructeur direct //du coup je l'ai mis dans le constructeur
 		System.out.println("Initialisation du terrain");
 		game.initialShipDeployment();
 		System.out.println("On place les vaisseaux pour commencer");

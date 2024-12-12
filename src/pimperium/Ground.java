@@ -9,10 +9,12 @@ public class Ground {
 	private int centralCardIndex;
 
 	public Ground() {
+		this.sectorcards = new ArrayList<SectorCard>();
 		for (int i=1; i<10; i++) {
 			sectorcards.add(new SectorCard(i));
 		}
 		this.hexes = new ArrayList<Hex>();
+		this.setupGround();
 	}
 
 	public List<Hex> getHexes() {
@@ -144,6 +146,13 @@ public class Ground {
 		for (Hex h: hexes) {
 			creerListeVoisins(h);
 		}
+		/* Pour vérifier la liste de voisin des hexs
+		for (Hex h: hexes){
+			System.out.print(h.getIdHex() + " et ses voisins : ");
+			for (Hex h1: h.getNeighbors()){
+				System.out.println(h1.getIdHex());
+			}
+		} */
 	}
 
 	// ***************************************************************

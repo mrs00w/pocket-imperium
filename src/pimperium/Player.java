@@ -17,11 +17,13 @@ public class Player {
 	private CommandCard[] cardOrder = commandCards;
 	//A l'initialisation, l'ordre des cartes est par défaut expand, explore et exterminate
 	private int score;
+	private int priority;
 
 	public Player() {
 		this.isAlive = true;
 		this.score = 0;
 		this.idPlayer = nombrePlayer;
+		this.priority=nombrePlayer;
 		nombrePlayer++;
 		this.name = "Player"+nombrePlayer;
 		this.cardOrder = new CommandCard[3];
@@ -51,6 +53,8 @@ public class Player {
 	}
 
 	public String getName(){return this.name;}
+
+	public int getPriority() {return this.priority;}
 
 	public List<Ship> findShipsByHexId(int hexId) {
 		// Filtre tous les vaisseaux correspondant à l'ID de l'Hex
@@ -135,5 +139,13 @@ public class Player {
 	@Override
 	public String toString() {
 		return "Player name : "+name;
+	}
+
+	public void updatePrio() {
+		if (this.priority == 0){
+			this.priority=2;
+		}else {
+			this.priority--;
+		}
 	}
 }
