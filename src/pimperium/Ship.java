@@ -3,11 +3,25 @@ package pimperium;
 public class Ship {
 	private Hex position;
 	private Player player;
+	private boolean used;
 
 	public Ship(Player player) {
 		//début partie, ship en dehors du terrain de jeu
 		this.position = null;
 		this.player = player;
+		this.used = used;
+	}
+
+	public boolean isUsed() {
+		return used;
+	}
+
+	public void markAsUsed(boolean used) {
+		this.used = used;
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 	public void invadeSystem(Hex h) {

@@ -10,12 +10,19 @@ public class SectorCard {
 	private List<Hex> hexes;
 	private String orientation;
 
-	public SectorCard(int id, boolean isCentral) {
+	public SectorCard(int id) {
 		this.id = id;
-		this.isCentral = isCentral;
 		this.typecard = typecard;
 		this.canRotate = canRotate; // Orientation par défaut
 		this.hexes = new ArrayList<>();
+	}
+
+	public List<Hex> getHexes() {
+		return hexes;
+	}
+
+	public void setHexes(List<Hex> hexes) {
+		this.hexes = hexes;
 	}
 
 	public void rotate() {
