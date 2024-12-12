@@ -38,6 +38,7 @@ public class Game {
 	public List<Player> compareOrder(int indiceCard) {
 		List<Player> copie = new ArrayList<>(players);
 		copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+
 		return copie;
 		//Est-ce que c'est player ? Player ? copie ?
 
@@ -68,11 +69,14 @@ public class Game {
 		}
 		for (int iCard = 0; iCard<3; iCard++) {
 			List<Player> copie = compareOrder(iCard);
+			System.out.println("Au tour "+ (iCard+1)+ " l'ordre des joueurs est :");
 			for (Player p : copie) {
+				System.out.println(p.getName());
 				// Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
 				// Expand en premier
 				// Il faut aussi prendre en compte l'ordre des cartes.
-				p.perform(iCard);
+				//Pour le moment on vérifie que l'ordre est correctement défini avant de perform
+				//p.perform(iCard);
 			}
 		}
 		sustainShips();
@@ -90,15 +94,11 @@ public class Game {
 		//Instanciation des joueurs
 		for (int i=0;i<3;i++) {
 			Player p = new Player();
-//			p.setPlayerName(); // Débuggage
+			p.setPlayerName();
 			game.players.add(p);
 		}
-        //On lit l'ensemble des joueurs pour vérifier qu'ils ont bien été créés
-        for (Player player : game.players) {
-            System.out.println(player.toString());
-        }
-
-		while ((getRound() < 9) && (game.players.size() != 1)) {
+		//J'ai mis la limite à 2 juste le temps des tests
+		while ((getRound() < 2) && (game.players.size() != 1)) {
 			game.nextRound();
 		}
 //		Map<String, Integer> tableauScores = new HashMap<>();

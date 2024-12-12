@@ -14,7 +14,8 @@ public class Player {
 	private List<Ship> shipsSurPlateau = new ArrayList<Ship>();
 //	private Set<CommandCard> cards;
 	private CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
-	private CommandCard[] cardOrder;
+	private CommandCard[] cardOrder = commandCards;
+	//A l'initialisation, l'ordre des cartes est par défaut expand, explore et exterminate
 	private int score;
 
 	public Player() {
@@ -79,13 +80,22 @@ public class Player {
 		return shipsInHex.subList(0, count); // Retourne les n premiers vaisseaux choisis
 	}
 
+	//Pour le moment le nom est imposé est correspond à Joueur+id
 	public void setPlayerName() {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
-		System.out.println("Enter a player name: ");
-		this.name = reader.next(); // Scans the next token of the input as an int
-		reader.close();
+		while(true){
+			System.out.println(this.name + " enter a player name: ");
+			if (reader.hasNextLine()) { // Vérifie s'il y a une ligne à lire
+				this.name = reader.nextLine(); // Lire la ligne complète
+				break;
+			} else {
+				System.out.println("No input found.");
+			}
+			reader.close();
+		}
 	}
-	
+
+	//Pour le moment les couleurs sont imposées
 	public void choisirCouleurVaisseau() {
 		//détecter erreur dans le cas où ce n'est pas un int qui est renseigné ?
 		//ou si int != de 0,1,2
@@ -98,16 +108,19 @@ public class Player {
 	public void plan() {
 		for (int i=0; i<3; i++) {
 			Scanner reader = new Scanner(System.in); // Reading from System.in
-			System.out.println("Quelle carte voulez-vous jouez en " + i + "(Expand, Explore ou Exterminate) :");
+			System.out.println(this.name + ", quelle carte voulez-vous jouez en " + (i+1) + "(Expand, Explore ou Exterminate) :");
 			String r = reader.next();
 //			reader.close();
 			// L'ordre est à surveiller, il y a souvent des erreurs de ce côté là
 			if (r.equalsIgnoreCase("expand")) {
 				cardOrder[i] = commandCards[0];
+				System.out.println("La "+(i+1)+"ieme carte choisie est la carte expand");
 			} else if (r.equalsIgnoreCase("explore")) {
 				cardOrder[i] = commandCards[1];
+				System.out.println("La "+(i+1)+"ieme carte choisie est la carte explore");
 			} else if (r.equalsIgnoreCase("exterminate")) {
                 cardOrder[i] = commandCards[2];
+				System.out.println("La "+(i+1)+"ieme carte choisie est la carte exterminate");
 			} else {
 				System.out.println("Choix invalide. Veuillez recommencer.");
 				i--; // Refaire la même position si l'entrée est invalide

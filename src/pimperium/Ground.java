@@ -13,6 +13,10 @@ public class Ground {
 	private int rows;
 	private int centralCardIndex;
 
+	public Ground(int i){
+
+	}
+
 	public Ground() {
 		this.rows = 3;
 		this.colums = 3;
@@ -23,13 +27,13 @@ public class Ground {
 		}
 		//Mise en place du terrain au moment de l'initialisation
 		List<Hex> hexes = new ArrayList<>();
-		for (int i=0;i<23;i++) {
+		for (int i=0;i<22;i++) {
 			hexes.add(new Hex(i, 0, false));
 		}
 		for (int i=0;i<16;i++) {
 			hexes.add(new Hex(i, 1, false));
 		}
-		for (int i=0;i<7;i++) {
+		for (int i=0;i<8;i++) {
 			hexes.add(new Hex(i, 2, false));
 		}
 		for (int i=0; i<4; i++) {
