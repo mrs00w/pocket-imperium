@@ -19,7 +19,7 @@ public class Game {
 	public static Game getInstance() {
 		if (game == null) {
 			System.out.println("Création d'une partie");
-			game = new Game(game);
+			game = new Game();
 		}
 		return game;
 	}
