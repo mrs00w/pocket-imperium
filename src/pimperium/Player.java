@@ -29,12 +29,42 @@ public class Player {
 		this.cardOrder = new CommandCard[3];
         //this.choisirCouleurVaisseau();
         //imposer la couleur aux joueurs finalement
-
         this.shipsHorsPlateau = new Stack<Ship>();
 		for (int i=0;i<15;i++) {
 			shipsHorsPlateau.push(new Ship(this));
 		}
+		//Avant même le premier tour, chaque joueur doit choisir le premier système sur lequel s'installer
 	}
+
+//	private void addNewShips(int nbShips) {
+//		Scanner scanner = new Scanner(System.in);
+//		List<Hex> hexes = Ground.getHexes().filter((Hex hex) -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null).toList();
+//		if(!this.shipsHorsPlateau.isEmpty()){
+//			int id = 10;
+//			while (true) {
+//				System.out.println("Choisir un hexagone (entrer son ID) : ");
+//				//On vérifie que l'entrée est un int
+//				if (!scanner.hasNextInt()) {
+//					System.out.println("Entrée invalide, veuillez entrer un entier.");
+//					scanner.next(); // Consomme l'entrée incorrecte pour éviter une boucle infinie
+//					continue; // Recommence la boucle pour demander un autre ID
+//				}
+//				while ((!hexes.stream().anyMatch((Hex hex) -> hex.getIdHex() == id)) || (Ground.getHexById(id).getCurrentOccupant()!=null)){
+//					//tant que l'Hex choisi n'est ni valide ni de niveau 1 ou que le système est déjà occupé
+//					System.out.println("Cet Hexagone n'est pas valide, entrez en un nouveau.");
+//					scanner.nextInt();
+//				}
+//				Hex getHex = Ground.getHexById(id);
+//				this.shipsHorsPlateau.peek().setPosition(getHex);
+//				//On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
+//				this.shipsSurPlateau.add(shipsHorsPlateau.peek());
+//				this.shipsHorsPlateau.pop();
+//			}
+//		}else{
+//			System.out.println("Vous n'avez plus de vaisseau à placer sur le plateau");
+//		}
+//		scanner.close();
+//	}
 
 	public Stack<Ship> getShipsHorsPlateau() {
 		return this.shipsHorsPlateau;
@@ -80,7 +110,6 @@ public class Player {
 		return shipsInHex.subList(0, count); // Retourne les n premiers vaisseaux choisis
 	}
 
-	//Pour le moment le nom est imposé est correspond à Joueur+id
 	public void setPlayerName() {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
 		while(true){

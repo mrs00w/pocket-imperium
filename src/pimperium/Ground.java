@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Ground {
 	//faire une liste dynamique pour ajouter les cartes une par une
-	private List<Hex> hexes;
+	private static List<Hex> hexes;
 	private List<SectorCard> sectorcards;
 	private int centralCardIndex;
 
@@ -22,7 +22,7 @@ public class Ground {
 	}
 
 	public Hex getHexById(int id) {
-		if (id >= 0 && id < getHexes().size()) {
+		if (hexes.stream().anyMatch((Hex hex) -> hex.getIdHex() == id)) { //On vérifie que l'hexagone existe
 			hexes = getHexes();
 			return hexes.get(id);  // Retourner l'Hex à l'index correspondant à l'ID
 		}
@@ -146,7 +146,8 @@ public class Ground {
 		for (Hex h: hexes) {
 			creerListeVoisins(h);
 		}
-		/* Pour vérifier la liste de voisin des hexs
+		// Pour vérifier la liste de voisin des hexs
+		/*
 		for (Hex h: hexes){
 			System.out.print(h.getIdHex() + " et ses voisins : ");
 			for (Hex h1: h.getNeighbors()){

@@ -97,7 +97,8 @@ public class Game {
 
 	private void placeShips(Player player, Ground ground) {
 		// Obtenez tous les systèmes de niveau 1 non occupés dans des secteurs non occupés
-		List<Hex> availableHexes = game.getGround().getHexes().stream()
+		//Comment vérifier que le secteur est libre ?
+		List<Hex> availableHexes = ground.getHexes().stream()
 				.filter(hex -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null)
 				.toList();
 
@@ -109,10 +110,18 @@ public class Game {
 		// Sélectionner un hex disponible pour le placement
 
 		Scanner reader = new Scanner(System.in);
-		Hex targetHex;
+		Hex targetHex = null;
 		// Il faut mettre des do partout pour permettre aux joueurs de refaire leurs actions
-		do {
-			System.out.println("Où voulez-vous placer vos vaisseaux ? (Entrez l'ID d'un Hex disponible)");
+		//j'ai inversé le do et le while
+		while (targetHex == null) {
+			System.out.println(STR."\{player.getName()}, où voulez-vous placer vos vaisseaux ? (Entrez l'ID d'un Hex disponible)");
+
+			if (!reader.hasNextInt()) {//On vérifie que c'est bien un int qui a été entré
+				System.out.println("Entrée invalide, veuillez entrer un entier.");
+				reader.next(); // Consomme l'entrée incorrecte pour éviter une boucle infinie
+				continue; // Recommence la boucle pour demander un autre ID
+			}
+
 			int idHex = reader.nextInt();
 
 			targetHex = availableHexes.stream()
@@ -123,27 +132,33 @@ public class Game {
 			if (targetHex == null) {
 				System.out.println("Erreur : Aucun Hex disponible avec cet ID. Réessayez.");
 			}
-		} while (targetHex == null);
+		}
 
 // Une fois sorti, targetHex est valide
 
 		System.out.println("Hex sélectionné : " + targetHex);
-
-		// Place 2 vaisseaux du joueur
-		List<Ship> shipsToDeploy = player.getShipsHorsPlateau().stream()
-				.limit(2)
-				.toList();
+//
+//		// Place 2 vaisseaux du joueur
+		Stack<Ship> shipsToDeploy = player.getShipsHorsPlateau();
+//				.stream()
+//				.limit(2)
+//				.toList();
 
 		if (shipsToDeploy.size() < 2) {
 			System.out.println(STR."Le joueur \{player.getName()} n'a pas assez de vaisseaux pour le placement.");
 			return;
 		}
 
-		for (Ship ship : shipsToDeploy) {
-			targetHex.addShip(ship);
-			player.getShipsHorsPlateau().remove(ship);
-			player.getShipsSurPlateau().add(ship);
-		}
+		shipsToDeploy.peek().setPosition(targetHex);
+		//On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
+		player.getShipsSurPlateau().add(shipsToDeploy.peek());
+		shipsToDeploy.pop();
+
+//		for (Ship ship : shipsToDeploy) {
+//			targetHex.addShip(ship);
+//			player.getShipsHorsPlateau().remove(ship);
+//			player.getShipsSurPlateau().add(ship);
+//		}
 
 		// Définir le joueur comme occupant du système
 		targetHex.setCurrentOccupant(player);
@@ -163,9 +178,7 @@ public class Game {
 			for (Player p : copie) {
 				System.out.println(p.getName());
 				// Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
-				// Expand en premier
-				// Il faut aussi prendre en compte l'ordre des cartes.
-				//Pour le moment on vérifie que l'ordre est correctement défini avant de perform
+				//Si on n'en a pas sur la carte on meurt nan ?
 				//p.perform(iCard);
 			}
 		}
@@ -188,9 +201,6 @@ public class Game {
 		game.ground = new Ground();
 		System.out.println("Création du terrain");
 		//game.ground.setupGround(); // En vrai on peut tout mettre dans le constructeur direct //du coup je l'ai mis dans le constructeur
-		System.out.println("Initialisation du terrain");
-		game.initialShipDeployment();
-		System.out.println("On place les vaisseaux pour commencer");
 //		String player;
 		//Instanciation des joueurs
 		for (int i = 0; i < 3; i++) {
@@ -198,6 +208,9 @@ public class Game {
 			p.setPlayerName();
 			game.players.add(p);
 		}
+		//Maintenant que la map et les joueurs sont créés on peut initialiser le terrain
+		System.out.println("Initialisation du terrain");
+		game.initialShipDeployment();
 		//J'ai mis la limite à 2 juste le temps des tests
 		while ((getRound() < 2) && (game.players.size() != 1)) {
 			game.nextRound();

@@ -21,6 +21,7 @@ public class Hex {
 		//Vérifier que bien compris entre 0 et 3
 		this.levelSystem = lvl;
 		this.neighbors = new ArrayList<Hex>();
+		this.currentOccupant=null;
 	}
 
 	public Hex(int id, int lvl) {
@@ -34,7 +35,7 @@ public class Hex {
 		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
 //		this.isTriPrime = tp;
 		this.isPartiel = true;
-		this.neighbors = new ArrayList<>();
+		this.neighbors = new ArrayList<Hex>();
 	}
 
 	public List<Ship> getShips() {

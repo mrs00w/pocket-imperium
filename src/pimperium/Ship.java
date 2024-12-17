@@ -36,6 +36,10 @@ public class Ship {
 		return this.position;  // Cette variable stocke la position actuelle du vaisseau
 	}
 
+	public void setPosition(Hex newHex){
+		this.position=(Hex) newHex;
+	}
+
 	public Ship findShipInHex(Hex targetHex) {
 		for (Ship ship : player.getShipsSurPlateau()) {
 			if (ship.getPosition() == targetHex) {  // Comparer la position du vaisseau avec l'Hex donné
