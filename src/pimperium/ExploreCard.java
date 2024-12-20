@@ -131,29 +131,30 @@ public class ExploreCard implements CommandCard {
 			if (!sourceHex.getNeighbors().contains(targetHex) && !hasValidCommonNeighbor(sourceHex,targetHex,player)){
 				System.out.println("Vous ne pouvez pas passé à travers un hex occupé par un autre joueur.");
 				i--; // Refaire ce tour
+				continue;
 			}
-
+			//IMPORTANT faire ce test avant de vérifier que targetHex appartient au TriPrime
+			//On vérifie que personne ne contrôle le TriPrime
+			if (targetHex.getLevelSystem() == 3 && Hex.getTriPrimeOccupant()!=null || Hex.getTriPrimeOccupant()!=player) {// && !shipsToMove.isEmpty()) { Ça sert a rien on l'a testé au dessus
+				System.out.println("Le Tri Prime est déjà controlé par un autre joueur.");
+				i--; //Refaire ce tour
+				continue;
+			}
 			if (!sourceHex.getNeighbors().contains(targetHex) && uniqueCommonNeighborTriPrime(sourceHex,targetHex)){
 				if(targetHex.getCurrentOccupant()!=null && targetHex.getCurrentOccupant()!=player){
 					System.out.println("Vous ne pouvez pas passé à travers du TriPrime alors qu'il est occupé");
 					i--; // Refaire ce tour
+					continue;
 				} else{
 					//S'arrêter sur le TriPrime
-					Hex triPrime = (sourceHex.getNeighbors().stream()
+					targetHex = (sourceHex.getNeighbors().stream()
 							.filter(targetHex.getNeighbors()::contains).toList()).getFirst();
 				}
-
-			}
-
-
-			//Ça sert à rien une fois qu'il est arrêté sur le tri prime de lui dire qu'il doit s'arrêter sur le tri prime
-			if (targetHex.getLevelSystem() == 3) {// && !shipsToMove.isEmpty()) { Ça sert a rien on l'a testé au dessus
-				System.out.println("Vous devez vous arrêter au hex Tri-Prime si vous y entrez.");
 			}
 			// Déplacer les vaisseaux
 			for (Ship s : shipsToMove) {
 				s.updatePosition(targetHex);
-				s.markAsUsed(true); // Empêcher d'utiliser ce vaisseau à nouveau ce tour
+				s.setUsed(true); // Empêcher d'utiliser ce vaisseau à nouveau ce tour
 				targetHex.getShips().add(s); //On ajoute le vaisseau dans la liste des vaisseaux de l'Hex cible
 			}
 			sourceHex.getShips().subList(0,shipsToMove.size()).clear(); //On supprime les ships déplacés de la liste de ships du Hex de départ
@@ -171,5 +172,8 @@ public class ExploreCard implements CommandCard {
 			}
 		}
 		System.out.println("Exploration terminée.");
+		for (Ship ship : player.getShipsSurPlateau()){
+			ship.setUsed(false);
+		}
 	}
 }

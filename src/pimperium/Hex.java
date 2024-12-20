@@ -2,6 +2,7 @@ package pimperium;
 import java.util.*;
 
 public class Hex {
+	private static Player triPrimeOccupant;
 	private Player currentOccupant;
 	private static int numHex = 0;
 	private int idHex;
@@ -22,6 +23,14 @@ public class Hex {
 		this.levelSystem = lvl;
 		this.neighbors = new ArrayList<Hex>();
 		this.currentOccupant=null;
+	}
+
+	public static Player getTriPrimeOccupant() {
+		return triPrimeOccupant;
+	}
+
+	public static void setTriPrimeOccupant(Player triPrimeOccupant) {
+		Hex.triPrimeOccupant = triPrimeOccupant;
 	}
 
 	public Hex(int id, int lvl) {

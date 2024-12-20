@@ -116,6 +116,6 @@ public class ExterminateCard implements CommandCard {
 		}
 
 		// Chaque vaisseau ne peut être utilisé qu'une fois par round, donc marquer les vaisseaux comme "utilisés"
-		invasionFleet.forEach(ship -> ship.markAsUsed(true));
+		invasionFleet.forEach(ship -> ship.setUsed(true));
 	}
 }
