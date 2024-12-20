@@ -102,10 +102,11 @@ public class Game {
 				.filter(hex -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null)
 				.toList();
 
-		if (availableHexes.isEmpty()) {
-			System.out.println("Aucun hex disponible pour le placement des vaisseaux.");
-			return;
-		}
+		//ça ça n'arrivera jamais vu qu'on l'utilise qu'au moment de l'initialisation (pour le moment)
+//		if (availableHexes.isEmpty()) {
+//			System.out.println("Aucun hex disponible pour le placement des vaisseaux.");
+//			return;
+//		}
 
 		// Sélectionner un hex disponible pour le placement
 
@@ -137,31 +138,25 @@ public class Game {
 // Une fois sorti, targetHex est valide
 
 		System.out.println("Hex sélectionné : " + targetHex);
-//
-//		// Place 2 vaisseaux du joueur
-		Stack<Ship> shipsToDeploy = player.getShipsHorsPlateau();
-//				.stream()
-//				.limit(2)
-//				.toList();
 
-		if (shipsToDeploy.size() < 2) {
-			System.out.println(STR."Le joueur \{player.getName()} n'a pas assez de vaisseaux pour le placement.");
-			return;
-		}
-
-		shipsToDeploy.peek().setPosition(targetHex);
-		//On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
-		player.getShipsSurPlateau().add(shipsToDeploy.peek());
-		shipsToDeploy.pop();
-
-//		for (Ship ship : shipsToDeploy) {
-//			targetHex.addShip(ship);
-//			player.getShipsHorsPlateau().remove(ship);
-//			player.getShipsSurPlateau().add(ship);
+		//Pas possible non plus car on est à l'initialisation, donc les joueurs auront forcément des vaisseaux à placer
+//		if (player.getShipsHorsPlateau().size() < 2) {
+//			System.out.println(STR."Le joueur \{player.getName()} n'a pas assez de vaisseaux pour le placement.");
+//			return;
 //		}
 
-		// Définir le joueur comme occupant du système
-		targetHex.setCurrentOccupant(player);
+		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
+			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
+			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
+			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
+			player.getShipsHorsPlateau().pop();
+			// Définir le joueur comme occupant du système
+			targetHex.setCurrentOccupant(player);
+			player.getHexesOccupes().add(targetHex);
+		}
+//		for (Ship s : targetHex.getShips()){
+//			System.out.println(s.toString());
+//		}
 
 		System.out.println(STR."\{player.getName()} a placé 2 vaisseaux sur le système \{targetHex.getIdHex()}");
 	}
@@ -174,17 +169,26 @@ public class Game {
 		}
 		for (int iCard = 0; iCard < 3; iCard++) {
 			List<Player> copie = compareOrder(iCard);
-			System.out.println("Au tour "+ (iCard+1)+ " l'ordre des joueurs est :");
+			System.out.println("Au tour "+ (iCard+1)+ " l'ordre des joueurs est : ");
 			for (Player p : copie) {
-				System.out.println(p.getName());
-				// Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
-				//Si on n'en a pas sur la carte on meurt nan ?
+				System.out.print(p.getName() +" ");
+				//Romain : Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
+				//Laora : Si on n'en a pas sur la carte on meurt, donc le cas où il n'y a pas de vaisseau n'existe pas
 				//p.perform(iCard);
+			}
+			System.out.println("");
+			for (Player p : copie) {
+//				CommandCard carteJouee = p.getCard(iCard);
+//				int indiceCarte = iCard;
+//				int capaciteCarte = (int) players.stream()
+//						.filter(player -> p.getCard(indiceCarte).equals(carteJouee))
+//						.count(); //On compte le nombre de joueurs ayant choisi la même carte que le joueur en train de jouer
+				p.perform(iCard);
 			}
 		}
 		//sustainShips();
 		//calculScore();
-		updatePriority();
+		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
 
 	}
 

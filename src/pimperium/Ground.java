@@ -22,11 +22,13 @@ public class Ground {
 	}
 
 	public Hex getHexById(int id) {
-		if (hexes.stream().anyMatch((Hex hex) -> hex.getIdHex() == id)) { //On vérifie que l'hexagone existe
-			hexes = getHexes();
-			return hexes.get(id);  // Retourner l'Hex à l'index correspondant à l'ID
+		Hex hex = null;
+		for (Hex h : hexes) {
+			if (h.getIdHex() == id) { //On cherche l'hexagone dont l'ID correspond a celui recherché
+				hex = h;
+			}
 		}
-		return null;  // Retourner null si l'ID est invalide
+		return hex;  //Si l'hex a été trouvé il est renvoyé sinon on renvoie null
 	}
 
 	public void setupGround() {

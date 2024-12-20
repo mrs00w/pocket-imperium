@@ -28,6 +28,11 @@ public class Ship {
 
 	}
 
+	@Override
+	public String toString() {
+		return "position : "+this.position+" du joueur "+this.player;
+	}
+
 	public void updatePosition(Hex h) {
 //		this.position = h;
 	}

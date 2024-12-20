@@ -12,6 +12,7 @@ public class Player {
 	private int couleurVaisseau;
 	private Stack<Ship> shipsHorsPlateau;
 	private List<Ship> shipsSurPlateau = new ArrayList<Ship>();
+	private List<Hex> hexesOccupes = new ArrayList<Hex>();
 //	private Set<CommandCard> cards;
 	private CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
 	private CommandCard[] cardOrder = commandCards;
@@ -74,6 +75,10 @@ public class Player {
 		return this.shipsSurPlateau;
 	}
 
+	public List<Hex> getHexesOccupes() {
+		return hexesOccupes;
+	}
+
 	public CommandCard[] getCardOrder() {
 		return this.cardOrder;
 	}
@@ -95,6 +100,11 @@ public class Player {
 
 	public List<Ship> chooseShipsToMove(List<Ship> shipsInHex) {
 		Scanner scanner = new Scanner(System.in);
+
+		if (shipsInHex.size()==0){
+			System.out.println("Vous ne pouvez pas déplacer de vaisseau depuis cet hexagone.");
+			return new ArrayList<Ship>(); //on renvoie une liste vide
+		}
 
 		System.out.println("Il y a " + shipsInHex.size() + " vaisseaux dans cet Hex.");
 		System.out.print("Combien de vaisseaux souhaitez-vous déplacer ? ");

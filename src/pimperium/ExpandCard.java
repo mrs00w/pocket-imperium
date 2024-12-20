@@ -10,7 +10,7 @@ public class ExpandCard implements CommandCard{
 		this.player = player;
 	}
 
-    public int getPriority() {
+	public int getPriority() {
         return 1;
 	}
 
@@ -36,9 +36,12 @@ public class ExpandCard implements CommandCard{
 		// Collecte des hexes contrôlés par le joueur
 		List<Hex> controlledHexes = game.getGround().getHexes().stream()
 				.filter(hex -> hex.getCurrentOccupant() == player)
+				.filter(hex -> hex.getLevelSystem() != 0)
 				.toList();
 
-		// Vérification : le joueur contrôle-t-il des hexes ?
+		// Vérification : le joueur contrôle-t-il des systèmes ?
+		//dans le cas où le joueur n'est pas mort (donc il a encore des vaisseaux sur la map)
+		//mais il ne controle pas de système
 		if (controlledHexes.isEmpty()) {
 			System.out.println("Vous ne contrôlez aucun hex pour ajouter des vaisseaux.");
 			return;
@@ -82,6 +85,7 @@ public class ExpandCard implements CommandCard{
 			// Mettre à jour la position du vaisseau
 			currentShip.updatePosition(selectedHex);
 			player.getShipsSurPlateau().add(currentShip);
+			selectedHex.getShips().add(currentShip);
 			System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
 		}
 	}

@@ -36,6 +36,7 @@ public class Hex {
 //		this.isTriPrime = tp;
 		this.isPartiel = true;
 		this.neighbors = new ArrayList<Hex>();
+		this.ships = new ArrayList<Ship>();
 	}
 
 	public List<Ship> getShips() {
