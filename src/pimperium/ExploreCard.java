@@ -16,6 +16,40 @@ public class ExploreCard implements CommandCard {
 		return priority;
 	}
 
+	private List<Hex> getCommonNeighbors(Hex hex1, Hex hex2) {
+		List<Hex> neighborsHex1 = hex1.getNeighbors();
+		List<Hex> neighborsHex2 = hex2.getNeighbors();
+
+		// Trouver les voisins communs
+		return neighborsHex1.stream()
+				.filter(neighborsHex2::contains)
+				.toList();
+	}
+
+	private boolean hasValidCommonNeighbor(Hex sourceHex, Hex targetHex, Player currentPlayer) {
+		// Obtenez les voisins communs
+		List<Hex> commonNeighbors = getCommonNeighbors(sourceHex, targetHex);
+
+		// Vérifiez si au moins un voisin répond aux critères
+		return commonNeighbors.stream().anyMatch(hex ->
+				hex.getCurrentOccupant() == null || hex.getCurrentOccupant() == currentPlayer);
+	}
+
+	public boolean uniqueCommonNeighborTriPrime(Hex hex1, Hex hex2) {
+		List<Hex> neighborsHex1 = hex1.getNeighbors();
+		List<Hex> neighborsHex2 = hex2.getNeighbors();
+
+		List<Hex> commonNeighbors = neighborsHex1.stream()
+				.filter(neighborsHex2::contains)
+				.filter(hex -> hex.getLevelSystem() == 3) // Ajout du critère sur le LevelSystem
+				.toList();
+
+		if (commonNeighbors.size() == 1) {
+			return true;
+		}
+		return false;
+	}
+
 	public void execute(int currentRound) {
 		System.out.println(STR."\{player.getName()} explore d'autres systèmes avec ses vaisseaux.");
 		Game game = Game.getInstance();
@@ -94,6 +128,25 @@ public class ExploreCard implements CommandCard {
 				i--; // Refaire ce tour
 				continue;
 			}
+			if (!sourceHex.getNeighbors().contains(targetHex) && !hasValidCommonNeighbor(sourceHex,targetHex,player)){
+				System.out.println("Vous ne pouvez pas passé à travers un hex occupé par un autre joueur.");
+				i--; // Refaire ce tour
+			}
+
+			if (!sourceHex.getNeighbors().contains(targetHex) && uniqueCommonNeighborTriPrime(sourceHex,targetHex)){
+				if(targetHex.getCurrentOccupant()!=null && targetHex.getCurrentOccupant()!=player){
+					System.out.println("Vous ne pouvez pas passé à travers du TriPrime alors qu'il est occupé");
+					i--; // Refaire ce tour
+				} else{
+					//S'arrêter sur le TriPrime
+					Hex triPrime = (sourceHex.getNeighbors().stream()
+							.filter(targetHex.getNeighbors()::contains).toList()).getFirst();
+				}
+
+			}
+
+
+			//Ça sert à rien une fois qu'il est arrêté sur le tri prime de lui dire qu'il doit s'arrêter sur le tri prime
 			if (targetHex.getLevelSystem() == 3) {// && !shipsToMove.isEmpty()) { Ça sert a rien on l'a testé au dessus
 				System.out.println("Vous devez vous arrêter au hex Tri-Prime si vous y entrez.");
 			}

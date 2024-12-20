@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Du coup j'ai oublié de le commit mais c'est ce que j'ai fait ce weekend. Je sais plus exactement où je m'étais arrêtée mais de mémoire ça fonctionne jusqu'au perform (toutes les étapes d'avant dont le choix des hex pour placer ses 4 premiers vaisseaux marchent)">
+    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Je suis allée jusqu'à la commande exploreCard, il me reste à vérifier qu'on traverse pas un hexagone déjà occupé ou le tri prime.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Ground.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Ground.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Hex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Ship.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,7 +123,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734461619030</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Je suis allée jusqu'à la commande exploreCard, il me reste à vérifier qu'on traverse pas un hexagone déjà occupé ou le tri prime.">
+      <option name="closed" value="true" />
+      <created>1734716898880</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1734716898880</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -139,6 +141,7 @@
     <MESSAGE value="on continue d'avancer" />
     <MESSAGE value="Le tri pour définir l'ordre de jeu des joueurs fonctionne." />
     <MESSAGE value="Du coup j'ai oublié de le commit mais c'est ce que j'ai fait ce weekend. Je sais plus exactement où je m'étais arrêtée mais de mémoire ça fonctionne jusqu'au perform (toutes les étapes d'avant dont le choix des hex pour placer ses 4 premiers vaisseaux marchent)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Du coup j'ai oublié de le commit mais c'est ce que j'ai fait ce weekend. Je sais plus exactement où je m'étais arrêtée mais de mémoire ça fonctionne jusqu'au perform (toutes les étapes d'avant dont le choix des hex pour placer ses 4 premiers vaisseaux marchent)" />
+    <MESSAGE value="Je suis allée jusqu'à la commande exploreCard, il me reste à vérifier qu'on traverse pas un hexagone déjà occupé ou le tri prime." />
+    <option name="LAST_COMMIT_MESSAGE" value="Je suis allée jusqu'à la commande exploreCard, il me reste à vérifier qu'on traverse pas un hexagone déjà occupé ou le tri prime." />
   </component>
 </project>
