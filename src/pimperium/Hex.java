@@ -2,7 +2,9 @@ package pimperium;
 import java.util.*;
 
 public class Hex {
+	private static Player triPrimeOccupant;
 	private Player currentOccupant;
+	private static int numHex = 0;
 	private int idHex;
 	private int col;
 	private int ligne;
@@ -11,6 +13,25 @@ public class Hex {
 	private boolean isPartiel;
 	private List<Hex> neighbors;
 	private List<Ship> ships;
+
+	public Hex(int lvl){
+		numHex++;
+		this.ships = new ArrayList<Ship>();
+		//implémenter l'id en fonction du nombre d'Hex créés précédemment
+		this.idHex = numHex;
+		//Vérifier que bien compris entre 0 et 3
+		this.levelSystem = lvl;
+		this.neighbors = new ArrayList<Hex>();
+		this.currentOccupant=null;
+	}
+
+	public static Player getTriPrimeOccupant() {
+		return triPrimeOccupant;
+	}
+
+	public static void setTriPrimeOccupant(Player triPrimeOccupant) {
+		Hex.triPrimeOccupant = triPrimeOccupant;
+	}
 
 	public Hex(int id, int lvl) {
 		this.currentOccupant = null;
@@ -23,7 +44,8 @@ public class Hex {
 		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
 //		this.isTriPrime = tp;
 		this.isPartiel = true;
-		this.neighbors = new ArrayList<>();
+		this.neighbors = new ArrayList<Hex>();
+		this.ships = new ArrayList<Ship>();
 	}
 
 	public List<Ship> getShips() {

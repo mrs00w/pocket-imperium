@@ -1,8 +1,6 @@
 package pimperium;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ExpandCard implements CommandCard{
 
@@ -12,36 +10,84 @@ public class ExpandCard implements CommandCard{
 		this.player = player;
 	}
 
-    public int getPriority() {
+	public int getPriority() {
         return 1;
 	}
 
 	public void execute(int currentRound) {
-		System.out.println(player.getName() + " ajoute de nouveaux vaisseaux sur le plateau");
+		System.out.println(STR."\{player.getName()} ajoute de nouveaux vaisseaux sur le plateau");
 		Game game = Game.getInstance();
-		List<Player> players = new ArrayList<>(game.getPlayers());
+		List<Player> players = game.getPlayers();
+
+		// Filtrer les joueurs ayant choisi la carte Expand
 		List<Player> expandPlayers = players.stream()
-				.filter(player -> player.getCard(currentRound) instanceof ExpandCard)
+				.filter(p -> p.getCard(currentRound) instanceof ExpandCard)
 				.toList();
 
 		int expandCount = expandPlayers.size();
 
-		int shipsToMove = switch (expandCount) {
-			case 1 -> 3;  // Si expandCount est 1, on retourne 3
-			case 2 -> 2;  // Si expandCount est 2, on retourne 2
-			default -> 1; // Si expandCount est autre chose, on retourne 1
+		// Calcul du nombre de vaisseaux à ajouter
+		int shipsToAdd = switch (expandCount) {
+			case 1 -> 3;
+			case 2 -> 2;
+			default -> 1;
 		};
 
-		for (int i=0; i < shipsToMove; i++) {
-			Ship currentShip = player.getShipsHorsPlateau().pop();
-			player.getShipsSurPlateau().add(currentShip);
-			Scanner reader = new Scanner(System.in); // Reading from System.in
-			System.out.println("Où voulez-vous placer votre vaisseau n°" + i + " :");
-			int hex = reader.nextInt();
-			currentShip.updatePosition(game.getGround().getHexById(hex));
-			// Introduire condition : seulement 2 Hex
-			reader.close();
+		// Collecte des hexes contrôlés par le joueur
+		List<Hex> controlledHexes = game.getGround().getHexes().stream()
+				.filter(hex -> hex.getCurrentOccupant() == player)
+				.filter(hex -> hex.getLevelSystem() != 0)
+				.toList();
+
+		// Vérification : le joueur contrôle-t-il des systèmes ?
+		//dans le cas où le joueur n'est pas mort (donc il a encore des vaisseaux sur la map)
+		//mais il ne controle pas de système
+		if (controlledHexes.isEmpty()) {
+			System.out.println("Vous ne contrôlez aucun hex pour ajouter des vaisseaux.");
+			return;
 		}
 
+		// Initialisation pour la lecture utilisateur
+		Scanner reader = new Scanner(System.in);
+		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
+
+		for (int i = 0; i < shipsToAdd; i++) {
+			Ship currentShip = player.getShipsHorsPlateau().pop();
+
+			Hex selectedHex;
+			while (true) {
+				System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé :");
+				int hexId = reader.nextInt();
+
+				// Vérifier si l'hex est contrôlé et est un hex valide
+				selectedHex = controlledHexes.stream()
+						.filter(hex -> hex.getIdHex() == hexId)
+						.findFirst()
+						.orElse(null);
+
+				if (selectedHex == null) {
+					System.out.println("Erreur : Hex non valide ou non contrôlé. Réessayez.");
+					continue;
+				}
+
+				// Vérification de la limite de placement (2 vaisseaux max par hex)
+				int allocatedShips = hexAllocation.getOrDefault(selectedHex.getIdHex(), 0);
+				if (allocatedShips >= 2) {
+					System.out.println("Erreur : Vous ne pouvez pas placer plus de 2 vaisseaux sur cet hex.");
+					continue;
+				}
+
+				// Si tout est valide, ajouter à l'allocation et sortir de la boucle
+				hexAllocation.put(selectedHex.getIdHex(), allocatedShips + 1);
+				break;
+			}
+
+			// Mettre à jour la position du vaisseau
+			currentShip.updatePosition(selectedHex);
+			player.getShipsSurPlateau().add(currentShip);
+			selectedHex.getShips().add(currentShip);
+			System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
+		}
 	}
+
 }

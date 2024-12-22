@@ -2,7 +2,6 @@ package pimperium;
 
 import java.util.Scanner;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Game {
 	private static Game game = null;
@@ -20,8 +19,6 @@ public class Game {
 		if (game == null) {
 			System.out.println("Création d'une partie");
 			game = new Game();
-		} else {
-			System.out.println("Instance existante de la partie récupérée");
 		}
 		return game;
 	}
@@ -40,12 +37,9 @@ public class Game {
 
 	public List<Player> compareOrder(int indiceCard) {
 		List<Player> copie = new ArrayList<>(players);
-		copie.sort(Comparator.comparingInt(player -> player.getCard(indiceCard).getPriority()));
+		copie.sort(Comparator.comparingInt((Player player) -> player.getCard(indiceCard).getPriority())
+				.thenComparingInt(Player::getPriority)); // Comparer la priorité des joueurs en cas d'égalité);
 		return copie;
-		//Est-ce que c'est player ? Player ? copie ?
-
-		// La liste est trié pour le tour
-		// Il faut prendre en compte le cas où deux joueurs ont choisi la même carte
 	}
 
 	public void sustainShips() {
@@ -77,8 +71,11 @@ public class Game {
 
 	public void calculScore() {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
-		// Ne peux pas encore être fait car version sans carte
-		// On peut faire une version avec les Hex seuls à la limite
+		//Demande à chaque joueur de choisir une sectorCard
+		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
+		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
+		//Personne ne peut sélectionner le TriPrime
+		//Pour chaque sectorCard, si des systemes sont controlés, le joueur qui le controle gagne autant de point que le niveau du systeme (peut importe qui a choisi la carte)
 	}
 
 	public void initialShipDeployment() {
@@ -100,37 +97,66 @@ public class Game {
 
 	private void placeShips(Player player, Ground ground) {
 		// Obtenez tous les systèmes de niveau 1 non occupés dans des secteurs non occupés
-		List<Hex> availableHexes = game.getGround().getHexes().stream()
+		//Comment vérifier que le secteur est libre ?
+		List<Hex> availableHexes = ground.getHexes().stream()
 				.filter(hex -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null)
 				.toList();
 
-		if (availableHexes.isEmpty()) {
-			System.out.println("Aucun hex disponible pour le placement des vaisseaux.");
-			return;
-		}
+		//ça ça n'arrivera jamais vu qu'on l'utilise qu'au moment de l'initialisation (pour le moment)
+//		if (availableHexes.isEmpty()) {
+//			System.out.println("Aucun hex disponible pour le placement des vaisseaux.");
+//			return;
+//		}
 
 		// Sélectionner un hex disponible pour le placement
 
-		Hex targetHex = availableHexes.getFirst(); // Il faut ajouter la logique de choix là
+		Scanner reader = new Scanner(System.in);
+		Hex targetHex = null;
+		// Il faut mettre des do partout pour permettre aux joueurs de refaire leurs actions
+		//j'ai inversé le do et le while
+		while (targetHex == null) {
+			System.out.println(STR."\{player.getName()}, où voulez-vous placer vos vaisseaux ? (Entrez l'ID d'un Hex disponible)");
 
-		// Place 2 vaisseaux du joueur
-		List<Ship> shipsToDeploy = player.getShipsHorsPlateau().stream()
-				.limit(2)
-				.toList();
+			if (!reader.hasNextInt()) {//On vérifie que c'est bien un int qui a été entré
+				System.out.println("Entrée invalide, veuillez entrer un entier.");
+				reader.next(); // Consomme l'entrée incorrecte pour éviter une boucle infinie
+				continue; // Recommence la boucle pour demander un autre ID
+			}
 
-		if (shipsToDeploy.size() < 2) {
-			System.out.println(STR."Le joueur \{player.getName()} n'a pas assez de vaisseaux pour le placement.");
-			return;
+			int idHex = reader.nextInt();
+
+			targetHex = availableHexes.stream()
+					.filter(hex -> hex.getIdHex() == idHex)
+					.findFirst()
+					.orElse(null);
+
+			if (targetHex == null) {
+				System.out.println("Erreur : Aucun Hex disponible avec cet ID. Réessayez.");
+			}
 		}
 
-		for (Ship ship : shipsToDeploy) {
-			targetHex.addShip(ship);
-			player.getShipsHorsPlateau().remove(ship);
-			player.getShipsSurPlateau().add(ship);
-		}
+// Une fois sorti, targetHex est valide
 
-		// Définir le joueur comme occupant du système
-		targetHex.setCurrentOccupant(player);
+		System.out.println("Hex sélectionné : " + targetHex);
+
+		//Pas possible non plus car on est à l'initialisation, donc les joueurs auront forcément des vaisseaux à placer
+//		if (player.getShipsHorsPlateau().size() < 2) {
+//			System.out.println(STR."Le joueur \{player.getName()} n'a pas assez de vaisseaux pour le placement.");
+//			return;
+//		}
+
+		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
+			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
+			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
+			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
+			player.getShipsHorsPlateau().pop();
+			// Définir le joueur comme occupant du système
+			targetHex.setCurrentOccupant(player);
+			player.getHexesOccupes().add(targetHex);
+		}
+//		for (Ship s : targetHex.getShips()){
+//			System.out.println(s.toString());
+//		}
 
 		System.out.println(STR."\{player.getName()} a placé 2 vaisseaux sur le système \{targetHex.getIdHex()}");
 	}
@@ -143,16 +169,33 @@ public class Game {
 		}
 		for (int iCard = 0; iCard < 3; iCard++) {
 			List<Player> copie = compareOrder(iCard);
+			System.out.println("Au tour "+ (iCard+1)+ " l'ordre des joueurs est : ");
 			for (Player p : copie) {
-				// Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
-				// Expand en premier
-				// Il faut aussi prendre en compte l'ordre des cartes.
+				System.out.print(p.getName() +" ");
+				//Romain : Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
+				//Laora : Si on n'en a pas sur la carte on meurt, donc le cas où il n'y a pas de vaisseau n'existe pas
+				//p.perform(iCard);
+			}
+			System.out.println("");
+			for (Player p : copie) {
+//				CommandCard carteJouee = p.getCard(iCard);
+//				int indiceCarte = iCard;
+//				int capaciteCarte = (int) players.stream()
+//						.filter(player -> p.getCard(indiceCarte).equals(carteJouee))
+//						.count(); //On compte le nombre de joueurs ayant choisi la même carte que le joueur en train de jouer
 				p.perform(iCard);
 			}
 		}
-		sustainShips();
-		calculScore();
+		//sustainShips();
+		//calculScore();
+		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
 
+	}
+
+	private void updatePriority() {
+		for (Player p: players){
+			p.updatePrio();
+		}
 	}
 
 	public static void main(String[] args) {
@@ -161,22 +204,19 @@ public class Game {
 		//Initialisation du terrain
 		game.ground = new Ground();
 		System.out.println("Création du terrain");
-		game.getGround().setupGround(); // En vrai on peut tout mettre dans le constructeur direct
-		System.out.println("Initialisation du terrain");
-		game.initialShipDeployment();
+		//game.ground.setupGround(); // En vrai on peut tout mettre dans le constructeur direct //du coup je l'ai mis dans le constructeur
 //		String player;
 		//Instanciation des joueurs
 		for (int i = 0; i < 3; i++) {
 			Player p = new Player();
-//			p.setPlayerName(); // Débuggage
+			p.setPlayerName();
 			game.players.add(p);
 		}
-		//On lit l'ensemble des joueurs pour vérifier qu'ils ont bien été créés
-		for (Player player : game.players) {
-			System.out.println(player.toString());
-		}
-
-		while ((getRound() < 9) && (game.players.size() != 1)) {
+		//Maintenant que la map et les joueurs sont créés on peut initialiser le terrain
+		System.out.println("Initialisation du terrain");
+		game.initialShipDeployment();
+		//J'ai mis la limite à 2 juste le temps des tests
+		while ((getRound() < 2) && (game.players.size() != 1)) {
 			game.nextRound();
 		}
 

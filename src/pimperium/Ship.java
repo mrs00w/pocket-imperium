@@ -9,14 +9,14 @@ public class Ship {
 		//début partie, ship en dehors du terrain de jeu
 		this.position = null;
 		this.player = player;
-		this.used = used;
+		this.used = false;
 	}
 
 	public boolean isUsed() {
 		return used;
 	}
 
-	public void markAsUsed(boolean used) {
+	public void setUsed(boolean used) {
 		this.used = used;
 	}
 
@@ -28,12 +28,21 @@ public class Ship {
 
 	}
 
+	@Override
+	public String toString() {
+		return "position : "+this.position+" du joueur "+this.player;
+	}
+
 	public void updatePosition(Hex h) {
 //		this.position = h;
 	}
 
 	public Hex getPosition() {
 		return this.position;  // Cette variable stocke la position actuelle du vaisseau
+	}
+
+	public void setPosition(Hex newHex){
+		this.position=(Hex) newHex;
 	}
 
 	public Ship findShipInHex(Hex targetHex) {

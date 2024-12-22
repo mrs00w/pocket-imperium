@@ -4,34 +4,17 @@ import java.util.*;
 
 public class Ground {
 	//faire une liste dynamique pour ajouter les cartes une par une
-	private SectorCard[] sectorcards;
-	private List<Hex> hexes;
-	private int colums;
-	private int rows;
+	private static List<Hex> hexes;
+	private List<SectorCard> sectorcards;
 	private int centralCardIndex;
 
 	public Ground() {
-		this.rows = 3;
-		this.colums = 3;
-		this.sectorcards = new SectorCard[9];
-		this.hexes = new ArrayList<Hex>();
-		for (int i = 0; i < 9; i++) {
-			sectorcards[i] = new SectorCard(i, i == centralCardIndex); // Marquer la carte centrale
+		this.sectorcards = new ArrayList<SectorCard>();
+		for (int i=1; i<10; i++) {
+			sectorcards.add(new SectorCard(i));
 		}
-		//Mise en place du terrain au moment de l'initialisation
-//		List<Hex> hexes = new ArrayList<>();
-//		for (int i=0;i<23;i++) {
-//			hexes.add(new Hex(i, 0, false));
-//		}
-//		for (int i=0;i<16;i++) {
-//			hexes.add(new Hex(i, 1, false));
-//		}
-//		for (int i=0;i<7;i++) {
-//			hexes.add(new Hex(i, 2, false));
-//		}
-//		for (int i=0; i<4; i++) {
-//			hexes.add(new Hex(i, 3, true));
-//		}
+		this.hexes = new ArrayList<Hex>();
+		this.setupGround();
 	}
 
 	public List<Hex> getHexes() {
@@ -39,79 +22,140 @@ public class Ground {
 	}
 
 	public Hex getHexById(int id) {
-		if (id >= 0 && id < getHexes().size()) {
-			hexes = getHexes();
-			return hexes.get(id);  // Retourner l'Hex à l'index correspondant à l'ID
+		Hex hex = null;
+		for (Hex h : hexes) {
+			if (h.getIdHex() == id) { //On cherche l'hexagone dont l'ID correspond a celui recherché
+				hex = h;
+			}
 		}
-		return null;  // Retourner null si l'ID est invalide
+		return hex;  //Si l'hex a été trouvé il est renvoyé sinon on renvoie null
 	}
 
 	public void setupGround() {
-		// par convention, l'id est setup comme suis :
+        // par convention, l'id est setup comme suis :
 		// le premier chiffre : colonne
 		// le second chiffre : ligne
 		hexes.add(new Hex(11, 2));
+		sectorcards.get(1).getHexes().add(hexes.get(0));
 		hexes.add(new Hex(21, 0));
+		sectorcards.get(1).getHexes().add(hexes.get(1));
 		hexes.add(new Hex(31, 1));
+		sectorcards.get(2).getHexes().add(hexes.get(2));
 		hexes.add(new Hex(41, 0));
+		sectorcards.get(2).getHexes().add(hexes.get(3));
 		hexes.add(new Hex(51, 1));
+		sectorcards.get(3).getHexes().add(hexes.get(4));
 		hexes.add(new Hex(61, 1));
+		sectorcards.get(3).getHexes().add(hexes.get(5));
 
 		hexes.add(new Hex(12, 1));
+		sectorcards.get(1).getHexes().add(hexes.get(6));
 		hexes.add(new Hex(22, 0));
+
 		hexes.add(new Hex(32, 1));
+		sectorcards.get(2).getHexes().add(hexes.get(8));
 		hexes.add(new Hex(42, 0));
+
 		hexes.add(new Hex(52, 0));
+		sectorcards.get(3).getHexes().add(hexes.get(10));
 
 		hexes.add(new Hex(13, 0));
+		sectorcards.get(1).getHexes().add(hexes.get(11));
 		hexes.add(new Hex(23, 1));
+		sectorcards.get(1).getHexes().add(hexes.get(12));
 		hexes.add(new Hex(33, 2));
+		sectorcards.get(2).getHexes().add(hexes.get(13));
 		hexes.add(new Hex(43, 0));
+		sectorcards.get(2).getHexes().add(hexes.get(14));
 		hexes.add(new Hex(53, 0));
+		sectorcards.get(3).getHexes().add(hexes.get(15));
 		hexes.add(new Hex(63, 2));
+		sectorcards.get(3).getHexes().add(hexes.get(16));
 
 		hexes.add(new Hex(14, 2));
+		sectorcards.get(1).getHexes().add(hexes.get(17));
 		hexes.add(new Hex(24, 0));
+		// Là c'est des demi, je ne sais pas encore où les mettre dans cette version. Ou peut être que si
+		// je vais voir
 		hexes.add(new Hex(34, 3));
+		sectorcards.get(2).getHexes().add(hexes.get(19));
 		hexes.add(new Hex(44, 0));
+
 		hexes.add(new Hex(54, 1));
+		sectorcards.get(3).getHexes().add(hexes.get(21));
 
 		hexes.add(new Hex(15, 1));
+		sectorcards.get(1).getHexes().add(hexes.get(22));
 		hexes.add(new Hex(25, 0));
+		sectorcards.get(1).getHexes().add(hexes.get(23));
 		hexes.add(new Hex(35, 3));
+		sectorcards.get(2).getHexes().add(hexes.get(24));
 		hexes.add(new Hex(45, 3));
+		sectorcards.get(2).getHexes().add(hexes.get(25));
 		hexes.add(new Hex(55, 0));
+		sectorcards.get(3).getHexes().add(hexes.get(26));
 		hexes.add(new Hex(65, 2));
+		sectorcards.get(3).getHexes().add(hexes.get(27));
 
 		hexes.add(new Hex(16, 1));
+		sectorcards.get(1).getHexes().add(hexes.get(28));
 		hexes.add(new Hex(26, 0));
+
 		hexes.add(new Hex(36, 3));
+		sectorcards.get(2).getHexes().add(hexes.get(30));
 		hexes.add(new Hex(46, 0));
+
 		hexes.add(new Hex(56, 1));
+		sectorcards.get(3).getHexes().add(hexes.get(32));
 
 		hexes.add(new Hex(17, 1));
+		sectorcards.get(1).getHexes().add(hexes.get(33));
 		hexes.add(new Hex(27, 1));
+		sectorcards.get(1).getHexes().add(hexes.get(34));
 		hexes.add(new Hex(37, 0));
+		sectorcards.get(2).getHexes().add(hexes.get(35));
 		hexes.add(new Hex(47, 1));
+		sectorcards.get(2).getHexes().add(hexes.get(36));
 		hexes.add(new Hex(57, 0));
+		sectorcards.get(3).getHexes().add(hexes.get(37));
 		hexes.add(new Hex(67, 0));
+		sectorcards.get(3).getHexes().add(hexes.get(38));
 
 		hexes.add(new Hex(18, 2));
+		sectorcards.get(1).getHexes().add(hexes.get(39));
 		hexes.add(new Hex(28, 0));
+
 		hexes.add(new Hex(38, 2));
+		sectorcards.get(2).getHexes().add(hexes.get(41));
 		hexes.add(new Hex(48, 0));
+
 		hexes.add(new Hex(58, 2));
+		sectorcards.get(3).getHexes().add(hexes.get(43));
 
 		hexes.add(new Hex(19, 0));
+		sectorcards.get(1).getHexes().add(hexes.get(44));
 		hexes.add(new Hex(29, 0));
+		sectorcards.get(1).getHexes().add(hexes.get(45));
 		hexes.add(new Hex(39, 0));
+		sectorcards.get(2).getHexes().add(hexes.get(46));
 		hexes.add(new Hex(49, 1));
+		sectorcards.get(2).getHexes().add(hexes.get(47));
 		hexes.add(new Hex(59, 1));
+		sectorcards.get(3).getHexes().add(hexes.get(48));
 		hexes.add(new Hex(69, 1));
+		sectorcards.get(3).getHexes().add(hexes.get(49));
 
 		for (Hex h: hexes) {
 			creerListeVoisins(h);
 		}
+		// Pour vérifier la liste de voisin des hexs
+		/*
+		for (Hex h: hexes){
+			System.out.print(h.getIdHex() + " et ses voisins : ");
+			for (Hex h1: h.getNeighbors()){
+				System.out.println(h1.getIdHex());
+			}
+		} */
 	}
 
 	// ***************************************************************
@@ -159,9 +203,9 @@ public class Ground {
 			System.out.println("La carte centrale ne peut pas être déplacée !");
 			return;
 		}
-		SectorCard temp = sectorcards[index1];
-		sectorcards[index1] = sectorcards[index2];
-		sectorcards[index2] = temp;
+		SectorCard temp = sectorcards.get(index1);
+		sectorcards.set(index1, sectorcards.get(index2));
+		sectorcards.set(index2, temp);
 	}
 
 	public void rotateCard(int index) {
@@ -169,7 +213,7 @@ public class Ground {
 			System.out.println("La carte centrale ne peut pas être tournée !");
 			return;
 		}
-		sectorcards[index].rotate();
+		sectorcards.get(index).rotate();
 	}
 
 	public void swapAndRotateTopBottom(int indexTop, int indexBottom) {
@@ -181,8 +225,8 @@ public class Ground {
 		swapCards(indexTop, indexBottom);
 
 		// Faire une rotation de 180° sur les deux cartes
-		sectorcards[indexTop].rotate();
-		sectorcards[indexBottom].rotate();
+		sectorcards.get(indexTop).rotate();
+		sectorcards.get(indexBottom).rotate();
 	}
 
 	public void shuffleMap() {
@@ -190,9 +234,9 @@ public class Ground {
 
 		// Étape 1 : Mélanger les cartes latérales (3 et 5) avec 50% de chance
 		if (random.nextBoolean()) { // 50% de chance
-			SectorCard temp = sectorcards[3];
-			sectorcards[3] = sectorcards[5];
-			sectorcards[5] = temp;
+			SectorCard temp = sectorcards.get(3);
+			sectorcards.set(3, sectorcards.get(5));
+			sectorcards.set(5, temp);
 		}
 
 		// Étape 2 : Mélanger les cartes du haut (0, 1, 2) et du bas (6, 7, 8)
@@ -212,13 +256,13 @@ public class Ground {
 				int bottomIndex = bottomIndices.get(i);
 
 				// Swap entre haut et bas avec rotation
-				SectorCard temp = sectorcards[topIndex];
-				sectorcards[topIndex] = sectorcards[bottomIndex];
-				sectorcards[bottomIndex] = temp;
+				SectorCard temp = sectorcards.get(topIndex);
+				sectorcards.set(topIndex, sectorcards.get(bottomIndex));
+				sectorcards.set(bottomIndex, temp);
 
 				// Rotation de 180° pour l'alignement
-				sectorcards[topIndex].rotate();
-				sectorcards[bottomIndex].rotate();
+				sectorcards.get(topIndex).rotate();
+				sectorcards.get(bottomIndex).rotate();
 			}
 		}
 
@@ -226,14 +270,3 @@ public class Ground {
 		// Rien à faire ici
 	}
 }
-//	public List<Hex> setGround() {
-//		for (int i=0;i<23;i++) {
-//			hexes.add(new Hex(i, 0, false));
-//		}
-//		for (int i=0;i<16;i++) {
-//			hexes.add(new Hex(i, 1, false));
-//		}
-//		for (int i=0;i<16;i++) {
-//			hexes.
-//		}
-//	}
