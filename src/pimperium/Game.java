@@ -200,7 +200,6 @@ public class Game {
 
 	public static void main(String[] args) {
 		Game game = getInstance();
-		System.out.println("Création de la partie");
 		//Initialisation du terrain
 		game.ground = new Ground();
 		System.out.println("Création du terrain");

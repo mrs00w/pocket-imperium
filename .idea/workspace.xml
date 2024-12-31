@@ -6,10 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Je continue d'améliorer le explore">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Hex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Ship.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Ship.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +141,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734720286835</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Je continue d'améliorer le explore">
+      <option name="closed" value="true" />
+      <created>1734724263389</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1734724263389</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">

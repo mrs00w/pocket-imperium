@@ -19,6 +19,9 @@ public class ExpandCard implements CommandCard{
 		Game game = Game.getInstance();
 		List<Player> players = game.getPlayers();
 
+
+		//
+ 		//Cette partie là on l'utilise pour chaque CommandCard, on peut (je pense) mettre cette méthode dans commandCard et la réutiliser (au lieu de la réécrire)
 		// Filtrer les joueurs ayant choisi la carte Expand
 		List<Player> expandPlayers = players.stream()
 				.filter(p -> p.getCard(currentRound) instanceof ExpandCard)
@@ -32,6 +35,9 @@ public class ExpandCard implements CommandCard{
 			case 2 -> 2;
 			default -> 1;
 		};
+		//Jusqu'ici c'est ce qu'on réécrit
+
+
 
 		// Collecte des hexes contrôlés par le joueur
 		List<Hex> controlledHexes = game.getGround().getHexes().stream()
@@ -49,9 +55,16 @@ public class ExpandCard implements CommandCard{
 
 		// Initialisation pour la lecture utilisateur
 		Scanner reader = new Scanner(System.in);
-		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
+//		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
+		if (reader.hasNextInt() && reader.nextInt()==0){
+			System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
+		}
 
 		for (int i = 0; i < shipsToAdd; i++) {
+			if (player.getShipsHorsPlateau().size()==0){
+				System.out.println("Vous n'avez plus de vaisseaux à placer");
+				break;
+			}
 			Ship currentShip = player.getShipsHorsPlateau().pop();
 
 			Hex selectedHex;
@@ -59,7 +72,7 @@ public class ExpandCard implements CommandCard{
 				System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé :");
 				int hexId = reader.nextInt();
 
-				// Vérifier si l'hex est contrôlé et est un hex valide
+				// Vérifier que l'hex est un système contrôlé par le joueur et est un hex valide
 				selectedHex = controlledHexes.stream()
 						.filter(hex -> hex.getIdHex() == hexId)
 						.findFirst()
@@ -69,16 +82,18 @@ public class ExpandCard implements CommandCard{
 					System.out.println("Erreur : Hex non valide ou non contrôlé. Réessayez.");
 					continue;
 				}
-
-				// Vérification de la limite de placement (2 vaisseaux max par hex)
-				int allocatedShips = hexAllocation.getOrDefault(selectedHex.getIdHex(), 0);
-				if (allocatedShips >= 2) {
-					System.out.println("Erreur : Vous ne pouvez pas placer plus de 2 vaisseaux sur cet hex.");
-					continue;
-				}
-
-				// Si tout est valide, ajouter à l'allocation et sortir de la boucle
-				hexAllocation.put(selectedHex.getIdHex(), allocatedShips + 1);
+//
+////				// Vérification de la limite de placement (2 vaisseaux max par hex)
+//				int allocatedShips = hexAllocation.getOrDefault(selectedHex.getIdHex(), 0);
+//
+//				//On n'a pas besoin d'imposer une limite de placement
+////				if (allocatedShips >= 2) {
+////					System.out.println("Erreur : Vous ne pouvez pas placer plus de 2 vaisseaux sur cet hex.");
+////					continue;
+////				}
+//
+//				// Si tout est valide, ajouter à l'allocation et sortir de la boucle
+//				hexAllocation.put(selectedHex.getIdHex(), allocatedShips + 1);
 				break;
 			}
 
