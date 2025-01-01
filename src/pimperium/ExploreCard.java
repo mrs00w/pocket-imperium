@@ -1,5 +1,7 @@
 package pimperium;
 
+import gui.Controller;
+
 import java.util.ArrayList;
 import java.util.*;
 import java.util.Scanner;
@@ -55,9 +57,30 @@ public class ExploreCard implements CommandCard {
 		return false;
 	}
 
+	private boolean isReachableInTwoSteps(Hex sourceHex, Hex targetHex) {
+		// Étape 1 : Obtenez les voisins directs de la source
+		List<Hex> firstStepNeighbors = sourceHex.getNeighbors();
+
+		// Étape 2 : Vérifiez si la destination est un voisin direct
+		if (firstStepNeighbors.contains(targetHex)) {
+			return true;
+		}
+
+		// Étape 3 : Obtenez les voisins des voisins et vérifiez s'ils contiennent la cible
+		for (Hex neighbor : firstStepNeighbors) {
+			if (neighbor.getNeighbors().contains(targetHex)) {
+				return true;
+			}
+		}
+
+		// Si aucune condition n'est remplie, la cible n'est pas atteignable
+		return false;
+	}
+
 	public void execute(int currentRound) {
 		System.out.println(STR."\{player.getName()} explore d'autres systèmes avec ses vaisseaux.");
 		Game game = Game.getInstance();
+		Controller controller = game.getController();
 		List<Player> players = new ArrayList<>(game.getPlayers());
 
 
@@ -100,10 +123,15 @@ public class ExploreCard implements CommandCard {
 			List<Ship> shipsNotUsedInHex = sourceHex.getShips().stream()
 					.filter(ship -> !ship.isUsed())
 					.toList();
+			if (shipsNotUsedInHex.isEmpty()) {
+				System.out.println("Aucun vaisseau disponible dans cet hex.");
+				i--;
+				continue;
+			}
 
-			int iBoucle=1;
-			boolean boucle=true;
-			while (boucle) {
+//			int iBoucle=1; // Peut être à supprimer
+//			boolean boucle=true;
+//			while (boucle) {
 //			for (Ship ship : sourceHex.getShips()) {
 //				if (ship.getPlayer() == player && !ship.isUsed()) { //pourquoi vérifier que le vaisseau appartient au jouer alors qu'on a déjà vérifié que l'hex appartenait au joueur ?
 //					shipsNotUsedInHex.add(ship);
@@ -121,11 +149,13 @@ public class ExploreCard implements CommandCard {
 				Hex targetHex = game.getGround().getHexById(targetHexId);
 
 				// Valider les règles de déplacement
-				if (targetHex == null) {
-					System.out.println("Hex non valide. Essayez encore.");
+				if (targetHex == null || !isReachableInTwoSteps(sourceHex, targetHex)) {
+					System.out.println("Le hex cible n'est pas atteignable en un ou deux mouvements. Essayez encore.");
 					i--; // Refaire ce tour
 					continue;
 				}
+
+
 //			//On peut avancer de 1 ou 2 hexagones. On doit donc vérifier que l'hexagone cible est bien voisin à 2 hex près
 //			//On a targetHexId l'hex de destination et sourceHexId l'hex de départ
 //			//ça marche pas à tous les coups --> Faire les mvt 1 par 1
@@ -189,29 +219,38 @@ public class ExploreCard implements CommandCard {
 					System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
 				}
 
+				controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size());
+				controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size());
+
 				// Déplacer les vaisseaux
 				for (Ship s : shipsToMove) {
 					s.updatePosition(targetHex);
 					s.setUsed(true); // Empêcher d'utiliser ce vaisseau à nouveau ce tour
 					targetHex.getShips().add(s); //On ajoute le vaisseau dans la liste des vaisseaux de l'Hex cible
 				}
-				sourceHex.getShips().subList(0, shipsToMove.size()).clear(); //On supprime les ships déplacés de la liste de ships du Hex de départ
 
-				if (iBoucle==1){
-					System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
-					if(reader.nextInt()==1){
-						sourceHex=targetHex;
-						shipsNotUsedInHex=shipsToMove;
-						iBoucle++;
-					} else{
-						boucle=false;
-					}
-				}
-			}
+				List<Ship> shipsInSourceHex = sourceHex.getShips();
+				int maxShipsToRemove = Math.min(shipsToMove.size(), shipsInSourceHex.size());
+				// Supprimer uniquement les vaisseaux valides
+				shipsInSourceHex.subList(0, maxShipsToRemove).clear();
+
+				controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size());
+				controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size());
+
+//				if (iBoucle==1){
+//					System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
+//					if(reader.nextInt()==1){
+//						sourceHex=targetHex;
+//						shipsNotUsedInHex=shipsToMove;
+//						iBoucle++;
+//					} else{
+//						boucle=false;
+//					}
+//				}
+//			}
 		}
+
+		player.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
 		System.out.println("Exploration terminée.");
-		for (Ship ship : player.getShipsSurPlateau()){
-			ship.setUsed(false);
-		}
 	}
 }

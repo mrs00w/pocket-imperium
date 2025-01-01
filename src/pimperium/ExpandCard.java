@@ -1,5 +1,7 @@
 package pimperium;
 
+import gui.Controller;
+
 import java.util.*;
 
 public class ExpandCard implements CommandCard{
@@ -17,6 +19,7 @@ public class ExpandCard implements CommandCard{
 	public void execute(int currentRound) {
 		System.out.println(STR."\{player.getName()} ajoute de nouveaux vaisseaux sur le plateau");
 		Game game = Game.getInstance();
+		Controller controller = game.getController();
 		List<Player> players = game.getPlayers();
 
 
@@ -61,7 +64,7 @@ public class ExpandCard implements CommandCard{
 		}
 
 		for (int i = 0; i < shipsToAdd; i++) {
-			if (player.getShipsHorsPlateau().size()==0){
+			if (player.getShipsHorsPlateau().isEmpty()){
 				System.out.println("Vous n'avez plus de vaisseaux à placer");
 				break;
 			}
@@ -101,6 +104,8 @@ public class ExpandCard implements CommandCard{
 			currentShip.updatePosition(selectedHex);
 			player.getShipsSurPlateau().add(currentShip);
 			selectedHex.getShips().add(currentShip);
+			int shipCount = selectedHex.getShips().size();
+			controller.updateHexLabel(selectedHex.getIdHex(), shipCount);
 			System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
 		}
 	}

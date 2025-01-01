@@ -1,18 +1,30 @@
 package pimperium;
 
+import gui.Controller;
+
 import java.util.Scanner;
 import java.util.*;
 
 public class Game {
 	private static Game game = null;
-	private List<Player> players;
+	private final List<Player> players;
 	private Ground ground;
 	private static int round = 0;
+	private SectorCard centralCard;
+	private Controller controller;
 
 	private Game() {
 		this.ground = new Ground();
-		List<Player> players = new ArrayList<>();
-		this.players = players;
+		this.players = new ArrayList<>();
+		this.centralCard = ground.findCentralCard(ground.getSectors());
+	}
+
+	public void setController(Controller controller) {
+		this.controller = controller;
+	}
+
+	public Controller getController() {
+		return controller;
 	}
 
 	public static Game getInstance() {
@@ -21,6 +33,89 @@ public class Game {
 			game = new Game();
 		}
 		return game;
+	}
+
+	public void calculScore() {
+		System.out.println("Calcul des scores de chaque joueur pour le round");
+		//Demande à chaque joueur de choisir une sectorCard
+		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
+		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
+		//Personne ne peut sélectionner le TriPrime
+		//Pour chaque sectorCard, si des systemes sont controlés, le joueur qui le controle gagne autant de point
+		// que le niveau du systeme (peut importe qui a choisi la carte)
+		Set<SectorCard> chosenSectors = new HashSet<>();
+		Map<Player, SectorCard> playerChoices = new HashMap<>();
+		Player triPrimeController = getTriPrimeController();
+
+		for (Player player : players) {
+			SectorCard chosenSector = chooseSector(player, chosenSectors);
+			if (chosenSector != null) {
+				chosenSectors.add(chosenSector);
+				playerChoices.put(player, chosenSector);
+			}
+		}
+
+		if (triPrimeController != null) {
+			SectorCard additionalSector = chooseSector(triPrimeController, chosenSectors);
+			if (additionalSector != null) {
+				chosenSectors.add(additionalSector);
+			}
+		}
+
+		// Calculer les scores
+		for (Map.Entry<Player, SectorCard> entry : playerChoices.entrySet()) {
+			Player player = entry.getKey();
+			SectorCard sectorCard = entry.getValue();
+			int points = calculateSectorPoints(player, sectorCard);
+			player.addPoints(points);
+		}
+
+		if (triPrimeController != null) {
+			for (SectorCard extraSector : chosenSectors) {
+				if (triPrimeController.controlsSector(extraSector)) {
+					int points = calculateSectorPoints(triPrimeController, extraSector);
+					triPrimeController.addPoints(points);
+				}
+			}
+		}
+	}
+
+	private Player getTriPrimeController() {
+		for (Player player : players) {
+			if (player.controlsSector(centralCard)) {
+				return player;
+			}
+		}
+		return null;
+	}
+
+	private SectorCard chooseSector(Player player, Set<SectorCard> chosenSectors) {
+		System.out.println("Quel secteur voulez-vous choisir ? (Entrez l'ID de position sur la carte)");
+		Scanner reader = new Scanner(System.in);
+		int idPositionOnMap = reader.nextInt();
+
+		SectorCard sector = ground.getSectorByPositionOnMap(idPositionOnMap);
+			// Vérifie si le secteur est valide
+			if (sector != null && sector.getPositionOnMap() == idPositionOnMap) { // Vérifie que l'ID correspond
+				if (!chosenSectors.contains(sector) && sector != centralCard && player.controlsSector(sector)) {
+					return sector; // Retourne le secteur si toutes les conditions sont respectées
+				} else {
+					System.out.println("Ce secteur ne peut pas être choisi (déjà choisi, central, ou non contrôlé par le joueur).");
+					return null; // Optionnel : Si le secteur n'est pas valide
+				}
+			}
+		System.out.println("Aucun secteur correspondant à cet ID n'a été trouvé.");
+		return null; // Si aucun secteur valide n'est trouvé
+	}
+
+	private int calculateSectorPoints(Player player, SectorCard sectorCard) {
+		int points = 0;
+		for (Hex hex : sectorCard.getHexes()) {
+			if (player.controlsHex(hex)) {
+				points += hex.getLevelSystem();
+			}
+		}
+		return points;
 	}
 
 	public List<Player> getPlayers() {
@@ -67,15 +162,6 @@ public class Game {
 				System.out.println(STR."\{excessShips} vaisseaux excédentaires ont été retirés de l'hex \{hex.getIdHex()}");
 			}
 		}
-	}
-
-	public void calculScore() {
-		System.out.println("Calcul des scores de chaque joueur pour le round");
-		//Demande à chaque joueur de choisir une sectorCard
-		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
-		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
-		//Personne ne peut sélectionner le TriPrime
-		//Pour chaque sectorCard, si des systemes sont controlés, le joueur qui le controle gagne autant de point que le niveau du systeme (peut importe qui a choisi la carte)
 	}
 
 	public void initialShipDeployment() {
@@ -139,16 +225,12 @@ public class Game {
 
 		System.out.println("Hex sélectionné : " + targetHex);
 
-		//Pas possible non plus car on est à l'initialisation, donc les joueurs auront forcément des vaisseaux à placer
-//		if (player.getShipsHorsPlateau().size() < 2) {
-//			System.out.println(STR."Le joueur \{player.getName()} n'a pas assez de vaisseaux pour le placement.");
-//			return;
-//		}
-
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
 			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
+			int shipCount = targetHex.getShips().size();
+			controller.updateHexLabel(targetHex.getIdHex(), shipCount);
 			player.getShipsHorsPlateau().pop();
 			// Définir le joueur comme occupant du système
 			targetHex.setCurrentOccupant(player);
@@ -186,10 +268,9 @@ public class Game {
 				p.perform(iCard);
 			}
 		}
-		//sustainShips();
-		//calculScore();
+		sustainShips();
+		calculScore();
 		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
-
 	}
 
 	private void updatePriority() {
@@ -198,19 +279,34 @@ public class Game {
 		}
 	}
 
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
+	public void setupGame() {
 		Game game = getInstance();
+		System.out.println("Création de la partie");
 		//Initialisation du terrain
 		game.ground = new Ground();
 		System.out.println("Création du terrain");
 		//game.ground.setupGround(); // En vrai on peut tout mettre dans le constructeur direct //du coup je l'ai mis dans le constructeur
 //		String player;
-		//Instanciation des joueurs
-		for (int i = 0; i < 3; i++) {
-			Player p = new Player();
-			p.setPlayerName();
-			game.players.add(p);
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Combien de joueurs humains ?");
+		int humanPlayers = scanner.nextInt();
+
+		System.out.println("Combien de bots ?");
+		int botPlayers = scanner.nextInt();
+
+		// Ajouter les joueurs humains
+		for (int i = 0; i < humanPlayers; i++) {
+			Player player = new Player();
+			player.setPlayerName(); // Demander un nom
+			players.add(player);
 		}
+
+		// Ajouter les bots
+		for (int i = 0; i < botPlayers; i++) {
+			players.add(new Bot());
+		}
+
 		//Maintenant que la map et les joueurs sont créés on peut initialiser le terrain
 		System.out.println("Initialisation du terrain");
 		game.initialShipDeployment();
@@ -220,23 +316,23 @@ public class Game {
 		}
 
 // Pour calculer les scores de victoire à la fin
-//		Map<String, Integer> tableauScores = new HashMap<>();
-//		for (Player p : players){
-//			tableauScores.put(p.name, Integer.valueOf(p.score));
-//		}
-//
-//		String gagnant = null;
-//		int scoreMax = 0;
-//
-//		for (Map.Entry<String, Integer> entry : tableauScores.entrySet()) {
-//			String joueur = entry.getKey();
-//			int score = entry.getValue();
-//
-//			if (score > scoreMax) {
-//				scoreMax = score;
-//				gagnant = joueur;
-//			}
-//		}
-//		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
+		Map<String, Integer> tableauScores = new HashMap<>();
+		for (Player p : game.players){
+			tableauScores.put(p.getName(), Integer.valueOf(p.getScore()));
+		}
+
+		String gagnant = null;
+		int scoreMax = 0;
+
+		for (Map.Entry<String, Integer> entry : tableauScores.entrySet()) {
+			String joueur = entry.getKey();
+			int score = entry.getValue();
+
+			if (score > scoreMax) {
+				scoreMax = score;
+				gagnant = joueur;
+			}
+		}
+		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
 	}
 }

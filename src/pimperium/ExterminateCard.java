@@ -1,5 +1,7 @@
 package pimperium;
 
+import gui.Controller;
+
 import java.util.ArrayList;
 import java.util.*;
 
@@ -20,6 +22,7 @@ public class ExterminateCard implements CommandCard {
 
 	public void execute(int currentround) {
 
+		Controller controller = game.getController();
 		System.out.println(STR."\{this.player.getName()} envahit un système");
 		System.out.println("Quel système voulez vous envahir ? (ID)");
 		Scanner reader = new Scanner(System.in);
@@ -113,6 +116,8 @@ public class ExterminateCard implements CommandCard {
 			System.out.println("Invasion réussie ! Vous contrôlez maintenant le système.");
 			targetHex.setCurrentOccupant(player);
 			targetHex.setShips(invasionFleet);
+			int shipCount = targetHex.getShips().size();
+			controller.updateHexLabel(targetHex.getIdHex(), shipCount);
 		}
 
 		// Chaque vaisseau ne peut être utilisé qu'une fois par round, donc marquer les vaisseaux comme "utilisés"
