@@ -4,7 +4,9 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import pimperium.Game;
+import pimperium.Player;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -185,17 +187,30 @@ public class Controller {
     }
 
     // Mettre à jour le texte et la visibilité du Label
-    public void updateHexLabel(int hexId, int shipCount) {
+    public void updateHexLabel(int hexId, int shipCount, Player controllingPlayer) {
         Platform.runLater(() -> {
             Label label = hexLabels.get(hexId);
             if (label != null) {
                 if (shipCount > 0) {
                     label.setText(String.valueOf(shipCount));
                     label.setVisible(true);
+
+                    if (controllingPlayer != null) {
+                        Color playerColor = controllingPlayer.getColor();
+                        label.setStyle("-fx-text-fill: " + toRgbString(playerColor) + ";");
+                    }
+
                 } else {
                     label.setVisible(false); // Cacher le label s'il n'y a pas de vaisseaux
                 }
             }
         });
+    }
+
+    private String toRgbString(Color color) {
+        int r = (int) (color.getRed() * 255);
+        int g = (int) (color.getGreen() * 255);
+        int b = (int) (color.getBlue() * 255);
+        return STR."rgb(\{r},\{g},\{b})";
     }
 }

@@ -105,7 +105,7 @@ public class ExpandCard implements CommandCard{
 			player.getShipsSurPlateau().add(currentShip);
 			selectedHex.getShips().add(currentShip);
 			int shipCount = selectedHex.getShips().size();
-			controller.updateHexLabel(selectedHex.getIdHex(), shipCount);
+			controller.updateHexLabel(selectedHex.getIdHex(), shipCount, player);
 			System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
 		}
 	}

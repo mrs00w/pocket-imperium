@@ -1,5 +1,7 @@
 package pimperium;
 
+import java.awt.*;
+import java.util.List;
 import java.util.Scanner;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -7,6 +9,7 @@ import java.util.stream.Collectors;
 public class Player {
 	private String name;
 	private static int nombrePlayer = 0;
+	private Color color;
 	private boolean isAlive;
 	private int idPlayer;
 	private int couleurVaisseau;
@@ -36,6 +39,14 @@ public class Player {
 			shipsHorsPlateau.push(new Ship(this));
 		}
 		//Avant même le premier tour, chaque joueur doit choisir le premier système sur lequel s'installer
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Color getColor() {
+		return color;
 	}
 
 	public int getIdPlayer() {
@@ -213,6 +224,8 @@ public class Player {
 
 		cardOrder[currentRound].execute(currentRound);
 	}
+
+
 
 	@Override
 	public String toString() {

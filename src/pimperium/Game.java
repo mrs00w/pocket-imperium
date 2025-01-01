@@ -2,6 +2,8 @@ package pimperium;
 
 import gui.Controller;
 
+import java.awt.*;
+import java.util.List;
 import java.util.Scanner;
 import java.util.*;
 
@@ -230,7 +232,7 @@ public class Game {
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
 			int shipCount = targetHex.getShips().size();
-			controller.updateHexLabel(targetHex.getIdHex(), shipCount);
+			controller.updateHexLabel(targetHex.getIdHex(), shipCount, player);
 			player.getShipsHorsPlateau().pop();
 			// Définir le joueur comme occupant du système
 			targetHex.setCurrentOccupant(player);
@@ -306,6 +308,10 @@ public class Game {
 		for (int i = 0; i < botPlayers; i++) {
 			players.add(new Bot());
 		}
+
+		players.get(0).setColor(Color.RED);
+		players.get(1).setColor(Color.GREEN);
+		players.get(2).setColor(Color.BLUE);
 
 		//Maintenant que la map et les joueurs sont créés on peut initialiser le terrain
 		System.out.println("Initialisation du terrain");

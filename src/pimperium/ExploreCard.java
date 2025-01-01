@@ -19,43 +19,42 @@ public class ExploreCard implements CommandCard {
 	}
 
 	public int getPriority() {
-		int priority = 2;
-		return priority;
+		return 2;
 	}
 
-	private List<Hex> getCommonNeighbors(Hex hex1, Hex hex2) {
-		List<Hex> neighborsHex1 = hex1.getNeighbors();
-		List<Hex> neighborsHex2 = hex2.getNeighbors();
+//	private List<Hex> getCommonNeighbors(Hex hex1, Hex hex2) {
+//		List<Hex> neighborsHex1 = hex1.getNeighbors();
+//		List<Hex> neighborsHex2 = hex2.getNeighbors();
+//
+//		// Trouver les voisins communs
+//		return neighborsHex1.stream()
+//				.filter(neighborsHex2::contains)
+//				.toList();
+//	}
 
-		// Trouver les voisins communs
-		return neighborsHex1.stream()
-				.filter(neighborsHex2::contains)
-				.toList();
-	}
+//	private boolean hasValidCommonNeighbor(Hex sourceHex, Hex targetHex, Player currentPlayer) {
+//		// Obtenez les voisins communs
+//		List<Hex> commonNeighbors = getCommonNeighbors(sourceHex, targetHex);
+//
+//		// Vérifiez si au moins un voisin répond aux critères
+//		return commonNeighbors.stream().anyMatch(hex ->
+//				hex.getCurrentOccupant() == null || hex.getCurrentOccupant() == currentPlayer);
+//	}
 
-	private boolean hasValidCommonNeighbor(Hex sourceHex, Hex targetHex, Player currentPlayer) {
-		// Obtenez les voisins communs
-		List<Hex> commonNeighbors = getCommonNeighbors(sourceHex, targetHex);
-
-		// Vérifiez si au moins un voisin répond aux critères
-		return commonNeighbors.stream().anyMatch(hex ->
-				hex.getCurrentOccupant() == null || hex.getCurrentOccupant() == currentPlayer);
-	}
-
-	public boolean uniqueCommonNeighborTriPrime(Hex hex1, Hex hex2) {
-		List<Hex> neighborsHex1 = hex1.getNeighbors();
-		List<Hex> neighborsHex2 = hex2.getNeighbors();
-
-		List<Hex> commonNeighbors = neighborsHex1.stream()
-				.filter(neighborsHex2::contains)
-				.filter(hex -> hex.getLevelSystem() == 3) // Ajout du critère sur le LevelSystem
-				.toList();
-
-		if (commonNeighbors.size() == 1) {
-			return true;
-		}
-		return false;
-	}
+//	public boolean uniqueCommonNeighborTriPrime(Hex hex1, Hex hex2) {
+//		List<Hex> neighborsHex1 = hex1.getNeighbors();
+//		List<Hex> neighborsHex2 = hex2.getNeighbors();
+//
+//		List<Hex> commonNeighbors = neighborsHex1.stream()
+//				.filter(neighborsHex2::contains)
+//				.filter(hex -> hex.getLevelSystem() == 3) // Ajout du critère sur le LevelSystem
+//				.toList();
+//
+//		if (commonNeighbors.size() == 1) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	private boolean isReachableInTwoSteps(Hex sourceHex, Hex targetHex) {
 		// Étape 1 : Obtenez les voisins directs de la source
@@ -219,8 +218,8 @@ public class ExploreCard implements CommandCard {
 					System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
 				}
 
-				controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size());
-				controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size());
+				controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
+				controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);
 
 				// Déplacer les vaisseaux
 				for (Ship s : shipsToMove) {
@@ -234,8 +233,8 @@ public class ExploreCard implements CommandCard {
 				// Supprimer uniquement les vaisseaux valides
 				shipsInSourceHex.subList(0, maxShipsToRemove).clear();
 
-				controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size());
-				controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size());
+				controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
+				controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);
 
 //				if (iBoucle==1){
 //					System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
