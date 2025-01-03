@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="752.0"
+            prefWidth="534.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+   <ImageView fitHeight="752.0" fitWidth="538.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true"
+              AnchorPane.bottomAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="-1.0">
+      <image>
+         <Image url="@images/map_pocket_imperium.png"/>
+      </image>
+   </ImageView>
+   <Label contentDisplay="CENTER" layoutX="14.0" layoutY="65.0" text="11" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="99.0" layoutY="65.0" text="21" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="185.0" layoutY="65.0" text="31" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="274.0" layoutY="65.0" text="41" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="361.0" layoutY="65.0" text="51" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="453.0" layoutY="65.0" text="61" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="56.0" layoutY="143.0" text="12" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="145.0" layoutY="143.0" text="22" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="234.0" layoutY="143.0" text="32" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="320.0" layoutY="143.0" text="42" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="412.0" layoutY="143.0" text="52" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="453.0" layoutY="216.0" text="63" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="361.0" layoutY="216.0" text="53" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="274.0" layoutY="216.0" text="43" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="185.0" layoutY="216.0" text="33" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="99.0" layoutY="216.0" text="23" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="14.0" layoutY="216.0" text="13" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="56.0" layoutY="292.0" text="14" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="145.0" layoutY="292.0" text="24" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="234.0" layoutY="292.0" text="34" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="320.0" layoutY="292.0" text="54" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="412.0" layoutY="292.0" text="64" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="453.0" layoutY="364.0" text="65" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="361.0" layoutY="364.0" text="55" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="320.0" layoutY="364.0" text="45" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="256.0" layoutY="462.0" text="36" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="185.0" layoutY="375.0" text="35" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="145.0" layoutY="450.0" text="26" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="99.0" layoutY="364.0" text="25" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="14.0" layoutY="375.0" text="15" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="56.0" layoutY="438.0" text="16" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="14.0" layoutY="506.0" text="17" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="99.0" layoutY="506.0" text="27" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="185.0" layoutY="506.0" text="37" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="274.0" layoutY="506.0" text="47" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="361.0" layoutY="517.0" text="57" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="320.0" layoutY="438.0" text="46" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="412.0" layoutY="438.0" text="56" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="453.0" layoutY="517.0" text="67" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="412.0" layoutY="582.0" text="58" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="320.0" layoutY="593.0" text="48" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="234.0" layoutY="593.0" text="38" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="145.0" layoutY="593.0" text="28" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="56.0" layoutY="593.0" text="18" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="14.0" layoutY="666.0" text="19" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="99.0" layoutY="666.0" text="29" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="185.0" layoutY="666.0" text="39" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="274.0" layoutY="666.0" text="49" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="361.0" layoutY="666.0" text="59" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label contentDisplay="CENTER" layoutX="453.0" layoutY="666.0" text="69" textFill="WHITE">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="36.0" layoutY="88.0" text="11" fx:id="hex11Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="139.0" layoutY="65.0" text="21" fx:id="hex21Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" visible="false" textOverrun="CLIP" >
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="228.0" layoutY="76.0" text="31" fx:id="hex31Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="314.0" layoutY="65.0" text="41" fx:id="hex41Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="400.0" layoutY="53.0" text="51" fx:id="hex51Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="485.0" layoutY="87.0" text="61" fx:id="hex61Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="458.0" layoutY="143.0" text="52" fx:id="hex52Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="143.0" text="42" fx:id="hex42Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="279.0" layoutY="143.0" text="32" fx:id="hex32Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="190.0" layoutY="143.0" text="22" fx:id="hex22Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="104.0" layoutY="154.0" text="12" fx:id="hex12Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="61.0" layoutY="216.0" text="13" fx:id="hex13Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="150.0" layoutY="227.0" text="23" fx:id="hex23Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="216.0" layoutY="238.0" text="33" fx:id="hex33Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="319.0" layoutY="216.0" text="43" fx:id="hex43Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="406.0" layoutY="215.0" text="53" fx:id="hex53Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="190.0" layoutY="292.0" text="24" fx:id="hex24Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="87.0" layoutY="315.0" text="14" fx:id="hex14Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="279.0" layoutY="292.0" text="34" fx:id="hex34Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="210.0" layoutY="352.0" text="35" fx:id="hex35Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="261.0" layoutY="426.0" text="36" fx:id="hex36Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="308.0" layoutY="386.0" text="45" fx:id="hex45Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="406.0" layoutY="364.0" text="55" fx:id="hex55Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="452.0" layoutY="303.0" text="64" fx:id="hex64Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="292.0" text="54" fx:id="hex54Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="144.0" layoutY="364.0" text="25" fx:id="hex25Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="61.0" layoutY="375.0" text="15" fx:id="hex15Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="92.0" layoutY="426.0" text="16" fx:id="hex16Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="184.0" layoutY="437.0" text="26" fx:id="hex26Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="438.0" text="46" fx:id="hex46Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="447.0" layoutY="426.0" text="56" fx:id="hex56Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="490.0" layoutY="517.0" text="67" fx:id="hex67Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="428.0" layoutY="616.0" text="58" fx:id="hex58Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="411.0" layoutY="517.0" text="57" fx:id="hex57Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="319.0" layoutY="505.0" text="47" fx:id="hex47Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="228.0" layoutY="528.0" text="37" fx:id="hex37Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="189.0" layoutY="593.0" text="28" fx:id="hex28Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="55.0" layoutY="666.0" text="19" fx:id="hex19Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="144.0" layoutY="666.0" text="29" fx:id="hex29Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+   <font>
+      <Font name="Arial Bold" size="20.0"/>
+   </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="666.0" text="39" fx:id="hex39Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="314.0" layoutY="654.0" text="49" fx:id="hex49Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="405.0" layoutY="677.0" text="59" fx:id="hex59Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="490.0" layoutY="654.0" text="69" fx:id="hex69Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="86.0" layoutY="616.0" text="18" fx:id="hex18Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="55.0" layoutY="505.0" text="17" fx:id="hex17Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="138.0" layoutY="505.0" text="27" fx:id="hex27Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="261.0" layoutY="616.0" text="38" fx:id="hex38Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="593.0" text="48" fx:id="hex48Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="484.0" layoutY="238.0" text="63" fx:id="hex63Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="478.0" layoutY="386.0" text="65" fx:id="hex65Label"
+          textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
+      <font>
+         <Font name="Arial Bold" size="20.0"/>
+      </font>
+   </Label>
+</AnchorPane>

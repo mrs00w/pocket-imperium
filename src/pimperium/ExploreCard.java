@@ -1,5 +1,7 @@
 package pimperium;
 
+import gui.Controller;
+
 import java.util.ArrayList;
 import java.util.*;
 import java.util.Scanner;
@@ -17,8 +19,7 @@ public class ExploreCard implements CommandCard {
 	}
 
 	public int getPriority() {
-		int priority = 2;
-		return priority;
+		return 2;
 	}
 
 	private List<Hex> getCommonNeighbors(Hex hex1, Hex hex2) {
@@ -52,12 +53,32 @@ public class ExploreCard implements CommandCard {
 		if (commonNeighbors.size() == 1) {
 			return true;
 		}
+
+//        private boolean isReachableInTwoSteps(Hex sourceHex, Hex targetHex) {
+//            // Étape 1 : Obtenez les voisins directs de la source
+//            List<Hex> firstStepNeighbors = sourceHex.getNeighbors();
+//
+            // Étape 2 : Vérifiez si la destination est un voisin direct
+//            if (firstStepNeighbors.contains(targetHex)) {
+//                return true;
+//            }
+
+            // Étape 3 : Obtenez les voisins des voisins et vérifiez s'ils contiennent la cible
+//            for (Hex neighbor : firstStepNeighbors) {
+//                if (neighbor.getNeighbors().contains(targetHex)) {
+//                    return true;
+//                }
+//            }
+//        }
+
+		// Si aucune condition n'est remplie, la cible n'est pas atteignable
 		return false;
 	}
 
 	public void execute(int currentRound) {
 		System.out.println(STR."\{player.getName()} explore d'autres systèmes avec ses vaisseaux.");
 		Game game = Game.getInstance();
+		Controller controller = game.getController();
 		List<Player> players = new ArrayList<>(game.getPlayers());
 
 
@@ -78,17 +99,32 @@ public class ExploreCard implements CommandCard {
 
 		//Jusque là on peut optimiser
 
-		Scanner reader = new Scanner(System.in); // Scanner pour l'entrée utilisateur
+		System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
+		System.out.println("1. Passer la carte");
+		System.out.println("2. Jouer la carte");
+
+		Scanner reader = new Scanner(System.in);
+
+		int choice;
+		try {
+			choice = reader.nextInt();
+		} catch (Exception e) {
+			System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+			return;
+		}
+
+		if (choice == 1) {
+			System.out.println("Vous avez choisi de passer cette carte.");
+			// Rien à faire ici : le joueur ne joue pas cette carte
+			return;
+		} // Scanner pour l'entrée utilisateur
+
 		System.out.println("Vous pouvez déplacer " +fleetMovementsAllowed+ " flottes");
 
 		// Effectuer les mouvements autorisés
 		for (int i = 0; i < fleetMovementsAllowed; i++) {
-			System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) ou taper 0 pour passer votre tour :");
+			System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) :");
 			int sourceHexId = reader.nextInt();
-			if (sourceHexId==0){
-				System.out.println("Vous avez choisi de ne pas explore pendant ce tour.");
-				break;
-			}
 
 			// Récupérer les vaisseaux dans l'hex source
 			Hex sourceHex = game.getGround().getHexById(sourceHexId);
@@ -104,6 +140,11 @@ public class ExploreCard implements CommandCard {
 			List<Ship> shipsNotUsedInHex = sourceHex.getShips().stream()
 					.filter(ship -> !ship.isUsed())
 					.toList();
+			if (shipsNotUsedInHex.isEmpty()) {
+				System.out.println("Aucun vaisseau disponible dans cet hex.");
+				i--;
+				continue;
+			}
 
 			int iBoucle=1;
 			boolean boucle=true;
@@ -125,11 +166,19 @@ public class ExploreCard implements CommandCard {
 				Hex targetHex = game.getGround().getHexById(targetHexId);
 
 				// Valider les règles de déplacement
-				if (targetHex == null) {
+                // Version de Romain
+//                if (targetHex == null || !isReachableInTwoSteps(sourceHex, targetHex)) {
+//                    System.out.println("Le hex cible n'est pas atteignable en un ou deux mouvements. Essayez encore.");
+//                    i--; // Refaire ce tour
+//                    continue;
+//                }
+                if (targetHex == null) {
 					System.out.println("Hex non valide. Essayez encore.");
 					i--; // Refaire ce tour
 					continue;
 				}
+
+
 //			//On peut avancer de 1 ou 2 hexagones. On doit donc vérifier que l'hexagone cible est bien voisin à 2 hex près
 //			//On a targetHexId l'hex de destination et sourceHexId l'hex de départ
 //			//ça marche pas à tous les coups --> Faire les mvt 1 par 1
@@ -195,13 +244,25 @@ public class ExploreCard implements CommandCard {
 				}
 				sourceHex.getShips().subList(0, shipsToMove.size()).clear(); //On supprime les ships déplacés de la liste de ships du Hex de départ
 
-				// Retirer le contrôle du hex source s'il est vidé
+                //Version Romain
+//                List<Ship> shipsInSourceHex = sourceHex.getShips();
+//                int maxShipsToRemove = Math.min(shipsToMove.size(), shipsInSourceHex.size());
+//                // Supprimer uniquement les vaisseaux valides
+//                shipsInSourceHex.subList(0, maxShipsToRemove).clear();
+//
+//                controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
+//                controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);
+
+                // Retirer le contrôle du hex source s'il est vidé
 				if (sourceHex.getShips().isEmpty()) {
 					sourceHex.setCurrentOccupant(null);
 					System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
 				}
+                controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
+                controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);
 
-				if (iBoucle==1){
+
+                if (iBoucle==1){
 					System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
 					if(reader.nextInt()==1){
 						System.out.println("");
@@ -215,9 +276,8 @@ public class ExploreCard implements CommandCard {
 				iBoucle++;
 			}
 		}
+
+		player.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
 		System.out.println("Exploration terminée.");
-		for (Ship ship : player.getShipsSurPlateau()){
-			ship.setUsed(false);
-		}
 	}
 }

@@ -1,5 +1,7 @@
 package pimperium;
 
+import java.awt.*;
+import java.util.List;
 import java.util.Scanner;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -7,6 +9,7 @@ import java.util.stream.Collectors;
 public class Player {
 	private String name;
 	private static int nombrePlayer = 0;
+	private Color color;
 	private boolean isAlive;
 	private int idPlayer;
 	private int couleurVaisseau;
@@ -19,6 +22,7 @@ public class Player {
 	//A l'initialisation, l'ordre des cartes est par défaut expand, explore et exterminate
 	private int score;
 	private int priority;
+	private Set<SectorCard> controlledSectors;
 
 	public Player() {
 		this.isAlive = true;
@@ -37,7 +41,23 @@ public class Player {
 		//Avant même le premier tour, chaque joueur doit choisir le premier système sur lequel s'installer
 	}
 
-//	private void addNewShips(int nbShips) {
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public int getIdPlayer() {
+		return idPlayer;
+	}
+
+	public CommandCard[] getCommandCards() {
+		return commandCards;
+	}
+
+	//	private void addNewShips(int nbShips) {
 //		Scanner scanner = new Scanner(System.in);
 //		List<Hex> hexes = Ground.getHexes().filter((Hex hex) -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null).toList();
 //		if(!this.shipsHorsPlateau.isEmpty()){
@@ -91,6 +111,26 @@ public class Player {
 
 	public int getPriority() {return this.priority;}
 
+	public void addPoints(int points) {
+		this.score += points;
+	}
+
+	public void addControlledSector(SectorCard sector) {
+		controlledSectors.add(sector);
+	}
+
+	public boolean controlsSector(SectorCard sector) {
+		return controlledSectors.contains(sector);
+	}
+
+	public boolean controlsHex(Hex hex) {
+		return hexesOccupes.contains(hex);
+	}
+
+	public int getScore() {
+		return score;
+	}
+
 	public List<Ship> findShipsByHexId(int hexId) {
 		// Filtre tous les vaisseaux correspondant à l'ID de l'Hex
 		return shipsSurPlateau.stream()
@@ -101,17 +141,17 @@ public class Player {
 	public List<Ship> chooseShipsToMove(List<Ship> shipsInHex) {
 		Scanner scanner = new Scanner(System.in);
 
-		if (shipsInHex.size()==0){
+		if (shipsInHex.isEmpty()){
 			System.out.println("Vous ne pouvez pas déplacer de vaisseau depuis cet hexagone.");
 			return new ArrayList<Ship>(); //on renvoie une liste vide
 		}
 
-		System.out.println("Il y a " + shipsInHex.size() + " vaisseaux dans cet Hex.");
+		System.out.println(STR."Il y a \{shipsInHex.size()} vaisseaux dans cet Hex.");
 		System.out.print("Combien de vaisseaux souhaitez-vous déplacer ? ");
 
 		int count = scanner.nextInt();
 		while (count < 1 || count > shipsInHex.size()) {
-			System.out.println("Nombre invalide. Veuillez choisir entre 1 et " + shipsInHex.size() + " vaisseaux.");
+			System.out.println(STR."Nombre invalide. Veuillez choisir entre 1 et \{shipsInHex.size()} vaisseaux.");
 			// On peut gérer cette erreur autrement par la suite
 			count = scanner.nextInt();
 //			scanner.close();
@@ -145,24 +185,34 @@ public class Player {
 	}
 	
 	public void plan() {
+		Set<CommandCard> chosenCards = new HashSet<>();
+
 		for (int i=0; i<3; i++) {
 			Scanner reader = new Scanner(System.in); // Reading from System.in
 			System.out.println(this.name + ", quelle carte voulez-vous jouez en " + (i+1) + "(Expand, Explore ou Exterminate) :");
 			String r = reader.next();
 //			reader.close();
 			// L'ordre est à surveiller, il y a souvent des erreurs de ce côté là
+			CommandCard selectedCard = null;
+
 			if (r.equalsIgnoreCase("expand")) {
-				cardOrder[i] = commandCards[0];
-				System.out.println("La "+(i+1)+"ieme carte choisie est la carte expand");
+				selectedCard = commandCards[0];
 			} else if (r.equalsIgnoreCase("explore")) {
-				cardOrder[i] = commandCards[1];
-				System.out.println("La "+(i+1)+"ieme carte choisie est la carte explore");
+				selectedCard = commandCards[1];
 			} else if (r.equalsIgnoreCase("exterminate")) {
-                cardOrder[i] = commandCards[2];
-				System.out.println("La "+(i+1)+"ieme carte choisie est la carte exterminate");
-			} else {
+				selectedCard = commandCards[2];
+			}
+
+			if (selectedCard == null) {
 				System.out.println("Choix invalide. Veuillez recommencer.");
 				i--; // Refaire la même position si l'entrée est invalide
+			} else if (chosenCards.contains(selectedCard)) {
+				System.out.println("Vous avez déjà choisi cette carte. Veuillez en choisir une autre.");
+				i--; // Refaire la même position si la carte a déjà été choisie
+			} else {
+				cardOrder[i] = selectedCard;
+				chosenCards.add(selectedCard); // Ajouter la carte choisie à l'ensemble
+				System.out.println("La " + (i + 1) + "ième carte choisie est " + selectedCard.getClass().getSimpleName());
 			}
 		}
 		
@@ -174,6 +224,8 @@ public class Player {
 
 		cardOrder[currentRound].execute(currentRound);
 	}
+
+
 
 	@Override
 	public String toString() {

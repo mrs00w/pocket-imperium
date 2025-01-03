@@ -1,5 +1,7 @@
 package pimperium;
 
+import gui.Controller;
+
 import java.util.*;
 
 public class ExpandCard implements CommandCard{
@@ -17,7 +19,27 @@ public class ExpandCard implements CommandCard{
 	public void execute(int currentRound) {
 		System.out.println(STR."\{player.getName()} ajoute de nouveaux vaisseaux sur le plateau");
 		Game game = Game.getInstance();
+		Controller controller = game.getController();
 		List<Player> players = game.getPlayers();
+
+		System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
+		System.out.println("1. Passer la carte");
+		System.out.println("2. Jouer la carte");
+		Scanner reader = new Scanner(System.in);
+
+		int choice;
+		try {
+			choice = reader.nextInt();
+		} catch (Exception e) {
+			System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+			return;
+		}
+
+        if (choice == 1) {
+            System.out.println("Vous avez choisi de passer cette carte.");
+            // Rien à faire ici : le joueur ne joue pas cette carte
+            return;
+        }
 
 
 		//
@@ -58,7 +80,7 @@ public class ExpandCard implements CommandCard{
 //		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
 
 		for (int i = 0; i < shipsToAdd; i++) {
-			if (player.getShipsHorsPlateau().size()==0){
+			if (player.getShipsHorsPlateau().isEmpty()){
 				System.out.println("Vous n'avez plus de vaisseaux à placer");
 				break;
 			}
@@ -67,7 +89,14 @@ public class ExpandCard implements CommandCard{
 			Hex selectedHex = null;
 			while (true) {
 				System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé ou tapez 0 pour passer votre tour :");
-				int hexId = reader.nextInt();
+				int hexId;
+				try {
+					hexId = reader.nextInt();
+				} catch (Exception e) {
+					System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+					return;
+				}
+
 				if (hexId==0){
 					System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
 					break;
@@ -102,6 +131,8 @@ public class ExpandCard implements CommandCard{
 				currentShip.updatePosition(selectedHex);
 				player.getShipsSurPlateau().add(currentShip);
 				selectedHex.getShips().add(currentShip);
+                int shipCount = selectedHex.getShips().size();
+                controller.updateHexLabel(selectedHex.getIdHex(), shipCount, player);
 				System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
 			}
 		}

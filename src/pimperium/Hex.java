@@ -6,11 +6,13 @@ public class Hex {
 	private Player currentOccupant;
 	private static int numHex = 0;
 	private int idHex;
+	private int idHexSector;
+	private int positionSector;
+	private int idSector;
+	private SectorCard sector;
 	private int col;
 	private int ligne;
 	private int levelSystem;
-	private boolean isTriPrime;
-	private boolean isPartiel;
 	private List<Hex> neighbors;
 	private List<Ship> ships;
 
@@ -25,12 +27,52 @@ public class Hex {
 		this.currentOccupant=null;
 	}
 
+	public SectorCard getSector() {
+		return sector;
+	}
+
 	public static Player getTriPrimeOccupant() {
 		return triPrimeOccupant;
 	}
 
 	public static void setTriPrimeOccupant(Player triPrimeOccupant) {
 		Hex.triPrimeOccupant = triPrimeOccupant;
+	}
+
+	public Hex(int id, int lvl, int positionSector) {
+		this.currentOccupant = null;
+		this.positionSector = positionSector;
+		//implémenter l'id en fonction du nombre d'Hex créés précédemment
+		this.idHex = id;
+		//Vérifier que bien compris entre 0 et 3
+		this.levelSystem = lvl;
+		this.col = idHex / 10;
+		this.ligne = idHex % 10;
+		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
+//		this.isTriPrime = tp;
+		this.neighbors = new ArrayList<Hex>();
+		this.ships = new ArrayList<Ship>();
+	}
+
+	public Hex(int id, int lvl, int positionSector, int IdSector) {
+		this.currentOccupant = null;
+		this.idSector = idSector;
+//		this.sector = setSector();
+		this.positionSector = positionSector;
+		//implémenter l'id en fonction du nombre d'Hex créés précédemment
+		this.idHex = id;
+		//Vérifier que bien compris entre 0 et 3
+		this.levelSystem = lvl;
+		this.col = idHex / 10;
+		this.ligne = idHex % 10;
+		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
+//		this.isTriPrime = tp;
+		this.neighbors = new ArrayList<Hex>();
+		this.ships = new ArrayList<Ship>();
+	}
+
+	public void setSector(SectorCard sector) {
+		this.sector = sector;
 	}
 
 	public Hex(int id, int lvl) {
@@ -43,7 +85,6 @@ public class Hex {
 		this.ligne = idHex % 10;
 		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
 //		this.isTriPrime = tp;
-		this.isPartiel = true;
 		this.neighbors = new ArrayList<Hex>();
 		this.ships = new ArrayList<Ship>();
 	}
