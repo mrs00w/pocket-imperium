@@ -100,7 +100,26 @@ public class ExploreCard implements CommandCard {
 
 		//Jusque là on peut optimiser
 
-		Scanner reader = new Scanner(System.in); // Scanner pour l'entrée utilisateur
+		System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
+		System.out.println("1. Passer la carte");
+		System.out.println("2. Jouer la carte");
+
+		Scanner reader = new Scanner(System.in);
+
+		int choice;
+		try {
+			choice = reader.nextInt();
+		} catch (Exception e) {
+			System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+			return;
+		}
+
+		if (choice == 1) {
+			System.out.println("Vous avez choisi de passer cette carte.");
+			// Rien à faire ici : le joueur ne joue pas cette carte
+			return;
+		} // Scanner pour l'entrée utilisateur
+
 		System.out.println("Vous pouvez déplacer " +fleetMovementsAllowed+ " flottes");
 
 		// Effectuer les mouvements autorisés
@@ -185,7 +204,7 @@ public class ExploreCard implements CommandCard {
 				if (targetHex.getLevelSystem() == 3){
 					if (Hex.getTriPrimeOccupant() == null || Hex.getTriPrimeOccupant() == player){
 						System.out.println("Vous controllez désormais le Tri Prime.");
-						return;
+//						return;
 					}else {
 						System.out.println("Le Tri Prime est déjà controlé par un autre joueur.");
 						i--; //Refaire ce tour

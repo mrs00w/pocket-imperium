@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="GUI + SustainShip + CalculScore + On continue de débugger. Fonctionne jusqu'à ExploreCard.">
-      <change afterPath="$PROJECT_DIR$/qodana.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/pocketimperium/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/pocketimperium/HelloApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Hex.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Player.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -81,23 +79,6 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
 }</component>
-  <component name="QodanaHighlightedReportService">
-    <option name="localRunNotPublishedPersistedInfo">
-      <LocalReportPersistedInfo>
-        <option name="path" value="C:\Users\frost\AppData\Local\Temp\qodana_output\qodana.sarif.json" />
-        <option name="reportGuid" value="c9e18067-ca60-4c1b-9352-4283e58078f2" />
-        <option name="reportName" value="PocketImperium/qodana/2025-01-01" />
-      </LocalReportPersistedInfo>
-    </option>
-  </component>
-  <component name="QodanaIsSelectedPersistenceService">
-    <option name="selectedOrLoading" value="true" />
-  </component>
-  <component name="QodanaReportsService">
-    <option name="descriptions">
-      <ReportDescription localRun="true" path="C:\Users\frost\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="c9e18067-ca60-4c1b-9352-4283e58078f2" reportId="PocketImperium/qodana/2025-01-01" />
-    </option>
-  </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\UTT\LO02\Project\pocket_imperium\PocketImperium\resources" />
@@ -229,7 +210,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735749711237</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="GUI + SustainShip + CalculScore + On continue de débugger. Fonctionne jusqu'à ExploreCard.">
+      <option name="closed" value="true" />
+      <created>1735754513744</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1735754513744</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

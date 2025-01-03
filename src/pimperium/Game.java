@@ -37,8 +37,25 @@ public class Game {
 		return game;
 	}
 
+	public void updateControlledSectors() {
+		// Parcours de tous les hexagones de la carte
+		for (Hex hex : ground.getHexes()) {
+			// Récupération du joueur occupant ce hex
+			Player occupant = hex.getCurrentOccupant();
+
+			// Vérification : si un occupant existe, on met à jour ses secteurs contrôlés
+			if (occupant != null) {
+				SectorCard sector = hex.getSector(); // Récupération du secteur du hex
+				if (sector != null) {
+					occupant.addControlledSector(sector); // Ajoute le secteur au joueur
+				}
+			}
+		}
+	}
+
 	public void calculScore() {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
+		updateControlledSectors();
 		//Demande à chaque joueur de choisir une sectorCard
 		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
 		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
@@ -70,6 +87,7 @@ public class Game {
 			SectorCard sectorCard = entry.getValue();
 			int points = calculateSectorPoints(player, sectorCard);
 			player.addPoints(points);
+			System.out.println("Le joueur " + player.getName() + "gagne " + points);
 		}
 
 		if (triPrimeController != null) {
@@ -140,6 +158,8 @@ public class Game {
 	}
 
 	public void sustainShips() {
+		System.out.println("On retire les vaisseaux en trop");
+		Controller controller = getController();
 		// On suppose que "ground" est l'objet contenant tous les hexes
 		for (Hex hex : ground.getHexes()) {
 			// Calculer la capacité maximale de vaisseaux que ce hex peut soutenir
@@ -162,6 +182,7 @@ public class Game {
 				}
 
 				System.out.println(STR."\{excessShips} vaisseaux excédentaires ont été retirés de l'hex \{hex.getIdHex()}");
+				controller.updateHexLabel(hex.getIdHex(), excessShips, hex.getCurrentOccupant());
 			}
 		}
 	}
@@ -181,6 +202,8 @@ public class Game {
 			Player currentPlayer = players.get(i);
 			placeShips(currentPlayer, ground);
 		}
+
+		updateControlledSectors();
 	}
 
 	private void placeShips(Player player, Ground ground) {
@@ -298,6 +321,7 @@ public class Game {
 		int botPlayers = scanner.nextInt();
 
 		// Ajouter les joueurs humains
+
 		for (int i = 0; i < humanPlayers; i++) {
 			Player player = new Player();
 			player.setPlayerName(); // Demander un nom

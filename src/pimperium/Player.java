@@ -115,7 +115,7 @@ public class Player {
 		this.score += points;
 	}
 
-	public void controlSector(SectorCard sector) {
+	public void addControlledSector(SectorCard sector) {
 		controlledSectors.add(sector);
 	}
 

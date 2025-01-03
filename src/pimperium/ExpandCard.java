@@ -22,6 +22,25 @@ public class ExpandCard implements CommandCard{
 		Controller controller = game.getController();
 		List<Player> players = game.getPlayers();
 
+		System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
+		System.out.println("1. Passer la carte");
+		System.out.println("2. Jouer la carte");
+		Scanner reader = new Scanner(System.in);
+
+		int choice;
+		try {
+			choice = reader.nextInt();
+		} catch (Exception e) {
+			System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+			return;
+		}
+
+        if (choice == 1) {
+            System.out.println("Vous avez choisi de passer cette carte.");
+            // Rien à faire ici : le joueur ne joue pas cette carte
+            return;
+        }
+
 
 		//
  		//Cette partie là on l'utilise pour chaque CommandCard, on peut (je pense) mettre cette méthode dans commandCard et la réutiliser (au lieu de la réécrire)
@@ -57,7 +76,6 @@ public class ExpandCard implements CommandCard{
 		}
 
 		// Initialisation pour la lecture utilisateur
-		Scanner reader = new Scanner(System.in);
 //		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
 		if (reader.hasNextInt() && reader.nextInt()==0){
 			System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
@@ -73,7 +91,13 @@ public class ExpandCard implements CommandCard{
 			Hex selectedHex;
 			while (true) {
 				System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé :");
-				int hexId = reader.nextInt();
+				int hexId;
+				try {
+					hexId = reader.nextInt();
+				} catch (Exception e) {
+					System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+					return;
+				}
 
 				// Vérifier que l'hex est un système contrôlé par le joueur et est un hex valide
 				selectedHex = controlledHexes.stream()

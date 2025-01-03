@@ -8,6 +8,7 @@ public class Hex {
 	private int idHex;
 	private int idHexSector;
 	private int positionSector;
+	private int idSector;
 	private SectorCard sector;
 	private int col;
 	private int ligne;
@@ -51,6 +52,27 @@ public class Hex {
 //		this.isTriPrime = tp;
 		this.neighbors = new ArrayList<Hex>();
 		this.ships = new ArrayList<Ship>();
+	}
+
+	public Hex(int id, int lvl, int positionSector, int IdSector) {
+		this.currentOccupant = null;
+		this.idSector = idSector;
+//		this.sector = setSector();
+		this.positionSector = positionSector;
+		//implémenter l'id en fonction du nombre d'Hex créés précédemment
+		this.idHex = id;
+		//Vérifier que bien compris entre 0 et 3
+		this.levelSystem = lvl;
+		this.col = idHex / 10;
+		this.ligne = idHex % 10;
+		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
+//		this.isTriPrime = tp;
+		this.neighbors = new ArrayList<Hex>();
+		this.ships = new ArrayList<Ship>();
+	}
+
+	public void setSector(SectorCard sector) {
+		this.sector = sector;
 	}
 
 	public Hex(int id, int lvl) {
