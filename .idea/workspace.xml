@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Je continue d'améliorer le explore">
+    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Amélioration du explore et du expand">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -149,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734724263389</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Amélioration du explore et du expand">
+      <option name="closed" value="true" />
+      <created>1734906198284</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1734906198284</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -161,6 +168,7 @@
     <MESSAGE value="Du coup j'ai oublié de le commit mais c'est ce que j'ai fait ce weekend. Je sais plus exactement où je m'étais arrêtée mais de mémoire ça fonctionne jusqu'au perform (toutes les étapes d'avant dont le choix des hex pour placer ses 4 premiers vaisseaux marchent)" />
     <MESSAGE value="Je suis allée jusqu'à la commande exploreCard, il me reste à vérifier qu'on traverse pas un hexagone déjà occupé ou le tri prime." />
     <MESSAGE value="Je continue d'améliorer le explore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Je continue d'améliorer le explore" />
+    <MESSAGE value="Amélioration du explore et du expand" />
+    <option name="LAST_COMMIT_MESSAGE" value="Amélioration du explore et du expand" />
   </component>
 </project>

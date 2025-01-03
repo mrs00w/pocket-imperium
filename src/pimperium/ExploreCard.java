@@ -83,8 +83,12 @@ public class ExploreCard implements CommandCard {
 
 		// Effectuer les mouvements autorisés
 		for (int i = 0; i < fleetMovementsAllowed; i++) {
-			System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) :");
+			System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) ou taper 0 pour passer votre tour :");
 			int sourceHexId = reader.nextInt();
+			if (sourceHexId==0){
+				System.out.println("Vous avez choisi de ne pas explore pendant ce tour.");
+				break;
+			}
 
 			// Récupérer les vaisseaux dans l'hex source
 			Hex sourceHex = game.getGround().getHexById(sourceHexId);
@@ -103,9 +107,9 @@ public class ExploreCard implements CommandCard {
 
 			int iBoucle=1;
 			boolean boucle=true;
-			while (boucle) {
+			while (boucle && iBoucle<=2) {
 //			for (Ship ship : sourceHex.getShips()) {
-//				if (ship.getPlayer() == player && !ship.isUsed()) { //pourquoi vérifier que le vaisseau appartient au jouer alors qu'on a déjà vérifié que l'hex appartenait au joueur ?
+//				if (ship.getPlayer() == player && !ship.isUsed()) { //pourquoi vérifier que le vaisseau appartient au joueur alors qu'on a déjà vérifié que l'hex appartenait au joueur ?
 //					shipsNotUsedInHex.add(ship);
 
 				// Sélectionner les vaisseaux à déplacer
@@ -155,8 +159,8 @@ public class ExploreCard implements CommandCard {
 				//On vérifie que personne ne contrôle le TriPrime
 				if (targetHex.getLevelSystem() == 3){
 					if (Hex.getTriPrimeOccupant() == null || Hex.getTriPrimeOccupant() == player){
-						System.out.println("Vous controllez désormais le Tri Prime.");
-						return;
+						System.out.println("Vous controllez le Tri Prime.");
+						boucle=false;
 					}else {
 						System.out.println("Le Tri Prime est déjà controlé par un autre joueur.");
 						i--; //Refaire ce tour
@@ -183,12 +187,6 @@ public class ExploreCard implements CommandCard {
 					System.out.println(STR."Vous contrôlez désormais l'hex \{targetHexId}.");
 				}
 
-				// Retirer le contrôle du hex source s'il est vidé
-				if (sourceHex.getShips().isEmpty()) {
-					sourceHex.setCurrentOccupant(null);
-					System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
-				}
-
 				// Déplacer les vaisseaux
 				for (Ship s : shipsToMove) {
 					s.updatePosition(targetHex);
@@ -197,16 +195,24 @@ public class ExploreCard implements CommandCard {
 				}
 				sourceHex.getShips().subList(0, shipsToMove.size()).clear(); //On supprime les ships déplacés de la liste de ships du Hex de départ
 
+				// Retirer le contrôle du hex source s'il est vidé
+				if (sourceHex.getShips().isEmpty()) {
+					sourceHex.setCurrentOccupant(null);
+					System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
+				}
+
 				if (iBoucle==1){
 					System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
 					if(reader.nextInt()==1){
+						System.out.println("");
 						sourceHex=targetHex;
-						shipsNotUsedInHex=shipsToMove;
-						iBoucle++;
+						sourceHexId=sourceHex.getIdHex();
+						shipsNotUsedInHex=shipsToMove; //ajouter à la liste les vaisseaux du joueur qui étaient déjà sur l'hex d'arrivé si il y en a
 					} else{
 						boucle=false;
 					}
 				}
+				iBoucle++;
 			}
 		}
 		System.out.println("Exploration terminée.");

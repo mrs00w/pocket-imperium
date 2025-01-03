@@ -56,9 +56,6 @@ public class ExpandCard implements CommandCard{
 		// Initialisation pour la lecture utilisateur
 		Scanner reader = new Scanner(System.in);
 //		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
-		if (reader.hasNextInt() && reader.nextInt()==0){
-			System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
-		}
 
 		for (int i = 0; i < shipsToAdd; i++) {
 			if (player.getShipsHorsPlateau().size()==0){
@@ -67,10 +64,14 @@ public class ExpandCard implements CommandCard{
 			}
 			Ship currentShip = player.getShipsHorsPlateau().pop();
 
-			Hex selectedHex;
+			Hex selectedHex = null;
 			while (true) {
-				System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé :");
+				System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé ou tapez 0 pour passer votre tour :");
 				int hexId = reader.nextInt();
+				if (hexId==0){
+					System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
+					break;
+				}
 
 				// Vérifier que l'hex est un système contrôlé par le joueur et est un hex valide
 				selectedHex = controlledHexes.stream()
@@ -96,12 +97,13 @@ public class ExpandCard implements CommandCard{
 //				hexAllocation.put(selectedHex.getIdHex(), allocatedShips + 1);
 				break;
 			}
-
-			// Mettre à jour la position du vaisseau
-			currentShip.updatePosition(selectedHex);
-			player.getShipsSurPlateau().add(currentShip);
-			selectedHex.getShips().add(currentShip);
-			System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
+			if (selectedHex!=null) {
+				// Mettre à jour la position du vaisseau
+				currentShip.updatePosition(selectedHex);
+				player.getShipsSurPlateau().add(currentShip);
+				selectedHex.getShips().add(currentShip);
+				System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
+			}
 		}
 	}
 
