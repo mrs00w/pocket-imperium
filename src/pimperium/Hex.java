@@ -27,6 +27,10 @@ public class Hex {
 		this.currentOccupant=null;
 	}
 
+	public int getSectorId() {
+		return this.idSector;
+	}
+
 	public SectorCard getSector() {
 		return sector;
 	}
@@ -54,10 +58,10 @@ public class Hex {
 		this.ships = new ArrayList<Ship>();
 	}
 
-	public Hex(int id, int lvl, int positionSector, int IdSector) {
+	public Hex(int id, int lvl, int positionSector, int idSector) {
 		this.currentOccupant = null;
 		this.idSector = idSector;
-//		this.sector = setSector();
+//		this.sector = getSectorById(idSector);
 		this.positionSector = positionSector;
 		//implémenter l'id en fonction du nombre d'Hex créés précédemment
 		this.idHex = id;

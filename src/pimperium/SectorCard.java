@@ -8,6 +8,7 @@ public class SectorCard {
 	private int[] idSystems;
 	private boolean isCentral; // Vrai si c'est la carte centrale
 	private boolean canRotate; // Orientation actuelle : "normal" ou "rotated180"
+	private boolean hasShips=false;
 	private List<Hex> hexes;
 	private String orientation;
 	private int positionOnMap;
@@ -25,6 +26,18 @@ public class SectorCard {
 		idSystems[0] = positionSystem11;
 		idSystems[1] = positionSystem12;
 		idSystems[2] = positionSystem2;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setHasShips(boolean hasShips) {
+		this.hasShips = hasShips;
+	}
+
+	public boolean getHasShips(){
+		return this.hasShips;
 	}
 
 	public void setPositionOnMap(int positionOnMap) {

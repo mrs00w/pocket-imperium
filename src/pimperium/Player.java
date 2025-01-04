@@ -160,6 +160,7 @@ public class Player {
 		return shipsInHex.subList(0, count); // Retourne les n premiers vaisseaux choisis
 	}
 
+	//Pour les joueurs humains
 	public void setPlayerName() {
 		Scanner reader = new Scanner(System.in); // Reading from System.in
 		while(true){
@@ -172,6 +173,10 @@ public class Player {
 			}
 			reader.close();
 		}
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	//Pour le moment les couleurs sont imposées

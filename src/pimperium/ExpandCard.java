@@ -1,7 +1,5 @@
 package pimperium;
-
 import gui.Controller;
-
 import java.util.*;
 
 public class ExpandCard implements CommandCard{
@@ -75,8 +73,8 @@ public class ExpandCard implements CommandCard{
 			return;
 		}
 
-		// Initialisation pour la lecture utilisateur
-		Scanner reader = new Scanner(System.in);
+//		// Initialisation pour la lecture utilisateur
+//		Scanner reader = new Scanner(System.in);
 //		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
 
 		for (int i = 0; i < shipsToAdd; i++) {

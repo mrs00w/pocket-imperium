@@ -58,12 +58,12 @@ public class ExploreCard implements CommandCard {
 //            // Étape 1 : Obtenez les voisins directs de la source
 //            List<Hex> firstStepNeighbors = sourceHex.getNeighbors();
 //
-            // Étape 2 : Vérifiez si la destination est un voisin direct
+        // Étape 2 : Vérifiez si la destination est un voisin direct
 //            if (firstStepNeighbors.contains(targetHex)) {
 //                return true;
 //            }
 
-            // Étape 3 : Obtenez les voisins des voisins et vérifiez s'ils contiennent la cible
+        // Étape 3 : Obtenez les voisins des voisins et vérifiez s'ils contiennent la cible
 //            for (Hex neighbor : firstStepNeighbors) {
 //                if (neighbor.getNeighbors().contains(targetHex)) {
 //                    return true;

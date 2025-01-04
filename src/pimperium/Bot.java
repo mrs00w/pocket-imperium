@@ -6,10 +6,11 @@ import java.util.Random;
 public class Bot extends Player {
     private Random random;
 
-    public Bot() {
+    public Bot(int id) {
         super();
         this.random = new Random();
-        this.setPlayerName(); // Un nom unique pour le bot
+        this.setName("Bot "+(id+1)); // Un nom unique pour le bot
+        System.out.println("Le bot "+this.getName()+" a été ajouté à la partie.");
     }
 
     @Override

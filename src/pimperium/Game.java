@@ -208,9 +208,8 @@ public class Game {
 
 	private void placeShips(Player player, Ground ground) {
 		// Obtenez tous les systèmes de niveau 1 non occupés dans des secteurs non occupés
-		//Comment vérifier que le secteur est libre ?
 		List<Hex> availableHexes = ground.getHexes().stream()
-				.filter(hex -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null)
+				.filter(hex -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null && !ground.getSectorById(hex.getSectorId()).getHasShips())
 				.toList();
 
 		//ça ça n'arrivera jamais vu qu'on l'utilise qu'au moment de l'initialisation (pour le moment)
@@ -223,8 +222,14 @@ public class Game {
 
 		Scanner reader = new Scanner(System.in);
 		Hex targetHex = null;
-		// Il faut mettre des do partout pour permettre aux joueurs de refaire leurs actions
-		//j'ai inversé le do et le while
+
+		//Lorsque c'est un bot qui doit choisir le systeme sur lequel placer ses 2 vaisseaux
+		if (player instanceof Bot){
+			Random random = new Random();
+			targetHex = availableHexes.get(random.nextInt(availableHexes.size()));
+		}
+
+		//Lorsque c'est un joueur humain qui doit choisir le systeme sur lequel placer ses 2 vaisseaux
 		while (targetHex == null) {
 			System.out.println(STR."\{player.getName()}, où voulez-vous placer vos vaisseaux ? (Entrez l'ID d'un Hex disponible)");
 
@@ -246,9 +251,9 @@ public class Game {
 			}
 		}
 
-// Une fois sorti, targetHex est valide
+// Une fois sorti, on a bien validé targetHex
 
-		System.out.println("Hex sélectionné : " + targetHex);
+		System.out.println("Hex sélectionné : " + targetHex.getIdHex());
 
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
 			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
@@ -261,6 +266,7 @@ public class Game {
 			targetHex.setCurrentOccupant(player);
 			player.getHexesOccupes().add(targetHex);
 		}
+		ground.getSectorById(targetHex.getSectorId()).setHasShips(true);
 //		for (Ship s : targetHex.getShips()){
 //			System.out.println(s.toString());
 //		}
@@ -314,11 +320,24 @@ public class Game {
 		//game.ground.setupGround(); // En vrai on peut tout mettre dans le constructeur direct //du coup je l'ai mis dans le constructeur
 //		String player;
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Combien de joueurs humains ?");
-		int humanPlayers = scanner.nextInt();
 
-		System.out.println("Combien de bots ?");
-		int botPlayers = scanner.nextInt();
+		int humanPlayers=0;
+		// Boucle jusqu'à ce qu'une entrée valide soit fournie
+		while (humanPlayers<1 || humanPlayers>3) {
+			System.out.println("Combien de joueurs humains ? (entre 1 et 3) ");
+			try {
+				humanPlayers = scanner.nextInt();
+				if (humanPlayers < 0) {
+					System.out.println("Le nombre de joueurs doit être positif. Veuillez réessayer.");
+				}
+			} catch (Exception e) {
+				System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+				scanner.next();  // Vide le scanner pour éviter une boucle infinie
+			}
+		}
+
+//		System.out.println("Combien de bots ?");
+//		int botPlayers = scanner.nextInt();
 
 		// Ajouter les joueurs humains
 
@@ -329,8 +348,9 @@ public class Game {
 		}
 
 		// Ajouter les bots
-		for (int i = 0; i < botPlayers; i++) {
-			players.add(new Bot());
+		//On complète avec des bots jusqu'à avoir 3 joueurs dans la partie
+		for (int i = 0; i < 3-humanPlayers; i++) {
+			players.add(new Bot(i));
 		}
 
 		players.get(0).setColor(Color.RED);
