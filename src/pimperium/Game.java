@@ -253,8 +253,6 @@ public class Game {
 
 // Une fois sorti, on a bien validé targetHex
 
-		System.out.println("Hex sélectionné : " + targetHex.getIdHex());
-
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
 			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
@@ -279,7 +277,6 @@ public class Game {
 		for (Player p : players) {
 			System.out.println(STR."Le joueur \{p.getName()} planifie son tour");
 			p.plan();
-			p.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
 
 		}
 		for (int iCard = 0; iCard < 3; iCard++) {
@@ -299,10 +296,11 @@ public class Game {
 //						.filter(player -> p.getCard(indiceCarte).equals(carteJouee))
 //						.count(); //On compte le nombre de joueurs ayant choisi la même carte que le joueur en train de jouer
 				p.perform(iCard);
+				p.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
 			}
 		}
 		sustainShips();
-		calculScore();
+		//calculScore();
 		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
 	}
 

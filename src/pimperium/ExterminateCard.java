@@ -157,6 +157,10 @@ public class ExterminateCard implements CommandCard {
                     System.out.println("Vous devez utiliser au moins un vaisseau.");
                     continue;
                 }
+                if (numberOfShips> validSources.size()) {
+                    System.out.println("Vous n'avez pas suffisament de vaisseaux disponibles.");
+                    continue;
+                }
 
                 // Collecter les vaisseaux à partir des hexes adjacents
                 sourceHex = null;
@@ -205,9 +209,19 @@ public class ExterminateCard implements CommandCard {
 
                 // Retirer les vaisseaux de chaque côté
 
-                for (int i = 0; i < smallestFleetSize; i++) {
-                    invasionFleet.removeFirst();
-                    defendingFleet.removeFirst();
+                if(currentOccupant!=null) {
+                    for (int i = 0; i < smallestFleetSize; i++) {
+                        invasionFleet.getFirst().updatePosition(null);
+                        //on retire le vaisseau du plateau
+                        player.getShipsHorsPlateau().push(invasionFleet.getFirst());
+                        player.getShipsSurPlateau().remove(invasionFleet.getFirst());
+                        invasionFleet.removeFirst();
+                        defendingFleet.getFirst().updatePosition(null);
+                        //On retire le vaisseau du plateau
+                        currentOccupant.getShipsSurPlateau().remove(defendingFleet.getFirst());
+                        currentOccupant.getShipsHorsPlateau().push(defendingFleet.getFirst());
+                        defendingFleet.removeFirst();
+                    }
                 }
 
                 // IL faut aussi retirer les vaisseaux en question du plateau
@@ -218,6 +232,8 @@ public class ExterminateCard implements CommandCard {
             // Résultat de l'invasion
             if (invasionFleet.isEmpty()) {
                 System.out.println("Invasion échouée.");
+                //La liste de ships de l'hex est mise à jour avec les ships restants au joueur attaqué
+                sourceHex.setShips(defendingFleet);
             } else {
                 System.out.println("Invasion réussie ! Vous contrôlez maintenant le système.");
                 targetHex.setCurrentOccupant(player);
@@ -229,8 +245,25 @@ public class ExterminateCard implements CommandCard {
                 targetHex.setCurrentOccupant(null);
             }
 
+            if (sourceHex.getShips().isEmpty()) {
+                System.out.println("Le système" + sourceHex.getIdHex() + "est désormais innocupé");
+                targetHex.setCurrentOccupant(null);
+            }
+
             controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), targetHex.getCurrentOccupant());
             controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), sourceHex.getCurrentOccupant());
+
+            //Dans le cas où l'un des deux joueurs participant à l'attaque n'a plus de vaisseaux sur le terrain, celui-ci meurt
+            if(currentOccupant!=null) {
+                if (currentOccupant.getShipsSurPlateau().isEmpty()) {
+                    game.getPlayers().remove(currentOccupant);
+                    System.out.println(currentOccupant.getName() + " est mort, il est hors jeu.");
+                }
+            }
+            if(player.getShipsSurPlateau().isEmpty()){
+                game.getPlayers().remove(player);
+                System.out.println(player.getName()+" est mort, il est hors jeu.");
+            }
 
             // Chaque vaisseau ne peut être utilisé qu'une fois par round, donc marquer les vaisseaux comme "utilisés"
             invasionFleet.forEach(ship -> ship.setUsed(true));
