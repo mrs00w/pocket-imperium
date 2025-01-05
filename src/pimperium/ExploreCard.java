@@ -1,6 +1,5 @@
 package pimperium;
 
-import eu.hansolo.toolbox.Helper;
 import gui.Controller;
 
 import java.util.ArrayList;
@@ -125,31 +124,19 @@ public class ExploreCard implements CommandCard {
 		System.out.println("Vous pouvez déplacer " +fleetMovementsAllowed+ " flottes");
 
 		// Effectuer les mouvements autorisés
-		int i=0;
-		while(i < fleetMovementsAllowed){
-			List<Hex> hexes = game.getGround().getHexes();
-			List<Hex> occupiedByPlayer = hexes.stream()
-					.filter(hex -> hex.getCurrentOccupant() != null && hex.getCurrentOccupant().equals(player))
-					.filter(hex -> hex.getShips().stream().anyMatch(ship -> !ship.isUsed()))
-					.toList();
-
-			if (occupiedByPlayer.isEmpty()) {
-				System.out.println("Vous ne pouvez pas déplacer de vaisseaux.");
-				return;
-			}
-			System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) ou tapez 0 pour passer votre tour :");
+		for (int i = 0; i < fleetMovementsAllowed; i++) {
+			System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) :");
 			int sourceHexId = reader.nextInt();
-
-			if (sourceHexId==0){
-				System.out.println("Vous choisissez de passer votre tour");
-				return;
-			}
 
 			// Récupérer les vaisseaux dans l'hex source
 			Hex sourceHex = game.getGround().getHexById(sourceHexId);
+			List<Hex> hexes = game.getGround().getHexes();
+			List<Hex> occupiedByPlayer = hexes.stream()
+					.filter(hex -> hex.getCurrentOccupant() != null && hex.getCurrentOccupant().equals(player)).toList();
 			if (!occupiedByPlayer.contains(sourceHex)){
 				System.out.println("Cet hex n'est pas contrôlé par vous. Veuillez choisir un autre hex.");
-				continue;// Refaire ce tour
+				i--; // Refaire ce tour
+				continue;
 			}
 
 			List<Ship> shipsNotUsedInHex = sourceHex.getShips().stream()
@@ -157,13 +144,13 @@ public class ExploreCard implements CommandCard {
 					.toList();
 			if (shipsNotUsedInHex.isEmpty()) {
 				System.out.println("Aucun vaisseau disponible dans cet hex.");
+				i--;
 				continue;
 			}
 
 			int iBoucle=1;
 			boolean boucle=true;
 			while (boucle && iBoucle<=2) {
-				System.out.println("On recommence au point repère 2");
 //			for (Ship ship : sourceHex.getShips()) {
 //				if (ship.getPlayer() == player && !ship.isUsed()) { //pourquoi vérifier que le vaisseau appartient au joueur alors qu'on a déjà vérifié que l'hex appartenait au joueur ?
 //					shipsNotUsedInHex.add(ship);
@@ -172,6 +159,7 @@ public class ExploreCard implements CommandCard {
 				List<Ship> shipsToMove = player.chooseShipsToMove(shipsNotUsedInHex);
 				if (shipsToMove.isEmpty()) {
 					System.out.println("Aucun vaisseau choisi pour ce déplacement. Essayez encore.");
+					i--; // Refaire ce tour
 					continue;
 				}
 
@@ -188,6 +176,7 @@ public class ExploreCard implements CommandCard {
 //                }
                 if (targetHex == null) {
 					System.out.println("Hex non valide. Essayez encore.");
+					i--; // Refaire ce tour
 					continue;
 				}
 
@@ -207,6 +196,7 @@ public class ExploreCard implements CommandCard {
 
 				if (targetHex.getCurrentOccupant() != player && targetHex.getCurrentOccupant() != null) {
 					System.out.println("Vous ne pouvez pas déplacer vos vaisseaux dans un hex occupé par un autre joueur.");
+					i--; // Refaire ce tour
 					continue;
 				}
 
@@ -224,6 +214,7 @@ public class ExploreCard implements CommandCard {
 						boucle=false;
 					}else {
 						System.out.println("Le Tri Prime est déjà controlé par un autre joueur.");
+						i--; //Refaire ce tour
 						continue;
 					}
 				}
@@ -244,6 +235,8 @@ public class ExploreCard implements CommandCard {
 				// Mettre à jour le contrôle du hex cible
 				if (targetHex.getCurrentOccupant() != player) {
 					targetHex.setCurrentOccupant(player);
+					player.addControlledSector(targetHex.getSector());
+					player.getHexesOccupes().add(targetHex);
 					System.out.println(STR."Vous contrôlez désormais l'hex \{targetHexId}.");
 				}
 
@@ -286,10 +279,9 @@ public class ExploreCard implements CommandCard {
 				}
 				iBoucle++;
 			}
-			i++;
 		}
 
-//		player.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
+		player.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
 		System.out.println("Exploration terminée.");
 	}
 }

@@ -12,9 +12,11 @@ public class SectorCard {
 	private List<Hex> hexes;
 	private String orientation;
 	private int positionOnMap;
+	private Set<Player> playerInSector;
 
 	public SectorCard(int id) {
 		this.id = id;
+		this.playerInSector = new HashSet<>();
 		this.typecard = typecard;
 		this.canRotate = canRotate; // Orientation par défaut
 		this.hexes = new ArrayList<>();
@@ -26,6 +28,10 @@ public class SectorCard {
 		idSystems[0] = positionSystem11;
 		idSystems[1] = positionSystem12;
 		idSystems[2] = positionSystem2;
+	}
+
+	public Set<Player> getPlayerInSector() {
+		return playerInSector;
 	}
 
 	public int getId() {

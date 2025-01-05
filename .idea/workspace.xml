@@ -7,11 +7,14 @@
     <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="maj d'un peu tout. Ajout de la détection des secteurs occupés ou non. Lors du déploiment initial, les joueurs/bots ne peuvent maintenant plus choisir des sectors cards déjà occupés. Les bots sont mtn créés en fonction du nombre de joueurs humains dans la partie. Leur initialShipsDeployment est maintenant automatique.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/CommandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/CommandCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/Ground.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Ground.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Hex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/SectorCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/SectorCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/hello-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,9 +76,9 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "test-feature",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Program Files/javafx-sdk-23.0.1/lib",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
+    "last_opened_file_path": "D:/Téléchargement/openjfx-23.0.1_windows-x64_bin-sdk/javafx-sdk-23.0.1/lib",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager"
   }
@@ -104,7 +107,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="gui.Main" />
       <module name="PocketImperium" />
-      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Program Files\Javafx\lib&quot; --add-modules javafx.controls,javafx.fxml " />
+      <option name="VM_PARAMETERS" value="--module-path &quot;D:\Téléchargement\openjfx-23.0.1_windows-x64_bin-sdk\javafx-sdk-23.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml " />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

@@ -32,6 +32,7 @@ public class Player {
 		nombrePlayer++;
 		this.name = "Player"+nombrePlayer;
 		this.cardOrder = new CommandCard[3];
+		this.controlledSectors = new HashSet<>();
         //this.choisirCouleurVaisseau();
         //imposer la couleur aux joueurs finalement
         this.shipsHorsPlateau = new Stack<Ship>();
@@ -51,6 +52,10 @@ public class Player {
 
 	public int getIdPlayer() {
 		return idPlayer;
+	}
+
+	public Set<SectorCard> getControlledSectors() {
+		return controlledSectors;
 	}
 
 	public CommandCard[] getCommandCards() {
@@ -112,7 +117,8 @@ public class Player {
 	public int getPriority() {return this.priority;}
 
 	public void addPoints(int points) {
-		this.score += points;
+		this.score = score + points;
+		System.out.println("Points ajoutés : " + points + ". Nouveau score : " + this.score);
 	}
 
 	public void addControlledSector(SectorCard sector) {
