@@ -22,24 +22,35 @@ public class ExpandCard implements CommandCard{
 		Controller controller = game.getController();
 		List<Player> players = game.getPlayers();
 
-		System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
-		System.out.println("1. Passer la carte");
-		System.out.println("2. Jouer la carte");
 		Scanner reader = new Scanner(System.in);
+		if (player instanceof Bot){
+			// Décision aléatoire : 1 chance sur 6 de passer la carte
+			int decision = new Random().nextInt(6) + 1;  // Génère un nombre entre 1 et 6
+			if (decision == 1) {
+				System.out.println("Le bot a décidé de passer la carte.");
+				return;
+			}
+			System.out.println("Le bot a décidé de jouer la carte Expand.");
+		}else {
 
-		int choice;
-		try {
-			choice = reader.nextInt();
-		} catch (Exception e) {
-			System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-			return;
+			System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
+			System.out.println("1. Passer la carte");
+			System.out.println("2. Jouer la carte");
+
+			int choice;
+			try {
+				choice = reader.nextInt();
+			} catch (Exception e) {
+				System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+				return;
+			}
+
+			if (choice == 1) {
+				System.out.println("Vous avez choisi de passer cette carte.");
+				// Rien à faire ici : le joueur ne joue pas cette carte
+				return;
+			}
 		}
-
-        if (choice == 1) {
-            System.out.println("Vous avez choisi de passer cette carte.");
-            // Rien à faire ici : le joueur ne joue pas cette carte
-            return;
-        }
 
 
 		//
@@ -71,7 +82,7 @@ public class ExpandCard implements CommandCard{
 		//dans le cas où le joueur n'est pas mort (donc il a encore des vaisseaux sur la map)
 		//mais il ne controle pas de système
 		if (controlledHexes.isEmpty()) {
-			System.out.println("Vous ne contrôlez aucun hex pour ajouter des vaisseaux.");
+			System.out.println(player.getName()+" ne contrôle aucun hex pour ajouter des vaisseaux.");
 			return;
 		}
 
@@ -81,37 +92,40 @@ public class ExpandCard implements CommandCard{
 
 		for (int i = 0; i < shipsToAdd; i++) {
 			if (player.getShipsHorsPlateau().isEmpty()){
-				System.out.println("Vous n'avez plus de vaisseaux à placer");
+				System.out.println(player.getName()+" n'a plus de vaisseaux à placer");
 				break;
 			}
 			Ship currentShip = player.getShipsHorsPlateau().pop();
 
 			Hex selectedHex = null;
-			while (true) {
-				System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé ou tapez 0 pour passer votre tour :");
-				int hexId;
-				try {
-					hexId = reader.nextInt();
-				} catch (Exception e) {
-					System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-					return;
-				}
+			if(player instanceof Bot){
+				selectedHex = controlledHexes.get(new Random().nextInt(controlledHexes.size()));
+			}else {
+				while (true) {
+					System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé ou tapez 0 pour passer votre tour :");
+					int hexId;
+					try {
+						hexId = reader.nextInt();
+					} catch (Exception e) {
+						System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+						return;
+					}
 
-				if (hexId==0){
-					System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
-					break;
-				}
+					if (hexId == 0) {
+						System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
+						break;
+					}
 
-				// Vérifier que l'hex est un système contrôlé par le joueur et est un hex valide
-				selectedHex = controlledHexes.stream()
-						.filter(hex -> hex.getIdHex() == hexId)
-						.findFirst()
-						.orElse(null);
+					// Vérifier que l'hex est un système contrôlé par le joueur et est un hex valide
+					selectedHex = controlledHexes.stream()
+							.filter(hex -> hex.getIdHex() == hexId)
+							.findFirst()
+							.orElse(null);
 
-				if (selectedHex == null) {
-					System.out.println("Erreur : Hex non valide ou non contrôlé. Réessayez.");
-					continue;
-				}
+					if (selectedHex == null) {
+						System.out.println("Erreur : Hex non valide ou non contrôlé. Réessayez.");
+						continue;
+					}
 //
 ////				// Vérification de la limite de placement (2 vaisseaux max par hex)
 //				int allocatedShips = hexAllocation.getOrDefault(selectedHex.getIdHex(), 0);
@@ -124,7 +138,8 @@ public class ExpandCard implements CommandCard{
 //
 //				// Si tout est valide, ajouter à l'allocation et sortir de la boucle
 //				hexAllocation.put(selectedHex.getIdHex(), allocatedShips + 1);
-				break;
+					break;
+				}
 			}
 			if (selectedHex!=null) {
 				// Mettre à jour la position du vaisseau
@@ -133,7 +148,7 @@ public class ExpandCard implements CommandCard{
 				selectedHex.getShips().add(currentShip);
                 int shipCount = selectedHex.getShips().size();
                 controller.updateHexLabel(selectedHex.getIdHex(), shipCount, player);
-				System.out.println(STR."Vaisseau ajouté à l'hex : \{selectedHex.getIdHex()}");
+				System.out.println(STR."\{player.getName()} a ajouté un vaisseau à l'hex : \{selectedHex.getIdHex()}");
 			}
 		}
 	}

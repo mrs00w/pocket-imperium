@@ -1,5 +1,6 @@
 package pimperium;
 
+import eu.hansolo.toolbox.Helper;
 import gui.Controller;
 
 import java.util.ArrayList;
@@ -99,52 +100,80 @@ public class ExploreCard implements CommandCard {
 			default -> 1; // 1 mouvement sinon
 		};
 
-		//Jusque là on peut optimiser
-
-		System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
-		System.out.println("1. Passer la carte");
-		System.out.println("2. Jouer la carte");
-
 		Scanner reader = new Scanner(System.in);
+		if (player instanceof Bot){
+			// Décision aléatoire : 1 chance sur 6 de passer la carte
+			int decision = new Random().nextInt(6) + 1;  // Génère un nombre entre 1 et 6
+			if (decision == 1) {
+				System.out.println("Le bot a décidé de passer la carte.");
+				return;
+			}
+			System.out.println("Le bot a décidé de jouer la carte Explore.");
+		}else {
 
-		int choice;
-		try {
-			choice = reader.nextInt();
-		} catch (Exception e) {
-			System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-			return;
-		}
+			System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
+			System.out.println("1. Passer la carte");
+			System.out.println("2. Jouer la carte");
 
-		if (choice == 1) {
-			System.out.println("Vous avez choisi de passer cette carte.");
-			// Rien à faire ici : le joueur ne joue pas cette carte
-			return;
-		} // Scanner pour l'entrée utilisateur
-
-		System.out.println("Vous pouvez déplacer " +fleetMovementsAllowed+ " flottes");
-
-		// Effectuer les mouvements autorisés
-		for (int i = 0; i < fleetMovementsAllowed; i++) {
-			System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) :");
-			int sourceHexId = reader.nextInt();
-
-			// Récupérer les vaisseaux dans l'hex source
-			Hex sourceHex = game.getGround().getHexById(sourceHexId);
-			List<Hex> hexes = game.getGround().getHexes();
-			List<Hex> occupiedByPlayer = hexes.stream()
-					.filter(hex -> hex.getCurrentOccupant() != null && hex.getCurrentOccupant().equals(player)).toList();
-			if (!occupiedByPlayer.contains(sourceHex)){
-				System.out.println("Cet hex n'est pas contrôlé par vous. Veuillez choisir un autre hex.");
-				i--; // Refaire ce tour
-				continue;
+			int choice;
+			try {
+				choice = reader.nextInt();
+			} catch (Exception e) {
+				System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+				return;
 			}
 
-			List<Ship> shipsNotUsedInHex = sourceHex.getShips().stream()
-					.filter(ship -> !ship.isUsed())
+			if (choice == 1) {
+				System.out.println("Vous avez choisi de passer cette carte.");
+				// Rien à faire ici : le joueur ne joue pas cette carte
+				return;
+			}
+		}
+
+		System.out.println(player.getName()+" peut déplacer jusqu'à " +fleetMovementsAllowed+ " flottes");
+
+		// Effectuer les mouvements autorisés
+		int i=0;
+		while(i < fleetMovementsAllowed){
+			List<Hex> hexes = game.getGround().getHexes();
+			List<Hex> occupiedByPlayer = hexes.stream()
+					.filter(hex -> hex.getCurrentOccupant() != null && hex.getCurrentOccupant().equals(player))
+					.filter(hex -> hex.getShips().stream().anyMatch(ship -> !ship.isUsed()))
 					.toList();
+
+			if (occupiedByPlayer.isEmpty()) {
+				System.out.println("Vous ne pouvez pas déplacer de vaisseaux.");
+				return;
+			}
+
+			int sourceHexId;
+			Hex sourceHex;
+			if(player instanceof Bot){
+				sourceHex = occupiedByPlayer.get(new Random().nextInt(occupiedByPlayer.size()));
+				sourceHexId = sourceHex.getIdHex();
+			}else {
+				System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) ou tapez 0 pour passer votre tour :");
+				sourceHexId = reader.nextInt();
+
+				if (sourceHexId == 0) {
+					System.out.println("Vous choisissez de passer votre tour");
+					return;
+				}
+
+				// Récupérer les vaisseaux dans l'hex source
+				sourceHex = game.getGround().getHexById(sourceHexId);
+				if (!occupiedByPlayer.contains(sourceHex)) {
+					System.out.println("Cet hex n'est pas contrôlé par vous. Veuillez choisir un autre hex.");
+					continue;// Refaire ce tour
+				}
+
+			}
+			List<Ship> shipsNotUsedInHex = new ArrayList<Ship>(sourceHex.getShips().stream()
+					.filter(ship -> !ship.isUsed())
+					.toList());
+
 			if (shipsNotUsedInHex.isEmpty()) {
 				System.out.println("Aucun vaisseau disponible dans cet hex.");
-				i--;
 				continue;
 			}
 
@@ -154,31 +183,44 @@ public class ExploreCard implements CommandCard {
 //			for (Ship ship : sourceHex.getShips()) {
 //				if (ship.getPlayer() == player && !ship.isUsed()) { //pourquoi vérifier que le vaisseau appartient au joueur alors qu'on a déjà vérifié que l'hex appartenait au joueur ?
 //					shipsNotUsedInHex.add(ship);
+				Hex targetHex;
+				int targetHexId;
+				List<Ship> shipsToMove;
 
-				// Sélectionner les vaisseaux à déplacer
-				List<Ship> shipsToMove = player.chooseShipsToMove(shipsNotUsedInHex);
-				if (shipsToMove.isEmpty()) {
-					System.out.println("Aucun vaisseau choisi pour ce déplacement. Essayez encore.");
-					i--; // Refaire ce tour
-					continue;
-				}
+				if(player instanceof Bot){
+					//Choix des vaisseaux à déplacer
+					shipsToMove = shipsNotUsedInHex.stream()
+							.limit(new Random().nextInt(shipsNotUsedInHex.size()) + 1)
+							.toList();
 
-				System.out.println("Sélectionnez un hex de destination (ID) :");
-				int targetHexId = reader.nextInt();
-				Hex targetHex = game.getGround().getHexById(targetHexId);
+					//Sélection hex de destination
+					targetHex = sourceHex.getNeighbors().get(new Random().nextInt(sourceHex.getNeighbors().size()));
+					targetHexId = targetHex.getIdHex();
+					System.out.println(player.getName()+" déplace "+shipsToMove.size()+" vaisseau(x) de "+sourceHex.getIdHex()+" vers "+targetHex.getIdHex());
 
-				// Valider les règles de déplacement
-                // Version de Romain
+				} else {
+					// Sélectionner les vaisseaux à déplacer
+					shipsToMove = player.chooseShipsToMove(shipsNotUsedInHex);
+					if (shipsToMove.isEmpty()) {
+						System.out.println("Aucun vaisseau choisi pour ce déplacement. Essayez encore.");
+						continue;
+					}
+
+					System.out.println("Sélectionnez un hex de destination (ID) :");
+					targetHexId = reader.nextInt();
+					targetHex = game.getGround().getHexById(targetHexId);
+
+					// Valider les règles de déplacement
+					// Version de Romain
 //                if (targetHex == null || !isReachableInTwoSteps(sourceHex, targetHex)) {
 //                    System.out.println("Le hex cible n'est pas atteignable en un ou deux mouvements. Essayez encore.");
 //                    i--; // Refaire ce tour
 //                    continue;
 //                }
-                if (targetHex == null) {
-					System.out.println("Hex non valide. Essayez encore.");
-					i--; // Refaire ce tour
-					continue;
-				}
+					if (targetHex == null) {
+						System.out.println("Hex non valide. Essayez encore.");
+						continue;
+					}
 
 
 //			//On peut avancer de 1 ou 2 hexagones. On doit donc vérifier que l'hexagone cible est bien voisin à 2 hex près
@@ -194,10 +236,10 @@ public class ExploreCard implements CommandCard {
 //				continue;
 //			}
 
-				if (targetHex.getCurrentOccupant() != player && targetHex.getCurrentOccupant() != null) {
-					System.out.println("Vous ne pouvez pas déplacer vos vaisseaux dans un hex occupé par un autre joueur.");
-					i--; // Refaire ce tour
-					continue;
+					if (targetHex.getCurrentOccupant() != player && targetHex.getCurrentOccupant() != null) {
+						System.out.println("Vous ne pouvez pas déplacer vos vaisseaux dans un hex occupé par un autre joueur.");
+						continue;
+					}
 				}
 
 //				if (!sourceHex.getNeighbors().contains(targetHex) && !hasValidCommonNeighbor(sourceHex, targetHex, player)) {
@@ -210,11 +252,10 @@ public class ExploreCard implements CommandCard {
 				//On vérifie que personne ne contrôle le TriPrime
 				if (targetHex.getLevelSystem() == 3){
 					if (Hex.getTriPrimeOccupant() == null || Hex.getTriPrimeOccupant() == player){
-						System.out.println("Vous controllez le Tri Prime.");
+						System.out.println(player.getName()+" controlle le Tri Prime.");
 						boucle=false;
 					}else {
 						System.out.println("Le Tri Prime est déjà controlé par un autre joueur.");
-						i--; //Refaire ce tour
 						continue;
 					}
 				}
@@ -235,9 +276,7 @@ public class ExploreCard implements CommandCard {
 				// Mettre à jour le contrôle du hex cible
 				if (targetHex.getCurrentOccupant() != player) {
 					targetHex.setCurrentOccupant(player);
-					player.addControlledSector(targetHex.getSector());
-					player.getHexesOccupes().add(targetHex);
-					System.out.println(STR."Vous contrôlez désormais l'hex \{targetHexId}.");
+					System.out.println(STR."\{player.getName()} contrôle désormais l'hex \{targetHexId}.");
 				}
 
 				// Déplacer les vaisseaux
@@ -267,21 +306,31 @@ public class ExploreCard implements CommandCard {
 
 
                 if (iBoucle==1){
-					System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
-					if(reader.nextInt()==1){
+					int choice;
+					if(player instanceof Bot){
+						choice = new Random().nextInt(5) + 1;
+					}else {
+						System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
+						choice = reader.nextInt();
+					}
+					if(choice==1){
 						System.out.println("");
 						sourceHex=targetHex;
 						sourceHexId=sourceHex.getIdHex();
-						shipsNotUsedInHex=shipsToMove; //ajouter à la liste les vaisseaux du joueur qui étaient déjà sur l'hex d'arrivé si il y en a
+//						shipsNotUsedInHex=shipsToMove; //ajouter à la liste les vaisseaux du joueur qui étaient déjà sur l'hex d'arrivé si il y en a
+//						if(!sourceHex.getShips().isEmpty()) {
+							shipsNotUsedInHex=sourceHex.getShips();
+//						}
 					} else{
 						boucle=false;
 					}
 				}
 				iBoucle++;
 			}
+			i++;
 		}
 
-		player.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
+//		player.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
 		System.out.println("Exploration terminée.");
 	}
 }

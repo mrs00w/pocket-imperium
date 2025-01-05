@@ -87,8 +87,7 @@ public class Game {
 			SectorCard sectorCard = entry.getValue();
 			int points = calculateSectorPoints(player, sectorCard);
 			player.addPoints(points);
-			System.out.println("Le joueur " + player.getName() + " gagne " + points);
-			System.out.println("Le joueur " + player.getName() + " a désormais " + player.getScore());
+			System.out.println("Le joueur " + player.getName() + "gagne " + points);
 		}
 
 		if (triPrimeController != null) {
@@ -291,29 +290,31 @@ public class Game {
 
 	public void nextRound() {
 		round++;
-//		for (Player p : players) {
-//			System.out.println(STR."Le joueur \{p.getName()} planifie son tour");
-//			p.plan();
-//		}
-//		for (int iCard = 0; iCard < 3; iCard++) {
-//			List<Player> copie = compareOrder(iCard);
-//			System.out.println("Au tour "+ (iCard+1)+ " l'ordre des joueurs est : ");
-//			for (Player p : copie) {
-//				System.out.print(p.getName() +" ");
-//				//Romain : Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
-//				//Laora : Si on n'en a pas sur la carte on meurt, donc le cas où il n'y a pas de vaisseau n'existe pas
-//				//p.perform(iCard);
-//			}
-//			System.out.println("");
-//			for (Player p : copie) {
-////				CommandCard carteJouee = p.getCard(iCard);
-////				int indiceCarte = iCard;
-////				int capaciteCarte = (int) players.stream()
-////						.filter(player -> p.getCard(indiceCarte).equals(carteJouee))
-////						.count(); //On compte le nombre de joueurs ayant choisi la même carte que le joueur en train de jouer
-//				p.perform(iCard);
-//			}
-//		}
+		for (Player p : players) {
+			System.out.println(STR."Le joueur \{p.getName()} planifie son tour");
+			p.plan();
+
+		}
+		for (int iCard = 0; iCard < 3; iCard++) {
+			List<Player> copie = compareOrder(iCard);
+			System.out.println("Au tour "+ (iCard+1)+ " l'ordre des joueurs est : ");
+			for (Player p : copie) {
+				System.out.print(p.getName() +" ");
+				//Romain : Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
+				//Laora : Si on n'en a pas sur la carte on meurt, donc le cas où il n'y a pas de vaisseau n'existe pas
+				//p.perform(iCard);
+			}
+			System.out.println("");
+			for (Player p : copie) {
+//				CommandCard carteJouee = p.getCard(iCard);
+//				int indiceCarte = iCard;
+//				int capaciteCarte = (int) players.stream()
+//						.filter(player -> p.getCard(indiceCarte).equals(carteJouee))
+//						.count(); //On compte le nombre de joueurs ayant choisi la même carte que le joueur en train de jouer
+				p.perform(iCard);
+				p.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
+			}
+		}
 		sustainShips();
 		calculScore();
 		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
