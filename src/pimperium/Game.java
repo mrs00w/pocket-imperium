@@ -279,6 +279,8 @@ public class Game {
 		for (Player p : players) {
 			System.out.println(STR."Le joueur \{p.getName()} planifie son tour");
 			p.plan();
+			p.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
+
 		}
 		for (int iCard = 0; iCard < 3; iCard++) {
 			List<Player> copie = compareOrder(iCard);

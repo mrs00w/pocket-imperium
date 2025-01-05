@@ -4,19 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Amélioration du explore et du expand">
+    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="maj d'un peu tout. Ajout de la détection des secteurs occupés ou non. Lors du déploiment initial, les joueurs/bots ne peuvent maintenant plus choisir des sectors cards déjà occupés. Les bots sont mtn créés en fonction du nombre de joueurs humains dans la partie. Leur initialShipsDeployment est maintenant automatique.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/hello-view.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/images/map_pocket_imperium.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/images/map_pocket_imperium.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/gui/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Bot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/CommandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/CommandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Ground.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Ground.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Hex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/SectorCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/SectorCard.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735754513744</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="maj d'un peu tout. Ajout de la détection des secteurs occupés ou non. Lors du déploiment initial, les joueurs/bots ne peuvent maintenant plus choisir des sectors cards déjà occupés. Les bots sont mtn créés en fonction du nombre de joueurs humains dans la partie. Leur initialShipsDeployment est maintenant automatique.">
+      <option name="closed" value="true" />
+      <created>1736012672528</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1736012672528</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -259,7 +262,8 @@
     <MESSAGE value="Je suis allée jusqu'à la commande exploreCard, il me reste à vérifier qu'on traverse pas un hexagone déjà occupé ou le tri prime." />
     <MESSAGE value="Je continue d'améliorer le explore" />
     <MESSAGE value="GUI + SustainShip + CalculScore + On continue de débugger. Fonctionne jusqu'à ExploreCard." />
-    <option name="LAST_COMMIT_MESSAGE" value="GUI + SustainShip + CalculScore + On continue de débugger. Fonctionne jusqu'à ExploreCard." />
+    <MESSAGE value="maj d'un peu tout. Ajout de la détection des secteurs occupés ou non. Lors du déploiment initial, les joueurs/bots ne peuvent maintenant plus choisir des sectors cards déjà occupés. Les bots sont mtn créés en fonction du nombre de joueurs humains dans la partie. Leur initialShipsDeployment est maintenant automatique." />
+    <option name="LAST_COMMIT_MESSAGE" value="maj d'un peu tout. Ajout de la détection des secteurs occupés ou non. Lors du déploiment initial, les joueurs/bots ne peuvent maintenant plus choisir des sectors cards déjà occupés. Les bots sont mtn créés en fonction du nombre de joueurs humains dans la partie. Leur initialShipsDeployment est maintenant automatique." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PocketImperium$Main.ic" NAME="Main Coverage Results" MODIFIED="1735654899031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
