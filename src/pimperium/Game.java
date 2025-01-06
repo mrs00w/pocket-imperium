@@ -172,7 +172,7 @@ public class Game {
 		for (Hex hex : sectorCard.getHexes()) {
 			if (player.controlsHex(hex)) {
 				System.out.println("Hex: " + hex.getIdHex() + " contrôlé par " + player.getName() + " avec niveau de système: " + hex.getLevelSystem());
-				points = hex.getLevelSystem();
+				points += hex.getLevelSystem();
 			}
 		}
 		return points;
