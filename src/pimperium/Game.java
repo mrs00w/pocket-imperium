@@ -97,8 +97,9 @@ public class Game {
 			chosenSectors.add(chosenSector);
 //				playerChoices.put(player, chosenSector);
 			for (Hex hex : chosenSector.getHexes()) {
-				if (hex.getLevelSystem() != 0 && hex.getCurrentOccupant() != null) {
+				if (hex.getLevelSystem() > 0 && hex.getCurrentOccupant() != null) {
 					hex.getCurrentOccupant().addPoints(hex.getLevelSystem());
+					System.out.println(hex.getCurrentOccupant().getName()+" a gagné "+hex.getLevelSystem()+" points.");
 				}
 			}
 //			}
@@ -114,8 +115,9 @@ public class Game {
 //				chosenSectors.add(additionalSector);
 			}
 			for (Hex hex : additionalSector.getHexes()){
-				if (hex.getLevelSystem()!=0 && hex.getCurrentOccupant()!=null){
+				if (hex.getLevelSystem()>0 && hex.getCurrentOccupant()!=null){
 					hex.getCurrentOccupant().addPoints(hex.getLevelSystem());
+					System.out.println(hex.getCurrentOccupant().getName()+" a gagné "+hex.getLevelSystem()+" points.");
 				}
 			}
         }
@@ -147,7 +149,6 @@ public class Game {
 
 	public SectorCard chooseSector(Player player, Set<SectorCard> chosenSectors) {
 		if(player instanceof Bot) {
-			System.out.println(player.getName() + "choisi un secteur");
 			while (true) {
 				Random random = new Random();
 				int randomId = random.nextInt(10);
@@ -158,6 +159,7 @@ public class Game {
 				if (filteredSectors.isEmpty() || randomId == 4) {
 					continue;
 				}
+				System.out.println(player.getName() + " a choisi le secteur "+randomId);
 				return ground.getSectorById(randomId);
 			}
 		}
