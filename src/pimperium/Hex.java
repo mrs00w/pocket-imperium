@@ -35,9 +35,7 @@ public class Hex {
 		return sector;
 	}
 
-	public static Player getTriPrimeOccupant() {
-		return triPrimeOccupant;
-	}
+	public static Player getTriPrimeOccupant() {return triPrimeOccupant;}
 
 	public static void setTriPrimeOccupant(Player triPrimeOccupant) {
 		Hex.triPrimeOccupant = triPrimeOccupant;

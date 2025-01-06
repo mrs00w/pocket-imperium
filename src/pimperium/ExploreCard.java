@@ -242,11 +242,11 @@ public class ExploreCard implements CommandCard {
 					}
 				}
 
-//				if (!sourceHex.getNeighbors().contains(targetHex) && !hasValidCommonNeighbor(sourceHex, targetHex, player)) {
-//					System.out.println("Vous ne pouvez pas passé à travers un hex occupé par un autre joueur.");
-//					i--; // Refaire ce tour
-//					continue;
-//				}
+				if (!sourceHex.getNeighbors().contains(targetHex) && !hasValidCommonNeighbor(sourceHex, targetHex, player)) {
+					System.out.println("Vous ne pouvez pas passé à travers un hex occupé par un autre joueur.");
+					i--; // Refaire ce tour
+					continue;
+				}
 
 				//IMPORTANT faire ce test avant de vérifier que targetHex appartient au TriPrime
 				//On vérifie que personne ne contrôle le TriPrime
