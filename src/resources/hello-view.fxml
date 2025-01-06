@@ -114,12 +114,12 @@
          <Font name="Arial Bold" size="20.0"/>
       </font>
    </Label>
-   <Label contentDisplay="CENTER" layoutX="320.0" layoutY="292.0" text="54" textFill="WHITE">
+   <Label contentDisplay="CENTER" layoutX="320.0" layoutY="292.0" text="44" textFill="WHITE">
       <font>
          <Font name="Arial Bold" size="20.0"/>
       </font>
    </Label>
-   <Label contentDisplay="CENTER" layoutX="412.0" layoutY="292.0" text="64" textFill="WHITE">
+   <Label contentDisplay="CENTER" layoutX="412.0" layoutY="292.0" text="54" textFill="WHITE">
       <font>
          <Font name="Arial Bold" size="20.0"/>
       </font>
@@ -402,13 +402,13 @@
          <Font name="Arial Bold" size="20.0"/>
       </font>
    </Label>
-   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="452.0" layoutY="303.0" text="64" fx:id="hex64Label"
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="452.0" layoutY="303.0" text="54" fx:id="hex54Label"
           textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
       <font>
          <Font name="Arial Bold" size="20.0"/>
       </font>
    </Label>
-   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="292.0" text="54" fx:id="hex54Label"
+   <Label alignment="CENTER" contentDisplay="CENTER" layoutX="366.0" layoutY="292.0" text="44" fx:id="hex44Label"
           textAlignment="JUSTIFY" textFill="#829bf4" textOverrun="CLIP" visible="false">
       <font>
          <Font name="Arial Bold" size="20.0"/>

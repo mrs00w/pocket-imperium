@@ -110,18 +110,27 @@ public class Game {
 	}
 
 	private SectorCard chooseSector(Player player, Set<SectorCard> chosenSectors) {
-		System.out.println("Quel secteur voulez-vous choisir ? (Entrez l'ID de position sur la carte)");
+		System.out.println("Quel secteur voulez-vous choisir " + player.getName() + "? (Entrez l'ID de position sur la carte)");
 		Scanner reader = new Scanner(System.in);
-		int idPositionOnMap = reader.nextInt();
+		int idSectorById = reader.nextInt();
+		System.out.println("Vous avez choisi le Secteur n°" + idSectorById);
 
-		SectorCard sector = ground.getSectorByPositionOnMap(idPositionOnMap);
+		SectorCard sector = ground.getSectorById(idSectorById);
+
+		if (player.getControlledSectors().contains(sector)) {
+			System.out.println("Le joueur est bien présent dans ce secteur " + idSectorById);
+		}
+
+		System.out.println("Vous avez choisi le Secteur n°" + idSectorById);
+
+		System.out.println("Vous avez choisi le Secteur : " + sector);
 			// Vérifie si le secteur est valide
-			if (sector != null && sector.getPositionOnMap() == idPositionOnMap) { // Vérifie que l'ID correspond
+			if (sector != null && sector.getId() == idSectorById) { // Vérifie que l'ID correspond
 				if (!chosenSectors.contains(sector) && sector != centralCard && player.controlsSector(sector)) {
 					return sector; // Retourne le secteur si toutes les conditions sont respectées
 				} else {
 					System.out.println("Ce secteur ne peut pas être choisi (déjà choisi, central, ou non contrôlé par le joueur).");
-					return null; // Optionnel : Si le secteur n'est pas valide
+					chooseSector(player, chosenSectors); // Optionnel : Si le secteur n'est pas valide
 				}
 			}
 		System.out.println("Aucun secteur correspondant à cet ID n'a été trouvé.");
@@ -132,7 +141,8 @@ public class Game {
 		int points = 0;
 		for (Hex hex : sectorCard.getHexes()) {
 			if (player.controlsHex(hex)) {
-				points += hex.getLevelSystem();
+				System.out.println("Hex: " + hex.getIdHex() + " contrôlé par " + player.getName() + " avec niveau de système: " + hex.getLevelSystem());
+				points = hex.getLevelSystem();
 			}
 		}
 		return points;
@@ -253,10 +263,14 @@ public class Game {
 
 // Une fois sorti, on a bien validé targetHex
 
+		System.out.println("Hex sélectionné : " + targetHex.getIdHex());
+
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
 			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
+			player.addControlledSector(targetHex.getSector());
+			System.out.println(player.getControlledSectors());
 			int shipCount = targetHex.getShips().size();
 			controller.updateHexLabel(targetHex.getIdHex(), shipCount, player);
 			player.getShipsHorsPlateau().pop();
@@ -264,6 +278,8 @@ public class Game {
 			targetHex.setCurrentOccupant(player);
 			player.getHexesOccupes().add(targetHex);
 		}
+
+		System.out.println("Le joueur " + player.getName() + " est présent dans le secteur n°" + targetHex.getSector().getId());
 		ground.getSectorById(targetHex.getSectorId()).setHasShips(true);
 //		for (Ship s : targetHex.getShips()){
 //			System.out.println(s.toString());
@@ -300,7 +316,7 @@ public class Game {
 			}
 		}
 		sustainShips();
-		//calculScore();
+		calculScore();
 		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
 	}
 
@@ -383,6 +399,7 @@ public class Game {
 				gagnant = joueur;
 			}
 		}
-		System.out.println("Félicitations, à" + gagnant + "pour avoir gagner la partie avec" + scoreMax +" points !");
+		System.out.println("La partie est terminée");
+		System.out.println("Félicitations, à " + gagnant + " pour avoir gagner la partie avec " + scoreMax +" points !");
 	}
 }

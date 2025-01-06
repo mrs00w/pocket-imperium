@@ -31,7 +31,13 @@ public class Bot extends Player {
             System.out.println("La carte " + (i + 1) + " choisie par le bot est : " + commandCards[i].getName());
         }
     }
-//    @Override
+
+    @Override
+    public String getName() {
+        return super.getName();
+    }
+
+    //    @Override
 //    public void plan() {
 //        System.out.println(STR."\{this.getName()} est en train de planifier ses actions.");
 //
