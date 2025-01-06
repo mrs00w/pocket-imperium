@@ -197,7 +197,8 @@ public class Controller {
 
                     if (controllingPlayer != null) {
                         Color playerColor = controllingPlayer.getColor();
-                        label.setStyle("-fx-text-fill: " + toRgbString(playerColor) + ";");
+                        String existingStyle = label.getStyle();
+                        label.setStyle(existingStyle + "; -fx-text-fill: " + toRgbString(playerColor) + ";");
                     }
 
                 } else {

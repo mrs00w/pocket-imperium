@@ -18,7 +18,7 @@ public class Game {
 	private Game() {
 		this.ground = new Ground();
 		this.players = new ArrayList<>();
-		this.centralCard = ground.findCentralCard(ground.getSectors());
+		this.centralCard = ground.getSectorById(4);
 	}
 
 	public void setController(Controller controller) {
@@ -53,8 +53,15 @@ public class Game {
 		}
 	}
 
+	public void clearControlledSectors() {
+		for (Player p : Game.getInstance().getPlayers()) {
+			p.getControlledSectors().clear();
+		}
+	}
+
 	public void calculScore() {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
+		clearControlledSectors();
 		updateControlledSectors();
 		//Demande à chaque joueur de choisir une sectorCard
 		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
@@ -67,35 +74,52 @@ public class Game {
 		Player triPrimeController = getTriPrimeController();
 
 		for (Player player : players) {
-			SectorCard chosenSector=null;
-			while(chosenSector==null) {
+
+            //Ma partie
+//            SectorCard chosenSector=null;
+  //          while(chosenSector==null) {
+    //            chosenSector = chooseSector(player, chosenSectors);
+    //        }
+    //        chosenSectors.add(chosenSector);
+    //        playerChoices.put(player, chosenSector);
+//          }
+
+            SectorCard chosenSector;
+			if (player instanceof Bot) {
+				chosenSector = chooseSectorBot((Bot) player, chosenSectors);
+                chosenSectors.add(chosenSector);
+                playerChoices.put(player, chosenSector);
+            } else {
 				chosenSector = chooseSector(player, chosenSectors);
+				if (chosenSector != null) {
+					chosenSectors.add(chosenSector);
+					playerChoices.put(player, chosenSector);
+				}
 			}
-			chosenSectors.add(chosenSector);
-			playerChoices.put(player, chosenSector);
 		}
 
 		if (triPrimeController != null) {
-			SectorCard additionalSector = chooseSector(triPrimeController, chosenSectors);
-			if (additionalSector != null) {
+            SectorCard additionalSector;
+            if (triPrimeController instanceof Bot) {
+                additionalSector = chooseSectorBot((Bot) triPrimeController, chosenSectors);
+                chosenSectors.add(additionalSector);
+            } else {
+				additionalSector = chooseSector(triPrimeController, chosenSectors);
 				chosenSectors.add(additionalSector);
 			}
-		}
+        }
 
 		// Calculer les scores
 		for (Map.Entry<Player, SectorCard> entry : playerChoices.entrySet()) {
 			Player player = entry.getKey();
 			SectorCard sectorCard = entry.getValue();
-			int points = calculateSectorPoints(player, sectorCard);
-			player.addPoints(points);
-			System.out.println("Le joueur " + player.getName() + "gagne " + points);
+			calculateSectorPoints(sectorCard);
 		}
 
 		if (triPrimeController != null) {
 			for (SectorCard extraSector : chosenSectors) {
 				if (triPrimeController.controlsSector(extraSector)) {
-					int points = calculateSectorPoints(triPrimeController, extraSector);
-					triPrimeController.addPoints(points);
+					calculateSectorPoints(extraSector);
 				}
 			}
 		}
@@ -157,15 +181,42 @@ public class Game {
 		return null; // Si aucun secteur valide n'est trouvé
 	}
 
-	private int calculateSectorPoints(Player player, SectorCard sectorCard) {
-		int points = 0;
+	private SectorCard chooseSectorBot(Bot bot, Set<SectorCard> chosenSectors) {
+		System.out.println(bot.getName() + "choisi un secteur");
+		Random random = new Random();
+
+		List<SectorCard> sectorControlledbyBotList = new ArrayList<SectorCard>(bot.getControlledSectors());
+
+        sectorControlledbyBotList.remove(centralCard);
+
+		for (SectorCard s: chosenSectors) {
+            sectorControlledbyBotList.remove(s);
+		}
+
+		int SectorByPositionInList = random.nextInt(sectorControlledbyBotList.size());
+		SectorCard sectorChoosen = sectorControlledbyBotList.get(SectorByPositionInList);
+
+		if (sectorChoosen == null) {
+			List<SectorCard> secteursRestants = ground.getSectors();
+			secteursRestants.removeAll(sectorControlledbyBotList);
+			int SectorByPosition = random.nextInt(secteursRestants.size());
+			sectorChoosen = secteursRestants.get(SectorByPosition);
+		}
+
+        System.out.println(bot.getName() + "a choisi le secteur n°" + sectorChoosen.getId());
+		return sectorChoosen;
+	}
+
+	private void calculateSectorPoints(SectorCard sectorCard) {
 		for (Hex hex : sectorCard.getHexes()) {
-			if (player.controlsHex(hex)) {
-				System.out.println("Hex: " + hex.getIdHex() + " contrôlé par " + player.getName() + " avec niveau de système: " + hex.getLevelSystem());
-				points += hex.getLevelSystem();
+//			if (player.controlsHex(hex)) {
+			Player hexOwner = hex.getCurrentOccupant();
+			if (hex.getLevelSystem() > 0 && hexOwner != null) {
+				int points = hex.getLevelSystem();
+				System.out.println("Le joueur " + hexOwner.getName() + " gagne " + points + " dans le secteur n°" + sectorCard.getId());
+				hexOwner.addPoints(points);
 			}
 		}
-		return points;
 	}
 
 	public List<Player> getPlayers() {
@@ -283,12 +334,15 @@ public class Game {
 
 // Une fois sorti, on a bien validé targetHex
 
+		System.out.println("Hex sélectionné : " + targetHex.getIdHex());
+
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
 			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
 			player.addControlledSector(targetHex.getSector());
-//			System.out.println(player.getControlledSectors());
+			System.out.println("Le joueur " + targetHex.getCurrentOccupant() + " controle le secteur n°" + targetHex.getSector().getId());
+			System.out.println(player.getControlledSectors());
 			int shipCount = targetHex.getShips().size();
 			controller.updateHexLabel(targetHex.getIdHex(), shipCount, player);
 			player.getShipsHorsPlateau().pop();
@@ -334,7 +388,7 @@ public class Game {
 			}
 		}
 		sustainShips();
-		//calculScore();
+		calculScore();
 		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
 	}
 

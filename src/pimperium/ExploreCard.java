@@ -129,10 +129,11 @@ public class ExploreCard implements CommandCard {
 
 			int sourceHexId;
 			Hex sourceHex;
+
 			if(player instanceof Bot){
 				sourceHex = occupiedByPlayer.get(new Random().nextInt(occupiedByPlayer.size()));
 				sourceHexId = sourceHex.getIdHex();
-			}else {
+			} else {
 				System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) ou tapez 0 pour passer votre tour :");
 				sourceHexId = reader.nextInt();
 
@@ -281,6 +282,8 @@ public class ExploreCard implements CommandCard {
 				if (targetHex.getCurrentOccupant() != player) { // && targetHex.getLevelSystem()!=3 ?
 					targetHex.setCurrentOccupant(player);
 					player.getHexesOccupes().add(targetHex);
+                    // ??????
+					player.getControlledSectors().add(targetHex.getSector());
 					System.out.println(STR."\{player.getName()} contrôle désormais l'hex \{targetHexId}.");
 				}
 
@@ -315,6 +318,16 @@ public class ExploreCard implements CommandCard {
 						System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
 					}
 				}
+
+	//			if (sourceHex.getShips().isEmpty()) {
+	//				if (sourceHex.getLevelSystem() == 3) {
+	//					for (Hex hex : game.getGround().getTriPrime()) {
+	//						if (hex.getShips().isEmpty()) {
+	//							System.out.println(STR."TriPrime n'est plus contrôlé.");
+	//						}
+	//					}
+	//				}
+	//			}
 
                 controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
                 controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);
