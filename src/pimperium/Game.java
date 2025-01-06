@@ -18,7 +18,7 @@ public class Game {
 	private Game() {
 		this.ground = new Ground();
 		this.players = new ArrayList<>();
-		this.centralCard = ground.findCentralCard(ground.getSectors());
+		this.centralCard = ground.getSectorById(4);
 	}
 
 	public void setController(Controller controller) {
@@ -53,8 +53,15 @@ public class Game {
 		}
 	}
 
+	public void clearControlledSectors() {
+		for (Player p : Game.getInstance().getPlayers()) {
+			p.getControlledSectors().clear();
+		}
+	}
+
 	public void calculScore() {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
+		clearControlledSectors();
 		updateControlledSectors();
 		//Demande à chaque joueur de choisir une sectorCard
 		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
@@ -67,10 +74,13 @@ public class Game {
 		Player triPrimeController = getTriPrimeController();
 
 		for (Player player : players) {
+			SectorCard chosenSector;
 			if (player instanceof Bot) {
-				SectorCard chosenSector = chooseSectorBot((Bot) player, chosenSectors);
-			} else {
-				SectorCard chosenSector = chooseSector(player, chosenSectors);
+				chosenSector = chooseSectorBot((Bot) player, chosenSectors);
+                chosenSectors.add(chosenSector);
+                playerChoices.put(player, chosenSector);
+            } else {
+				chosenSector = chooseSector(player, chosenSectors);
 				if (chosenSector != null) {
 					chosenSectors.add(chosenSector);
 					playerChoices.put(player, chosenSector);
@@ -79,23 +89,27 @@ public class Game {
 		}
 
 		if (triPrimeController != null) {
-			SectorCard additionalSector = chooseSector(triPrimeController, chosenSectors);
-			if (additionalSector != null) {
+            SectorCard additionalSector;
+            if (triPrimeController instanceof Bot) {
+                additionalSector = chooseSectorBot((Bot) triPrimeController, chosenSectors);
+                chosenSectors.add(additionalSector);
+            } else {
+				additionalSector = chooseSector(triPrimeController, chosenSectors);
 				chosenSectors.add(additionalSector);
 			}
-		}
+        }
 
 		// Calculer les scores
 		for (Map.Entry<Player, SectorCard> entry : playerChoices.entrySet()) {
 			Player player = entry.getKey();
 			SectorCard sectorCard = entry.getValue();
-			calculateSectorPoints(player, sectorCard);
+			calculateSectorPoints(sectorCard);
 		}
 
 		if (triPrimeController != null) {
 			for (SectorCard extraSector : chosenSectors) {
 				if (triPrimeController.controlsSector(extraSector)) {
-					calculateSectorPoints(triPrimeController, extraSector);
+					calculateSectorPoints(extraSector);
 				}
 			}
 		}
@@ -141,38 +155,37 @@ public class Game {
 	private SectorCard chooseSectorBot(Bot bot, Set<SectorCard> chosenSectors) {
 		System.out.println(bot.getName() + "choisi un secteur");
 		Random random = new Random();
-		SectorCard sectorChoosen = null;
-		List<Integer> sectorIdControlledByBot = new ArrayList<>();
 
-		int idSectorById = random.nextInt(9);
+		List<SectorCard> sectorControlledbyBotList = new ArrayList<SectorCard>(bot.getControlledSectors());
 
-		for (SectorCard sector: bot.getControlledSectors()) {
-			sectorIdControlledByBot.add(sector.getId());
-			}
+        sectorControlledbyBotList.remove(centralCard);
 
-		int sectorIdChoosen = sectorIdControlledByBot.get(random.nextInt(sectorIdControlledByBot.size()));
-
-		for (SectorCard sector: bot.getControlledSectors()) {
-			if (sector.getId() == sectorIdChoosen && sector != centralCard) {
-				sectorChoosen = sector;
-			} else {
-				chooseSectorBot(bot, chosenSectors);
-			}
+		for (SectorCard s: chosenSectors) {
+            sectorControlledbyBotList.remove(s);
 		}
 
-		System.out.println(bot.getName() + "a choisi le secteur n°" + idSectorById);
+		int SectorByPositionInList = random.nextInt(sectorControlledbyBotList.size());
+		SectorCard sectorChoosen = sectorControlledbyBotList.get(SectorByPositionInList);
+
+		if (sectorChoosen == null) {
+			List<SectorCard> secteursRestants = ground.getSectors();
+			secteursRestants.removeAll(sectorControlledbyBotList);
+			int SectorByPosition = random.nextInt(secteursRestants.size());
+			sectorChoosen = secteursRestants.get(SectorByPosition);
+		}
+
+        System.out.println(bot.getName() + "a choisi le secteur n°" + sectorChoosen.getId());
 		return sectorChoosen;
 	}
 
-	private void calculateSectorPoints(Player player, SectorCard sectorCard) {
-		int points = 0;
+	private void calculateSectorPoints(SectorCard sectorCard) {
 		for (Hex hex : sectorCard.getHexes()) {
 //			if (player.controlsHex(hex)) {
 			Player hexOwner = hex.getCurrentOccupant();
-			if (hex.getLevelSystem() > 0) {
-				points += hex.getLevelSystem();
+			if (hex.getLevelSystem() > 0 && hexOwner != null) {
+				int points = hex.getLevelSystem();
+				System.out.println("Le joueur " + hexOwner.getName() + " gagne " + points + " dans le secteur n°" + sectorCard.getId());
 				hexOwner.addPoints(points);
-				System.out.println("Le joueur " + hexOwner.getName() + "gagne " + points);
 			}
 		}
 	}
@@ -299,6 +312,7 @@ public class Game {
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
 			player.addControlledSector(targetHex.getSector());
+			System.out.println("Le joueur " + targetHex.getCurrentOccupant() + " controle le secteur n°" + targetHex.getSector().getId());
 			System.out.println(player.getControlledSectors());
 			int shipCount = targetHex.getShips().size();
 			controller.updateHexLabel(targetHex.getIdHex(), shipCount, player);
@@ -308,7 +322,7 @@ public class Game {
 			player.getHexesOccupes().add(targetHex);
 		}
 
-		System.out.println("Le joueur " + player.getName() + " est présent dans le secteur n°" + targetHex.getSector().getId());
+//		System.out.println("Le joueur " + player.getName() + " est présent dans le secteur n°" + targetHex.getSector().getId());
 		ground.getSectorById(targetHex.getSectorId()).setHasShips(true);
 //		for (Ship s : targetHex.getShips()){
 //			System.out.println(s.toString());

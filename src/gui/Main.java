@@ -3,6 +3,8 @@ package gui;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -34,6 +36,23 @@ public class Main extends Application {
         guiThread.start();
 
         Scene scene = new Scene(root);
+
+        primaryStage.setResizable(false);
+        primaryStage.setResizable(false);
+        primaryStage.setFullScreen(false);
+        primaryStage.fullScreenProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                primaryStage.setFullScreen(false);
+            }
+        });
+
+        // Bloquer le raccourci clavier pour le plein écran
+        primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.F11) {
+                event.consume(); // Bloque l'action
+            }
+        });
+
         primaryStage.setTitle("Pocket Imperium");
         primaryStage.setScene(scene);
         primaryStage.show();
