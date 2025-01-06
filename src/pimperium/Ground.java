@@ -24,6 +24,14 @@ public class Ground {
 		return triPrime;
 	}
 
+	public Player getTriPrimeOccupant() {
+		Player occupant = null;
+		for (Hex hex : triPrime) {
+			if (hex.getCurrentOccupant() != null) occupant = hex.getCurrentOccupant();
+		}
+		return occupant;
+	}
+
 	public SectorCard findCentralCard(List<SectorCard> cards) {
 		int targetPosition = 5; // L'identifiant recherché
 

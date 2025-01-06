@@ -67,15 +67,12 @@ public class Game {
 		Player triPrimeController = getTriPrimeController();
 
 		for (Player player : players) {
-			if (player instanceof Bot) {
-				SectorCard chosenSector = chooseSectorBot((Bot) player, chosenSectors);
-			} else {
-				SectorCard chosenSector = chooseSector(player, chosenSectors);
-				if (chosenSector != null) {
-					chosenSectors.add(chosenSector);
-					playerChoices.put(player, chosenSector);
-				}
+			SectorCard chosenSector=null;
+			while(chosenSector==null) {
+				chosenSector = chooseSector(player, chosenSectors);
 			}
+			chosenSectors.add(chosenSector);
+			playerChoices.put(player, chosenSector);
 		}
 
 		if (triPrimeController != null) {
@@ -114,10 +111,32 @@ public class Game {
 	}
 
 	private SectorCard chooseSector(Player player, Set<SectorCard> chosenSectors) {
+		if(player instanceof Bot){
+			System.out.println(player.getName() + "choisi un secteur");
+			Random random = new Random();
+			SectorCard sectorChoosen = null;
+			List<Integer> sectorIdControlledByBot = new ArrayList<>();
+
+			int idSectorById = random.nextInt(9);
+
+			for (SectorCard sector: player.getControlledSectors()) {
+				sectorIdControlledByBot.add(sector.getId());
+			}
+
+			int sectorIdChoosen = sectorIdControlledByBot.get(random.nextInt(sectorIdControlledByBot.size()));
+
+			for (SectorCard sector: player.getControlledSectors()) {
+				if (sector.getId() == sectorIdChoosen && sector != centralCard) {
+					sectorChoosen = sector;
+				} else {
+					chooseSector(player, chosenSectors);
+				}
+			}
+		}
 		System.out.println("Quel secteur voulez-vous choisir " + player.getName() + "? (Entrez l'ID de position sur la carte)");
 		Scanner reader = new Scanner(System.in);
 		int idSectorById = reader.nextInt();
-		System.out.println("Vous avez choisi le Secteur n°" + idSectorById);
+//		System.out.println("Vous avez choisi le Secteur n°" + idSectorById);
 
 		SectorCard sector = ground.getSectorById(idSectorById);
 
@@ -125,46 +144,17 @@ public class Game {
 			System.out.println("Le joueur est bien présent dans ce secteur " + idSectorById);
 		}
 
-		System.out.println("Vous avez choisi le Secteur n°" + idSectorById);
-
-		System.out.println("Vous avez choisi le Secteur : " + sector);
-			// Vérifie si le secteur est valide
-			if (sector != null && sector.getId() == idSectorById) { // Vérifie que l'ID correspond
-				if (!chosenSectors.contains(sector) && sector != centralCard && player.controlsSector(sector)) {
-					return sector; // Retourne le secteur si toutes les conditions sont respectées
-				} else {
-					System.out.println("Ce secteur ne peut pas être choisi (déjà choisi, central, ou non contrôlé par le joueur).");
-					chooseSector(player, chosenSectors); // Optionnel : Si le secteur n'est pas valide
-				}
-			}
-		System.out.println("Aucun secteur correspondant à cet ID n'a été trouvé.");
-		return null; // Si aucun secteur valide n'est trouvé
-	}
-
-	private SectorCard chooseSectorBot(Bot bot, Set<SectorCard> chosenSectors) {
-		System.out.println(bot.getName() + "choisi un secteur");
-		Random random = new Random();
-		SectorCard sectorChoosen = null;
-		List<Integer> sectorIdControlledByBot = new ArrayList<>();
-
-		int idSectorById = random.nextInt(9);
-
-		for (SectorCard sector: bot.getControlledSectors()) {
-			sectorIdControlledByBot.add(sector.getId());
-			}
-
-		int sectorIdChoosen = sectorIdControlledByBot.get(random.nextInt(sectorIdControlledByBot.size()));
-
-		for (SectorCard sector: bot.getControlledSectors()) {
-			if (sector.getId() == sectorIdChoosen && sector != centralCard) {
-				sectorChoosen = sector;
+		// Vérifie si le secteur est valide
+		if (sector != null && sector.getId() == idSectorById) { // Vérifie que l'ID correspond
+			if (!chosenSectors.contains(sector) && sector != centralCard && player.controlsSector(sector)) {
+				return sector; // Retourne le secteur si toutes les conditions sont respectées
 			} else {
-				chooseSectorBot(bot, chosenSectors);
+				System.out.println("Ce secteur ne peut pas être choisi (déjà choisi, central, ou non contrôlé par le joueur).");
+				chooseSector(player, chosenSectors); // Optionnel : Si le secteur n'est pas valide
 			}
 		}
-
-		System.out.println(bot.getName() + "a choisi le secteur n°" + idSectorById);
-		return sectorChoosen;
+		System.out.println("Aucun secteur correspondant à cet ID n'a été trouvé.");
+		return null; // Si aucun secteur valide n'est trouvé
 	}
 
 	private int calculateSectorPoints(Player player, SectorCard sectorCard) {
@@ -293,14 +283,12 @@ public class Game {
 
 // Une fois sorti, on a bien validé targetHex
 
-		System.out.println("Hex sélectionné : " + targetHex.getIdHex());
-
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
 			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
 			player.addControlledSector(targetHex.getSector());
-			System.out.println(player.getControlledSectors());
+//			System.out.println(player.getControlledSectors());
 			int shipCount = targetHex.getShips().size();
 			controller.updateHexLabel(targetHex.getIdHex(), shipCount, player);
 			player.getShipsHorsPlateau().pop();
@@ -308,8 +296,8 @@ public class Game {
 			targetHex.setCurrentOccupant(player);
 			player.getHexesOccupes().add(targetHex);
 		}
-
-		System.out.println("Le joueur " + player.getName() + " est présent dans le secteur n°" + targetHex.getSector().getId());
+//
+//		System.out.println("Le joueur " + player.getName() + " est présent dans le secteur n°" + targetHex.getSector().getId());
 		ground.getSectorById(targetHex.getSectorId()).setHasShips(true);
 //		for (Ship s : targetHex.getShips()){
 //			System.out.println(s.toString());
@@ -346,7 +334,7 @@ public class Game {
 			}
 		}
 		sustainShips();
-		calculScore();
+		//calculScore();
 		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
 	}
 
@@ -407,7 +395,7 @@ public class Game {
 		System.out.println("Initialisation du terrain");
 		game.initialShipDeployment();
 		//J'ai mis la limite à 2 juste le temps des tests
-		while ((getRound() < 2) && (game.players.size() != 1)) {
+		while ((getRound() < 2) && (game.players.size() != 2)) {
 			game.nextRound();
 		}
 

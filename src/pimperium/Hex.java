@@ -120,7 +120,11 @@ public class Hex {
 	}
 
 	public Player getCurrentOccupant() {
-		return currentOccupant;
+		if (this.ships.isEmpty()) {
+			return null;
+		} else {
+			return this.ships.getFirst().getPlayer();
+		}
 	}
 
 	public void changeOccupant(Player p) {
