@@ -45,30 +45,10 @@ public class ExterminateCard implements CommandCard {
                 return;
             }
             System.out.println("Le bot a décidé de jouer la carte Exterminate.");
-        }else {
-
-            System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
-            System.out.println("1. Passer la carte");
-            System.out.println("2. Jouer la carte");
-
-            Scanner reader = new Scanner(System.in);
-            int choice;
-            try {
-                choice = reader.nextInt();
-            } catch (Exception e) {
-                System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-                return;
-            }
-            if (choice == 1) {
-                System.out.println("Vous avez choisi de passer cette carte.");
-                // Rien à faire ici : le joueur ne joue pas cette carte
-                return;
-            }
         }
         Controller controller = game.getController();
         int n = 0;
         while (n < fleetMovementsAllowed) {
-            System.out.println("Quel système voulez vous envahir ? (ID)");
             Hex targetHex;
             Hex sourceHex;
             List<Ship> invasionFleet = new LinkedList<>();
@@ -104,6 +84,10 @@ public class ExterminateCard implements CommandCard {
                         .toList();
 
                 // Étape 5 : Choisir un hex source aléatoire
+                if (validSources.isEmpty()){
+                    System.out.println("Il n'y a plus de système attaquable.");
+                    return;
+                }
                 sourceHex = validSources.get(random.nextInt(validSources.size()));
                 System.out.println("Le Bot choisit de déplacer des vaisseaux depuis l'hex : " + sourceHex.getIdHex());
 
@@ -116,6 +100,8 @@ public class ExterminateCard implements CommandCard {
                     controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), sourceHex.getCurrentOccupant());
                 }
             }else {
+                System.out.println("Quel système voulez vous envahir ? (ID) (tapez 0 si vous souhaiter passer ce tour) ");
+
                 Scanner reader = new Scanner(System.in);
                 int idHex;
                 try {
@@ -125,7 +111,17 @@ public class ExterminateCard implements CommandCard {
                     continue;
                 }
 
+                if (idHex == 0) {
+                    System.out.println("Vous choisissez de passer votre tour");
+                    return;
+                }
+
                 targetHex = game.getGround().getHexById(idHex);
+
+                if(targetHex==null){
+                    System.out.println("Mauvaise entrée.");
+                    continue;
+                }
 
                 // Vérifier que le joueur n'occupe pas déjà le système
                 if (targetHex.getCurrentOccupant() == player) {
@@ -135,12 +131,25 @@ public class ExterminateCard implements CommandCard {
 
                 // Vérifier que le système est adjacent
                 List<Hex> neighbors = targetHex.getNeighbors();
+                if(neighbors.stream().anyMatch(game.getGround().getTriPrime()::contains)){
+                    if(game.getGround().getTriPrimeOccupant()==player){
+                        neighbors.add(game.getGround().getHexById(34));
+                    }
+                }
                 List<Hex> validSources = neighbors.stream()
                         .filter(h -> h.getCurrentOccupant() == player && h.getShips().stream().anyMatch(ship -> !ship.isUsed()))
                         .toList();
                 if (validSources.isEmpty()) {
                     System.out.println("Aucun hex adjacent ne contient vos vaisseaux pour l'invasion.");
                     continue;
+                }
+
+                if(game.getGround().getTriPrime().contains(targetHex)){
+                    if (game.getGround().getTriPrimeOccupant()==player){
+                        System.out.println("Vous contrôlez déjà le TriPrime, vous ne pouvez pas envahir ce système.");
+                        continue;
+                    }
+                    targetHex=game.getGround().getHexById(34);
                 }
 
                 // Demander au joueur combien de vaisseaux il souhaite utiliser
@@ -157,8 +166,12 @@ public class ExterminateCard implements CommandCard {
                     System.out.println("Vous devez utiliser au moins un vaisseau.");
                     continue;
                 }
-                if (numberOfShips> validSources.size()) {
-                    System.out.println("Vous n'avez pas suffisament de vaisseaux disponibles.");
+                int maxShips  = 0;
+                for (Hex hex : validSources) {
+                    maxShips += hex.getShips().size();
+                }
+                if (numberOfShips> maxShips) {
+                    System.out.println("Vous n'avez pas suffisamment de vaisseaux disponibles.");
                     continue;
                 }
 
@@ -249,16 +262,24 @@ public class ExterminateCard implements CommandCard {
                 //La liste de ships de l'hex est mise à jour avec les ships restants au joueur attaqué
                 sourceHex.setShips(defendingFleet);
             } else {
-                System.out.println("Invasion réussie ! Vous contrôlez maintenant le système.");
                 player.getHexesOccupes().add(targetHex);
                 targetHex.setCurrentOccupant(player);
                 targetHex.setShips(invasionFleet);
+                if(targetHex.getIdHex()==34){
+                    Hex.setTriPrimeOccupant(player);
+                    System.out.println("Invasion réussie ! Vous contrôlez maintenant le TriPrime.");
+                }else{
+                    System.out.println("Invasion réussie ! Vous contrôlez maintenant le système.");
+                }
             }
 
             if (targetHex.getShips().isEmpty()) {
                 System.out.println("Le système" + targetHex.getIdHex() + "est désormais innocupé");
                 defendingFleet.getFirst().getPlayer().getHexesOccupes().remove(targetHex);
                 targetHex.setCurrentOccupant(null);
+                if(targetHex.getIdHex()==34){
+                    Hex.setTriPrimeOccupant(null);
+                }
             }
 
             controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), targetHex.getCurrentOccupant());

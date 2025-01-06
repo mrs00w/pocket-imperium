@@ -61,55 +61,82 @@ public class Game {
 
 	public void calculScore() {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
-		clearControlledSectors();
-		updateControlledSectors();
+
+		//on va bazarder c'te partie :
+
+//		clearControlledSectors();
+//		updateControlledSectors();
+		//Demande à chaque joueur de choisir une sectorCard
+		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
+		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
+		//Personne ne peut sélectionner le TriPrime
+		//Pour chaque sectorCard, si des systemes sont controlés, le joueur qui le controle gagne autant de point
+		// que le niveau du systeme (peut importe qui a choisi la carte)
 		Set<SectorCard> chosenSectors = new HashSet<>();
-		Map<Player, SectorCard> playerChoices = new HashMap<>();
-		Player triPrimeController = getTriPrimeController();
+//		Map<Player, SectorCard> playerChoices = new HashMap<>();
+		Player triPrimeController = ground.getTriPrimeOccupant();
 
 		for (Player player : players) {
-			SectorCard chosenSector;
-			if (player instanceof Bot) {
-				chosenSector = chooseSectorBot((Bot) player, chosenSectors);
-                chosenSectors.add(chosenSector);
-                playerChoices.put(player, chosenSector);
-            } else {
-				chosenSector = chooseSector(player, chosenSectors);
-				if (chosenSector != null) {
-					chosenSectors.add(chosenSector);
-					playerChoices.put(player, chosenSector);
+
+            //Ma partie
+//            SectorCard chosenSector=null;
+  //          while(chosenSector==null) {
+    //            chosenSector = chooseSector(player, chosenSectors);
+    //        }
+    //        chosenSectors.add(chosenSector);
+    //        playerChoices.put(player, chosenSector);
+//          }
+
+            SectorCard chosenSector;
+//			if (player instanceof Bot) {
+//				chosenSector = chooseSectorBot((Bot) player, chosenSectors);
+//                chosenSectors.add(chosenSector);
+//                playerChoices.put(player, chosenSector);
+//            } else {
+			chosenSector = chooseSector(player, chosenSectors);
+			chosenSectors.add(chosenSector);
+//				playerChoices.put(player, chosenSector);
+			for (Hex hex : chosenSector.getHexes()) {
+				if (hex.getLevelSystem() != 0 && hex.getCurrentOccupant() != null) {
+					hex.getCurrentOccupant().addPoints(hex.getLevelSystem());
 				}
 			}
+//			}
 		}
 
 		if (triPrimeController != null) {
-            SectorCard additionalSector;
+			SectorCard additionalSector;
             if (triPrimeController instanceof Bot) {
-                additionalSector = chooseSectorBot((Bot) triPrimeController, chosenSectors);
-                chosenSectors.add(additionalSector);
+                additionalSector = chooseSectorBot((Bot) ground.getTriPrimeOccupant(), chosenSectors);
+//                chosenSectors.add(additionalSector);
             } else {
-				additionalSector = chooseSector(triPrimeController, chosenSectors);
-				chosenSectors.add(additionalSector);
+				additionalSector = chooseSector(ground.getTriPrimeOccupant(), chosenSectors);
+//				chosenSectors.add(additionalSector);
+			}
+			for (Hex hex : additionalSector.getHexes()){
+				if (hex.getLevelSystem()!=0 && hex.getCurrentOccupant()!=null){
+					hex.getCurrentOccupant().addPoints(hex.getLevelSystem());
+				}
 			}
         }
 
 		// Calculer les scores
-		for (Map.Entry<Player, SectorCard> entry : playerChoices.entrySet()) {
-			Player player = entry.getKey();
-			SectorCard sectorCard = entry.getValue();
-			calculateSectorPoints(sectorCard);
-		}
+//		for (Map.Entry<Player, SectorCard> entry : playerChoices.entrySet()) {
+//			Player player = entry.getKey();
+//			SectorCard sectorCard = entry.getValue();
+//			calculateSectorPoints(sectorCard);
+//		}
 
-		if (triPrimeController != null) {
-			for (SectorCard extraSector : chosenSectors) {
-				if (triPrimeController.controlsSector(extraSector)) {
-					calculateSectorPoints(extraSector);
-				}
-			}
-		}
+//		if (triPrimeController != null) {
+//			for (SectorCard extraSector : chosenSectors) {
+//				if (triPrimeController.controlsSector(extraSector)) {
+//					calculateSectorPoints(extraSector);
+//				}
+//			}
+//		}
 	}
 
-	private Player getTriPrimeController() {
+	public Player getTriPrimeController() {
 		for (Player player : players) {
 			if (player.controlsSector(centralCard)) {
 				return player;
@@ -118,32 +145,71 @@ public class Game {
 		return null;
 	}
 
-	private SectorCard chooseSector(Player player, Set<SectorCard> chosenSectors) {
-		System.out.println("Quel secteur voulez-vous choisir " + player.getName() + "? (Entrez l'ID de position sur la carte)");
-		Scanner reader = new Scanner(System.in);
-		int idSectorById = reader.nextInt();
-		System.out.println("Vous avez choisi le Secteur n°" + idSectorById);
+	public SectorCard chooseSector(Player player, Set<SectorCard> chosenSectors) {
+		if(player instanceof Bot) {
+			System.out.println(player.getName() + "choisi un secteur");
+			while (true) {
+				Random random = new Random();
+				int randomId = random.nextInt(10);
 
-		SectorCard sector = ground.getSectorById(idSectorById);
-
-		if (player.getControlledSectors().contains(sector)) {
-			System.out.println("Le joueur est bien présent dans ce secteur " + idSectorById);
-		}
-
-		System.out.println("Vous avez choisi le Secteur n°" + idSectorById);
-
-		System.out.println("Vous avez choisi le Secteur : " + sector);
-			// Vérifie si le secteur est valide
-			if (sector != null && sector.getId() == idSectorById) { // Vérifie que l'ID correspond
-				if (!chosenSectors.contains(sector) && sector != centralCard && player.controlsSector(sector)) {
-					return sector; // Retourne le secteur si toutes les conditions sont respectées
-				} else {
-					System.out.println("Ce secteur ne peut pas être choisi (déjà choisi, central, ou non contrôlé par le joueur).");
-					chooseSector(player, chosenSectors); // Optionnel : Si le secteur n'est pas valide
+				List<SectorCard> filteredSectors = ground.getSectors().stream()
+						.filter(sector -> sector.equals(ground.getSectorById(randomId)) && !chosenSectors.contains(sector))
+						.toList();
+				if (filteredSectors.isEmpty() || randomId == 4) {
+					continue;
 				}
+				return ground.getSectorById(randomId);
 			}
-		System.out.println("Aucun secteur correspondant à cet ID n'a été trouvé.");
-		return null; // Si aucun secteur valide n'est trouvé
+		}
+//			List<Integer> sectorIdControlledByBot = new ArrayList<>();
+//
+//			int idSectorById = random.nextInt(9);
+//
+//			for (SectorCard sector: player.getControlledSectors()) {
+//				sectorIdControlledByBot.add(sector.getId());
+//			}
+//
+//			int sectorIdChoosen = sectorIdControlledByBot.get(random.nextInt(sectorIdControlledByBot.size()));
+//
+//			for (SectorCard sector: player.getControlledSectors()) {
+//				if (sector.getId() == sectorIdChoosen && sector != centralCard) {
+//					sectorChoosen = sector;
+//				} else {
+//					chooseSector(player, chosenSectors);
+//				}
+//			}
+//		}
+		while (true) {
+			System.out.println("Quel secteur voulez-vous choisir " + player.getName() + "? (Entrez l'ID de position sur la carte)");
+			Scanner reader = new Scanner(System.in);
+			int idSectorById = reader.nextInt();
+
+			List<SectorCard> filteredSectors = ground.getSectors().stream()
+					.filter(sector -> sector.equals(ground.getSectorById(idSectorById)) && !chosenSectors.contains(sector))
+					.toList();
+			if (filteredSectors.isEmpty() || idSectorById==5) {
+				System.out.println("Le secteur choisi n'est pas valide");
+				continue;
+			}
+
+			return ground.getSectorById(idSectorById);
+
+//		if (player.getControlledSectors().contains(sector)) {
+//			System.out.println("Le joueur est bien présent dans ce secteur " + idSectorById);
+//		}
+
+			// Vérifie si le secteur est valide
+//		if (sector != null && sector.getId() == idSectorById) { // Vérifie que l'ID correspond
+//			if (!chosenSectors.contains(sector) && sector != centralCard && player.controlsSector(sector)) {
+//				return sector; // Retourne le secteur si toutes les conditions sont respectées
+//			} else {
+//				System.out.println("Ce secteur ne peut pas être choisi (déjà choisi, central, ou non contrôlé par le joueur).");
+//				chooseSector(player, chosenSectors); // Optionnel : Si le secteur n'est pas valide
+//			}
+//		}
+//		System.out.println("Aucun secteur correspondant à cet ID n'a été trouvé.");
+//		return null; // Si aucun secteur valide n'est trouvé
+		}
 	}
 
 	private SectorCard chooseSectorBot(Bot bot, Set<SectorCard> chosenSectors) {
@@ -152,7 +218,7 @@ public class Game {
 
 		List<SectorCard> sectorControlledbyBotList = new ArrayList<SectorCard>(bot.getControlledSectors());
 
-        sectorControlledbyBotList.remove(centralCard);
+//        sectorControlledbyBotList.remove(centralCard);
 
 		for (SectorCard s: chosenSectors) {
             sectorControlledbyBotList.remove(s);
@@ -394,12 +460,14 @@ public class Game {
 		System.out.println("\nInitialisation du terrain");
 		game.initialShipDeployment();
 		//J'ai mis la limite à 2 juste le temps des tests
-		while ((getRound() < 2) && (game.players.size() != 1)) {
+		while ((getRound() < 2) && (game.players.size() != 2)) {
 			game.nextRound();
 		}
 
 // Pour calculer les scores de victoire à la fin
 		Map<String, Integer> tableauScores = new HashMap<>();
+
+		//reparcourir l'ensemble des systèmes pour accorder les points x2
 		for (Player p : game.players){
 			tableauScores.put(p.getName(), Integer.valueOf(p.getScore()));
 		}

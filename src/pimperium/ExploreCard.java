@@ -92,25 +92,6 @@ public class ExploreCard implements CommandCard {
 				return;
 			}
 			System.out.println("Le bot a décidé de jouer la carte Explore.");
-		} else {
-
-			System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
-			System.out.println("1. Passer la carte");
-			System.out.println("2. Jouer la carte");
-
-			int choice;
-			try {
-				choice = reader.nextInt();
-			} catch (Exception e) {
-				System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-				return;
-			}
-
-			if (choice == 1) {
-				System.out.println("Vous avez choisi de passer cette carte.");
-				// Rien à faire ici : le joueur ne joue pas cette carte
-				return;
-			}
 		}
 
 		System.out.println(player.getName()+" peut déplacer jusqu'à " +fleetMovementsAllowed+ " flottes");
@@ -152,16 +133,29 @@ public class ExploreCard implements CommandCard {
 
 				// Récupérer les vaisseaux dans l'hex source
 				sourceHex = game.getGround().getHexById(sourceHexId);
-				if (!occupiedByPlayer.contains(sourceHex)) {
-					System.out.println("Cet hex n'est pas contrôlé par vous. Veuillez choisir un autre hex.");
-					continue;// Refaire ce tour
+				if(game.getGround().getTriPrime().contains(sourceHex)){
+					if (game.getGround().getTriPrimeOccupant()!=player) {
+						System.out.println("Vous n'occupez pas ce système.");
+						continue;
+					}
+				}else{
+					if (!occupiedByPlayer.contains(sourceHex)) {
+						System.out.println("Cet hex n'est pas contrôlé par vous. Veuillez choisir un autre hex.");
+						continue;// Refaire ce tour
+					}
 				}
 
 			}
-
-			List<Ship> shipsNotUsedInHex = new ArrayList<Ship>(sourceHex.getShips().stream()
-					.filter(ship -> !ship.isUsed())
-					.toList());
+			List<Ship> shipsNotUsedInHex;
+			if(game.getGround().getTriPrime().contains(sourceHex)){
+				shipsNotUsedInHex = new ArrayList<Ship>(game.getGround().getHexById(34).getShips().stream()
+						.filter(ship -> !ship.isUsed())
+						.toList());
+			}else {
+				shipsNotUsedInHex = new ArrayList<Ship>(sourceHex.getShips().stream()
+						.filter(ship -> !ship.isUsed())
+						.toList());
+			}
 
 			if (shipsNotUsedInHex.isEmpty()) {
 				System.out.println("Aucun vaisseau disponible dans cet hex.");
@@ -230,11 +224,13 @@ public class ExploreCard implements CommandCard {
 				//IMPORTANT faire ce test avant de vérifier que targetHex appartient au TriPrime
 				//On vérifie que personne ne contrôle le TriPrime
 				if (targetHex.getLevelSystem() == 3){
-					if (Hex.getTriPrimeOccupant() == null || Hex.getTriPrimeOccupant() == player){
+					if (game.getGround().getTriPrimeOccupant() == null || game.getGround().getTriPrimeOccupant() == player){
 						System.out.println(player.getName()+" contrôle le Tri Prime.");
 						player.addControlledSector(targetHex.getSector());
 						player.addHexesOccupes(game.getGround().getTriPrime());
+						targetHex=game.getGround().getHexById(34);
 						boucle=false;
+						iBoucle++;
 					}else {
 						System.out.println("Le Tri Prime est déjà controlé par un autre joueur.");
 						continue;
@@ -242,9 +238,10 @@ public class ExploreCard implements CommandCard {
 				}
 
 				// Mettre à jour le contrôle du hex cible
-				if (targetHex.getCurrentOccupant() != player) {
+				if (targetHex.getCurrentOccupant() != player) { // && targetHex.getLevelSystem()!=3 ?
 					targetHex.setCurrentOccupant(player);
 					player.getHexesOccupes().add(targetHex);
+                    // ??????
 					player.getControlledSectors().add(targetHex.getSector());
 					System.out.println(STR."\{player.getName()} contrôle désormais l'hex \{targetHexId}.");
 				}
@@ -255,25 +252,32 @@ public class ExploreCard implements CommandCard {
 					s.setUsed(true); // Empêcher d'utiliser ce vaisseau à nouveau ce tour
 					targetHex.getShips().add(s); //On ajoute le vaisseau dans la liste des vaisseaux de l'Hex cible
 				}
-
+				if(game.getGround().getTriPrime().contains(sourceHex)){
+					sourceHex=game.getGround().getHexById(34);
+				}
 				sourceHex.getShips().subList(0, shipsToMove.size()).clear(); //On supprime les ships déplacés de la liste de ships du Hex de départ
 
                 // Retirer le contrôle du hex source s'il est vidé
 				if (sourceHex.getShips().isEmpty()) {
 					sourceHex.setCurrentOccupant(null);
-					player.getHexesOccupes().remove(targetHex);
-					System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
-				}
-
-				if (sourceHex.getShips().isEmpty()) {
-					if (sourceHex.getLevelSystem() == 3) {
-						for (Hex hex : game.getGround().getTriPrime()) {
-							if (hex.getShips().isEmpty()) {
-								System.out.println(STR."TriPrime n'est plus contrôlé.");
-							}
-						}
+					player.getHexesOccupes().remove(sourceHex); //pourquoi ici on enlevait targetHex ?
+					if(game.getGround().getTriPrime().contains(sourceHex)){
+						Hex.setTriPrimeOccupant(null);
+						System.out.println("Vous ne contrôlez plus le TriPrime");
+					}else{
+						System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
 					}
 				}
+
+	//			if (sourceHex.getShips().isEmpty()) {
+	//				if (sourceHex.getLevelSystem() == 3) {
+	//					for (Hex hex : game.getGround().getTriPrime()) {
+	//						if (hex.getShips().isEmpty()) {
+	//							System.out.println(STR."TriPrime n'est plus contrôlé.");
+	//						}
+	//					}
+	//				}
+	//			}
 
                 controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
                 controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);

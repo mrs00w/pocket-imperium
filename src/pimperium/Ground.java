@@ -35,6 +35,25 @@ public class Ground {
 //		// Retourner la carte ou null si elle n'existe pas
 //		return centralCard.orElse(null);
 //	}
+	public Player getTriPrimeOccupant() {
+		Player occupant = null;
+		for (Hex hex : triPrime) {
+			if (hex.getCurrentOccupant() != null) occupant = hex.getCurrentOccupant();
+		}
+		return occupant;
+	}
+
+	public SectorCard findCentralCard(List<SectorCard> cards) {
+		int targetPosition = 5; // L'identifiant recherché
+
+		// Utiliser Stream pour trouver la carte
+		Optional<SectorCard> centralCard = cards.stream()
+				.filter(card -> card.getPositionOnMap() == targetPosition)
+				.findFirst();
+
+		// Retourner la carte ou null si elle n'existe pas
+		return centralCard.orElse(null);
+	}
 
 	public List<Hex> getHexes() {
 			return hexes;

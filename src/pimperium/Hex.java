@@ -23,9 +23,7 @@ public class Hex {
 		return sector;
 	}
 
-	public static Player getTriPrimeOccupant() {
-		return triPrimeOccupant;
-	}
+	public static Player getTriPrimeOccupant() {return triPrimeOccupant;}
 
 	public static void setTriPrimeOccupant(Player triPrimeOccupant) {
 		Hex.triPrimeOccupant = triPrimeOccupant;
@@ -90,7 +88,11 @@ public class Hex {
 	}
 
 	public Player getCurrentOccupant() {
-		return currentOccupant;
+		if (this.ships.isEmpty()) {
+			return null;
+		} else {
+			return this.ships.getFirst().getPlayer();
+		}
 	}
 
 	public int getIdHex() {

@@ -31,27 +31,7 @@ public class ExpandCard implements CommandCard{
 				return;
 			}
 			System.out.println("Le bot a décidé de jouer la carte Expand.");
-		}else {
-
-			System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
-			System.out.println("1. Passer la carte");
-			System.out.println("2. Jouer la carte");
-
-			int choice;
-			try {
-				choice = reader.nextInt();
-			} catch (Exception e) {
-				System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-				return;
-			}
-
-			if (choice == 1) {
-				System.out.println("Vous avez choisi de passer cette carte.");
-				// Rien à faire ici : le joueur ne joue pas cette carte
-				return;
-			}
 		}
-
 
 		//
  		//Cette partie là on l'utilise pour chaque CommandCard, on peut (je pense) mettre cette méthode dans commandCard et la réutiliser (au lieu de la réécrire)
@@ -91,7 +71,7 @@ public class ExpandCard implements CommandCard{
 		for (int i = 0; i < shipsToAdd; i++) {
 			if (player.getShipsHorsPlateau().isEmpty()){
 				System.out.println(player.getName()+" n'a plus de vaisseaux à placer");
-				break;
+				return;
 			}
 			Ship currentShip = player.getShipsHorsPlateau().pop();
 
@@ -100,18 +80,18 @@ public class ExpandCard implements CommandCard{
 				selectedHex = controlledHexes.get(new Random().nextInt(controlledHexes.size()));
 			}else {
 				while (true) {
-					System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé ou tapez 0 pour passer votre tour :");
+					System.out.println(STR."Où voulez-vous placer votre vaisseau n°\{i + 1} ? Entrez l'ID d'un hex contrôlé ou tapez 0 pour passer votre tour : ");
 					int hexId;
 					try {
 						hexId = reader.nextInt();
 					} catch (Exception e) {
 						System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-						return;
+						continue;
 					}
 
 					if (hexId == 0) {
 						System.out.println("Vous avez choisi de ne pas expand pendant ce tour.");
-						break;
+						return;
 					}
 
 					// Vérifier que l'hex est un système contrôlé par le joueur et est un hex valide
