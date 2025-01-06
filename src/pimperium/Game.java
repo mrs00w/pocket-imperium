@@ -274,7 +274,6 @@ public class Game {
 	public void sustainShips() {
 		System.out.println("On retire les vaisseaux en trop");
 		Controller controller = getController();
-		// On suppose que "ground" est l'objet contenant tous les hexes
 		for (Hex hex : ground.getHexes()) {
 			// Calculer la capacité maximale de vaisseaux que ce hex peut soutenir
 			int maxShips = 1 + hex.getLevelSystem();  // 1 + niveau du système
@@ -289,14 +288,15 @@ public class Game {
 
 				// On parcourt les vaisseaux excédentaires et on les retire
 				for (int i = 0; i < excessShips; i++) {
-					Ship shipToRemove = shipsOnHex.get(shipsOnHex.size() - 1 - i);  // Retirer les vaisseaux du fond de la liste
+					Ship shipToRemove = shipsOnHex.getFirst();  // Retirer les vaisseaux du fond de la liste
 					hex.getShips().remove(shipToRemove);  // Retirer le vaisseau de l'hex
 					// Retourner le vaisseau à l'approvisionnement (ou le stockage)
+					hex.getCurrentOccupant().getShipsSurPlateau().remove(shipToRemove);
 					hex.getCurrentOccupant().getShipsHorsPlateau().add(shipToRemove);  // Assurez-vous que game.getSupply() existe et fonctionne
 				}
 
 				System.out.println(STR."\{excessShips} vaisseaux excédentaires ont été retirés de l'hex \{hex.getIdHex()}");
-				controller.updateHexLabel(hex.getIdHex(), excessShips, hex.getCurrentOccupant());
+				controller.updateHexLabel(hex.getIdHex(), shipsOnHex.size(), hex.getCurrentOccupant());
 			}
 		}
 	}
