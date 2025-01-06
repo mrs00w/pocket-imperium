@@ -17,7 +17,7 @@ public class ExpandCard implements CommandCard{
 	public String getName(){return "expand";}
 
 	public void execute(int currentRound) {
-		System.out.println(STR."\{player.getName()} ajoute de nouveaux vaisseaux sur le plateau");
+		System.out.println(STR."\n\{player.getName()} ajoute de nouveaux vaisseaux sur le plateau");
 		Game game = Game.getInstance();
 		Controller controller = game.getController();
 		List<Player> players = game.getPlayers();
@@ -87,8 +87,6 @@ public class ExpandCard implements CommandCard{
 		}
 
 //		// Initialisation pour la lecture utilisateur
-//		Scanner reader = new Scanner(System.in);
-//		Map<Integer, Integer> hexAllocation = new HashMap<>(); // Suivi des hexes déjà utilisés
 
 		for (int i = 0; i < shipsToAdd; i++) {
 			if (player.getShipsHorsPlateau().isEmpty()){
@@ -126,18 +124,6 @@ public class ExpandCard implements CommandCard{
 						System.out.println("Erreur : Hex non valide ou non contrôlé. Réessayez.");
 						continue;
 					}
-//
-////				// Vérification de la limite de placement (2 vaisseaux max par hex)
-//				int allocatedShips = hexAllocation.getOrDefault(selectedHex.getIdHex(), 0);
-//
-//				//On n'a pas besoin d'imposer une limite de placement
-////				if (allocatedShips >= 2) {
-////					System.out.println("Erreur : Vous ne pouvez pas placer plus de 2 vaisseaux sur cet hex.");
-////					continue;
-////				}
-//
-//				// Si tout est valide, ajouter à l'allocation et sortir de la boucle
-//				hexAllocation.put(selectedHex.getIdHex(), allocatedShips + 1);
 					break;
 				}
 			}

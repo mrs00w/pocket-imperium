@@ -63,12 +63,6 @@ public class Game {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
 		clearControlledSectors();
 		updateControlledSectors();
-		//Demande à chaque joueur de choisir une sectorCard
-		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
-		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
-		//Personne ne peut sélectionner le TriPrime
-		//Pour chaque sectorCard, si des systemes sont controlés, le joueur qui le controle gagne autant de point
-		// que le niveau du systeme (peut importe qui a choisi la carte)
 		Set<SectorCard> chosenSectors = new HashSet<>();
 		Map<Player, SectorCard> playerChoices = new HashMap<>();
 		Player triPrimeController = getTriPrimeController();
@@ -240,6 +234,7 @@ public class Game {
 	}
 
 	public void initialShipDeployment() {
+		System.out.println("");
 		List<Player> players = game.getPlayers();
 		Ground ground = game.getGround();
 
@@ -305,15 +300,13 @@ public class Game {
 
 // Une fois sorti, on a bien validé targetHex
 
-		System.out.println("Hex sélectionné : " + targetHex.getIdHex());
+		System.out.println("\nHex sélectionné : " + targetHex.getIdHex());
 
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
 			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
 			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
 			player.addControlledSector(targetHex.getSector());
-			System.out.println("Le joueur " + targetHex.getCurrentOccupant() + " controle le secteur n°" + targetHex.getSector().getId());
-			System.out.println(player.getControlledSectors());
 			int shipCount = targetHex.getShips().size();
 			controller.updateHexLabel(targetHex.getIdHex(), shipCount, player);
 			player.getShipsHorsPlateau().pop();
@@ -322,38 +315,27 @@ public class Game {
 			player.getHexesOccupes().add(targetHex);
 		}
 
-//		System.out.println("Le joueur " + player.getName() + " est présent dans le secteur n°" + targetHex.getSector().getId());
 		ground.getSectorById(targetHex.getSectorId()).setHasShips(true);
-//		for (Ship s : targetHex.getShips()){
-//			System.out.println(s.toString());
-//		}
 
 		System.out.println(STR."\{player.getName()} a placé 2 vaisseaux sur le système \{targetHex.getIdHex()}");
 	}
 
 	public void nextRound() {
 		round++;
+		System.out.println("\nNouvelle manche");
 		for (Player p : players) {
-			System.out.println(STR."Le joueur \{p.getName()} planifie son tour");
+			System.out.println(STR."\nLe joueur \{p.getName()} planifie son tour");
 			p.plan();
 
 		}
 		for (int iCard = 0; iCard < 3; iCard++) {
 			List<Player> copie = compareOrder(iCard);
-			System.out.println("Au tour "+ (iCard+1)+ " l'ordre des joueurs est : ");
+			System.out.println("\nAu tour "+ (iCard+1)+ " l'ordre des joueurs est : ");
 			for (Player p : copie) {
 				System.out.print(p.getName() +" ");
-				//Romain : Il faut prendre en compte qu'on ne peut déplacer de vaisseaux si on en a pas. Normalement tout le monde devrait jouer
-				//Laora : Si on n'en a pas sur la carte on meurt, donc le cas où il n'y a pas de vaisseau n'existe pas
-				//p.perform(iCard);
 			}
 			System.out.println("");
 			for (Player p : copie) {
-//				CommandCard carteJouee = p.getCard(iCard);
-//				int indiceCarte = iCard;
-//				int capaciteCarte = (int) players.stream()
-//						.filter(player -> p.getCard(indiceCarte).equals(carteJouee))
-//						.count(); //On compte le nombre de joueurs ayant choisi la même carte que le joueur en train de jouer
 				p.perform(iCard);
 				p.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
 			}
@@ -369,15 +351,12 @@ public class Game {
 		}
 	}
 
-//	public static void main(String[] args) {
 	public void setupGame() {
 		Game game = getInstance();
 		System.out.println("Création de la partie");
 		//Initialisation du terrain
 		game.ground = new Ground();
 		System.out.println("Création du terrain");
-		//game.ground.setupGround(); // En vrai on peut tout mettre dans le constructeur direct //du coup je l'ai mis dans le constructeur
-//		String player;
 		Scanner scanner = new Scanner(System.in);
 
 		int humanPlayers=0;
@@ -394,11 +373,6 @@ public class Game {
 				scanner.next();  // Vide le scanner pour éviter une boucle infinie
 			}
 		}
-
-//		System.out.println("Combien de bots ?");
-//		int botPlayers = scanner.nextInt();
-
-		// Ajouter les joueurs humains
 
 		for (int i = 0; i < humanPlayers; i++) {
 			Player player = new Player();
@@ -417,7 +391,7 @@ public class Game {
 		players.get(2).setColor(Color.BLUE);
 
 		//Maintenant que la map et les joueurs sont créés on peut initialiser le terrain
-		System.out.println("Initialisation du terrain");
+		System.out.println("\nInitialisation du terrain");
 		game.initialShipDeployment();
 		//J'ai mis la limite à 2 juste le temps des tests
 		while ((getRound() < 2) && (game.players.size() != 1)) {

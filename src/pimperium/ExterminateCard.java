@@ -22,7 +22,7 @@ public class ExterminateCard implements CommandCard {
     public String getName(){return "exterminate";}
 
 	public void execute(int currentRound) {
-        System.out.println(STR."\{this.player.getName()} envahit un système");
+        System.out.println(STR."\n\{this.player.getName()} envahit un système");
         // Filtre des joueurs ayant choisi Explore pour compter le nbr de vaisseaux a déplacer
         List<Player> players = new ArrayList<>(game.getPlayers());
         List<Player> exterminatePlayers = players.stream()
@@ -168,7 +168,14 @@ public class ExterminateCard implements CommandCard {
                     System.out.println("Sélectionnez un hex adjacent (ID) pour fournir des vaisseaux :");
                     validSources.forEach(h -> System.out.println(STR."Hex ID: \{h.getIdHex()} - Vaisseaux disponibles: \{h.getShips().size()}"));
 
-                    int sourceHexId = reader.nextInt();
+                    int sourceHexId;
+                    try {
+                        sourceHexId = reader.nextInt();
+                    } catch (Exception e) {
+                        System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+                        return;
+                    }
+
                     sourceHex = validSources.stream()
                             .filter(h -> h.getIdHex() == sourceHexId)
                             .findFirst()
@@ -180,11 +187,18 @@ public class ExterminateCard implements CommandCard {
                     }
 
                     System.out.println("Combien de vaisseaux voulez-vous prendre de cet hex ?");
-                    int shipsToTake = reader.nextInt();
+
+                    int shipsToTake;
+                    try {
+                        shipsToTake = reader.nextInt();
+                    } catch (Exception e) {
+                        System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+                        return;
+                    }
 
                     if (shipsToTake <= 0 || shipsToTake > sourceHex.getShips().size()) {
                         System.out.println("Nombre de vaisseaux invalide. Veuillez réessayer.");
-                        continue;
+                         continue;
                     }
 
                     //Dans le cas où le joueur choisi plus de vaisseaux que ce qu'il avait prévu

@@ -24,17 +24,17 @@ public class Ground {
 		return triPrime;
 	}
 
-	public SectorCard findCentralCard(List<SectorCard> cards) {
-		int targetPosition = 5; // L'identifiant recherché
-
-		// Utiliser Stream pour trouver la carte
-		Optional<SectorCard> centralCard = cards.stream()
-				.filter(card -> card.getPositionOnMap() == targetPosition)
-				.findFirst();
-
-		// Retourner la carte ou null si elle n'existe pas
-		return centralCard.orElse(null);
-	}
+//	public SectorCard findCentralCard(List<SectorCard> cards) {
+//		int targetPosition = 5; // L'identifiant recherché
+//
+//		// Utiliser Stream pour trouver la carte
+//		Optional<SectorCard> centralCard = cards.stream()
+//				.filter(card -> card.getPositionOnMap() == targetPosition)
+//				.findFirst();
+//
+//		// Retourner la carte ou null si elle n'existe pas
+//		return centralCard.orElse(null);
+//	}
 
 	public List<Hex> getHexes() {
 			return hexes;
@@ -63,12 +63,12 @@ public class Ground {
 		return sectorcards;
 	}
 
-	public SectorCard getSectorByPositionOnMap(int positionOnMap) {
-		return sectorcards.stream()
-				.filter(sectorCard -> sectorCard.getPositionOnMap() == positionOnMap)
-				.findFirst()
-				.orElse(null);
-	}
+//	public SectorCard getSectorByPositionOnMap(int positionOnMap) {
+//		return sectorcards.stream()
+//				.filter(sectorCard -> sectorCard.getPositionOnMap() == positionOnMap)
+//				.findFirst()
+//				.orElse(null);
+//	}
 
 	public void setupGround() {
 		// Initialisation de la map fixe

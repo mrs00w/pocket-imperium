@@ -44,42 +44,25 @@ public class ExploreCard implements CommandCard {
 				hex.getCurrentOccupant() == null || hex.getCurrentOccupant() == currentPlayer);
 	}
 
-	public boolean uniqueCommonNeighborTriPrime(Hex hex1, Hex hex2) {
-		List<Hex> neighborsHex1 = hex1.getNeighbors();
-		List<Hex> neighborsHex2 = hex2.getNeighbors();
-
-		List<Hex> commonNeighbors = neighborsHex1.stream()
-				.filter(neighborsHex2::contains)
-				.filter(hex -> hex.getLevelSystem() == 3) // Ajout du critère sur le LevelSystem
-				.toList();
-
-		if (commonNeighbors.size() == 1) {
-			return true;
-		}
-
-//        private boolean isReachableInTwoSteps(Hex sourceHex, Hex targetHex) {
-//            // Étape 1 : Obtenez les voisins directs de la source
-//            List<Hex> firstStepNeighbors = sourceHex.getNeighbors();
+//	public boolean uniqueCommonNeighborTriPrime(Hex hex1, Hex hex2) {
+//		List<Hex> neighborsHex1 = hex1.getNeighbors();
+//		List<Hex> neighborsHex2 = hex2.getNeighbors();
 //
-        // Étape 2 : Vérifiez si la destination est un voisin direct
-//            if (firstStepNeighbors.contains(targetHex)) {
-//                return true;
-//            }
-
-        // Étape 3 : Obtenez les voisins des voisins et vérifiez s'ils contiennent la cible
-//            for (Hex neighbor : firstStepNeighbors) {
-//                if (neighbor.getNeighbors().contains(targetHex)) {
-//                    return true;
-//                }
-//            }
-//        }
-
-		// Si aucune condition n'est remplie, la cible n'est pas atteignable
-		return false;
-	}
+//		List<Hex> commonNeighbors = neighborsHex1.stream()
+//				.filter(neighborsHex2::contains)
+//				.filter(hex -> hex.getLevelSystem() == 3) // Ajout du critère sur le LevelSystem
+//				.toList();
+//
+//		if (commonNeighbors.size() == 1) {
+//			return true;
+//		}
+//
+//		// Si aucune condition n'est remplie, la cible n'est pas atteignable
+//		return false;
+//	}
 
 	public void execute(int currentRound) {
-		System.out.println(STR."\{player.getName()} explore d'autres systèmes avec ses vaisseaux.");
+		System.out.println(STR."\n\{player.getName()} explore d'autres systèmes avec ses vaisseaux.");
 		Game game = Game.getInstance();
 		Controller controller = game.getController();
 		List<Player> players = new ArrayList<>(game.getPlayers());
@@ -154,7 +137,13 @@ public class ExploreCard implements CommandCard {
 				sourceHexId = sourceHex.getIdHex();
 			} else {
 				System.out.println("Sélectionnez un hex à partir duquel déplacer une flotte (ID) ou tapez 0 pour passer votre tour :");
-				sourceHexId = reader.nextInt();
+
+				try {
+					sourceHexId = reader.nextInt();
+				} catch (Exception e) {
+					System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+					return;
+				}
 
 				if (sourceHexId == 0) {
 					System.out.println("Vous choisissez de passer votre tour");
@@ -182,9 +171,6 @@ public class ExploreCard implements CommandCard {
 			int iBoucle=1;
 			boolean boucle=true;
 			while (boucle && iBoucle<=2) {
-//			for (Ship ship : sourceHex.getShips()) {
-//				if (ship.getPlayer() == player && !ship.isUsed()) { //pourquoi vérifier que le vaisseau appartient au joueur alors qu'on a déjà vérifié que l'hex appartenait au joueur ?
-//					shipsNotUsedInHex.add(ship);
 				Hex targetHex;
 				int targetHexId;
 				List<Ship> shipsToMove;
@@ -209,16 +195,16 @@ public class ExploreCard implements CommandCard {
 					}
 
 					System.out.println("Sélectionnez un hex de destination (ID) :");
-					targetHexId = reader.nextInt();
+
+					try {
+						targetHexId = reader.nextInt();
+					} catch (Exception e) {
+						System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+						return;
+					}
+
 					targetHex = game.getGround().getHexById(targetHexId);
 
-					// Valider les règles de déplacement
-					// Version de Romain
-//                if (targetHex == null || !isReachableInTwoSteps(sourceHex, targetHex)) {
-//                    System.out.println("Le hex cible n'est pas atteignable en un ou deux mouvements. Essayez encore.");
-//                    i--; // Refaire ce tour
-//                    continue;
-//                }
 					if (targetHex == null) {
 						System.out.println("Hex non valide. Essayez encore.");
 						continue;
@@ -228,20 +214,6 @@ public class ExploreCard implements CommandCard {
 						System.out.println("Cet Hex n'est un pas un voisin de l'Hex de départ");
 						continue;
 					}
-
-
-//			//On peut avancer de 1 ou 2 hexagones. On doit donc vérifier que l'hexagone cible est bien voisin à 2 hex près
-//			//On a targetHexId l'hex de destination et sourceHexId l'hex de départ
-//			//ça marche pas à tous les coups --> Faire les mvt 1 par 1
-//			int origineDizaine = sourceHexId/10;
-//			int origineUnite = sourceHexId%10;
-//			int targetDizaine = targetHexId/10;
-//			int targetUnite = targetHexId%10;
-//			if (!((targetDizaine >= origineDizaine - 2) && (targetDizaine <= origineDizaine + 2) && (targetUnite >= origineUnite - 2) && (targetUnite <= origineUnite + 2))) {
-//				System.out.println("Le hex cible n'est pas adjacent. Essayez encore.");
-//				i--; // Refaire ce tour
-//				continue;
-//			}
 
 					if (targetHex.getCurrentOccupant() != player && targetHex.getCurrentOccupant() != null) {
 						System.out.println("Vous ne pouvez pas déplacer vos vaisseaux dans un hex occupé par un autre joueur.");
@@ -259,7 +231,7 @@ public class ExploreCard implements CommandCard {
 				//On vérifie que personne ne contrôle le TriPrime
 				if (targetHex.getLevelSystem() == 3){
 					if (Hex.getTriPrimeOccupant() == null || Hex.getTriPrimeOccupant() == player){
-						System.out.println(player.getName()+" controlle le Tri Prime.");
+						System.out.println(player.getName()+" contrôle le Tri Prime.");
 						player.addControlledSector(targetHex.getSector());
 						player.addHexesOccupes(game.getGround().getTriPrime());
 						boucle=false;
@@ -268,19 +240,6 @@ public class ExploreCard implements CommandCard {
 						continue;
 					}
 				}
-
-				//Pour ne pas passer au travers du tri prime mais on en n'a plus besoin
-//				if (!sourceHex.getNeighbors().contains(targetHex) && uniqueCommonNeighborTriPrime(sourceHex, targetHex)) {
-//					if (targetHex.getCurrentOccupant() != null && targetHex.getCurrentOccupant() != player) {
-//						System.out.println("Vous ne pouvez pas passé à travers du TriPrime alors qu'il est occupé");
-//						i--; // Refaire ce tour
-//						continue;
-//					} else {
-//						//S'arrêter sur le TriPrime
-//						targetHex = (sourceHex.getNeighbors().stream()
-//								.filter(targetHex.getNeighbors()::contains).toList()).getFirst();
-//					}
-//				}
 
 				// Mettre à jour le contrôle du hex cible
 				if (targetHex.getCurrentOccupant() != player) {
@@ -298,15 +257,6 @@ public class ExploreCard implements CommandCard {
 				}
 
 				sourceHex.getShips().subList(0, shipsToMove.size()).clear(); //On supprime les ships déplacés de la liste de ships du Hex de départ
-
-                //Version Romain
-//                List<Ship> shipsInSourceHex = sourceHex.getShips();
-//                int maxShipsToRemove = Math.min(shipsToMove.size(), shipsInSourceHex.size());
-//                // Supprimer uniquement les vaisseaux valides
-//                shipsInSourceHex.subList(0, maxShipsToRemove).clear();
-//
-//                controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
-//                controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);
 
                 // Retirer le contrôle du hex source s'il est vidé
 				if (sourceHex.getShips().isEmpty()) {
@@ -335,7 +285,12 @@ public class ExploreCard implements CommandCard {
 						choice = new Random().nextInt(5) + 1;
 					}else {
 						System.out.println("Voulez vous déplacer votre flotte d'une case de plus ? (0 pour non, 1 pour oui) : ");
-						choice = reader.nextInt();
+						try {
+							choice = reader.nextInt();
+						} catch (Exception e) {
+							System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+							return;
+						}
 					}
 					if(choice==1){
 						System.out.println("");
@@ -355,6 +310,6 @@ public class ExploreCard implements CommandCard {
 		}
 
 //		player.getShipsSurPlateau().forEach(ship -> ship.setUsed(false));
-		System.out.println("Exploration terminée.");
+		System.out.println("\nExploration terminée.");
 	}
 }

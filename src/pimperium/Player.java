@@ -10,14 +10,12 @@ public class Player {
 	private String name;
 	private static int nombrePlayer = 0;
 	private Color color;
-	private boolean isAlive;
-	private int idPlayer;
-	private int couleurVaisseau;
-	private Stack<Ship> shipsHorsPlateau;
-	private List<Ship> shipsSurPlateau = new ArrayList<Ship>();
-	private List<Hex> hexesOccupes = new ArrayList<Hex>();
+	private final int idPlayer;
+	private final Stack<Ship> shipsHorsPlateau;
+	private final List<Ship> shipsSurPlateau = new ArrayList<Ship>();
+	private final List<Hex> hexesOccupes = new ArrayList<Hex>();
 //	private Set<CommandCard> cards;
-	private CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
+	private final CommandCard[] commandCards = {new ExpandCard(this), new ExploreCard(this), new ExterminateCard(this)};
 	private CommandCard[] cardOrder = commandCards;
 	//A l'initialisation, l'ordre des cartes est par défaut expand, explore et exterminate
 	private int score;
@@ -25,7 +23,6 @@ public class Player {
 	private Set<SectorCard> controlledSectors;
 
 	public Player() {
-		this.isAlive = true;
 		this.score = 0;
 		this.idPlayer = nombrePlayer;
 		this.priority=nombrePlayer;
@@ -58,10 +55,6 @@ public class Player {
 		return color;
 	}
 
-	public int getIdPlayer() {
-		return idPlayer;
-	}
-
 	public Set<SectorCard> getControlledSectors() {
 		return controlledSectors;
 	}
@@ -69,36 +62,6 @@ public class Player {
 	public CommandCard[] getCommandCards() {
 		return commandCards;
 	}
-
-	//	private void addNewShips(int nbShips) {
-//		Scanner scanner = new Scanner(System.in);
-//		List<Hex> hexes = Ground.getHexes().filter((Hex hex) -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null).toList();
-//		if(!this.shipsHorsPlateau.isEmpty()){
-//			int id = 10;
-//			while (true) {
-//				System.out.println("Choisir un hexagone (entrer son ID) : ");
-//				//On vérifie que l'entrée est un int
-//				if (!scanner.hasNextInt()) {
-//					System.out.println("Entrée invalide, veuillez entrer un entier.");
-//					scanner.next(); // Consomme l'entrée incorrecte pour éviter une boucle infinie
-//					continue; // Recommence la boucle pour demander un autre ID
-//				}
-//				while ((!hexes.stream().anyMatch((Hex hex) -> hex.getIdHex() == id)) || (Ground.getHexById(id).getCurrentOccupant()!=null)){
-//					//tant que l'Hex choisi n'est ni valide ni de niveau 1 ou que le système est déjà occupé
-//					System.out.println("Cet Hexagone n'est pas valide, entrez en un nouveau.");
-//					scanner.nextInt();
-//				}
-//				Hex getHex = Ground.getHexById(id);
-//				this.shipsHorsPlateau.peek().setPosition(getHex);
-//				//On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
-//				this.shipsSurPlateau.add(shipsHorsPlateau.peek());
-//				this.shipsHorsPlateau.pop();
-//			}
-//		}else{
-//			System.out.println("Vous n'avez plus de vaisseau à placer sur le plateau");
-//		}
-//		scanner.close();
-//	}
 
 	public Stack<Ship> getShipsHorsPlateau() {
 		return this.shipsHorsPlateau;
@@ -135,10 +98,6 @@ public class Player {
 
 	public boolean controlsSector(SectorCard sector) {
 		return controlledSectors.contains(sector);
-	}
-
-	public boolean controlsHex(Hex hex) {
-		return hexesOccupes.contains(hex);
 	}
 
 	public int getScore() {
@@ -194,14 +153,14 @@ public class Player {
 	}
 
 	//Pour le moment les couleurs sont imposées
-	public void choisirCouleurVaisseau() {
-		//détecter erreur dans le cas où ce n'est pas un int qui est renseigné ?
-		//ou si int != de 0,1,2
-		Scanner inputReader = new Scanner(System.in);
-		System.out.println("Choisir votre couleur parmi jaune(0) rouge(1) ou bleu(2)");
-		int couleur = inputReader.nextInt();
-		this.couleurVaisseau = couleur;
-	}
+//	public void choisirCouleurVaisseau() {
+//		//détecter erreur dans le cas où ce n'est pas un int qui est renseigné ?
+//		//ou si int != de 0,1,2
+//		Scanner inputReader = new Scanner(System.in);
+//		System.out.println("Choisir votre couleur parmi jaune(0) rouge(1) ou bleu(2)");
+//		int couleur = inputReader.nextInt();
+//		this.couleurVaisseau = couleur;
+//	}
 	
 	public void plan() {
 		Set<CommandCard> chosenCards = new HashSet<>();

@@ -6,7 +6,6 @@ public class Hex {
 	private Player currentOccupant;
 	private static int numHex = 0;
 	private int idHex;
-	private int idHexSector;
 	private int positionSector;
 	private int idSector;
 	private SectorCard sector;
@@ -15,17 +14,6 @@ public class Hex {
 	private int levelSystem;
 	private List<Hex> neighbors;
 	private List<Ship> ships;
-
-	public Hex(int lvl){
-		numHex++;
-		this.ships = new ArrayList<Ship>();
-		//implémenter l'id en fonction du nombre d'Hex créés précédemment
-		this.idHex = numHex;
-		//Vérifier que bien compris entre 0 et 3
-		this.levelSystem = lvl;
-		this.neighbors = new ArrayList<Hex>();
-		this.currentOccupant=null;
-	}
 
 	public int getSectorId() {
 		return this.idSector;
@@ -43,21 +31,6 @@ public class Hex {
 		Hex.triPrimeOccupant = triPrimeOccupant;
 	}
 
-	public Hex(int id, int lvl, int positionSector) {
-		this.currentOccupant = null;
-		this.positionSector = positionSector;
-		//implémenter l'id en fonction du nombre d'Hex créés précédemment
-		this.idHex = id;
-		//Vérifier que bien compris entre 0 et 3
-		this.levelSystem = lvl;
-		this.col = idHex / 10;
-		this.ligne = idHex % 10;
-		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
-//		this.isTriPrime = tp;
-		this.neighbors = new ArrayList<Hex>();
-		this.ships = new ArrayList<Ship>();
-	}
-
 	public Hex(int id, int lvl, int positionSector, int idSector, SectorCard sector) {
 		this.currentOccupant = null;
 		this.idSector = idSector;
@@ -70,13 +43,8 @@ public class Hex {
 		this.col = idHex / 10;
 		this.ligne = idHex % 10;
 		//peut être à supprimer si on teste levelSystem = 3 au lieu de isTriPrime
-//		this.isTriPrime = tp;
 		this.neighbors = new ArrayList<Hex>();
 		this.ships = new ArrayList<Ship>();
-	}
-
-	public void setSector(SectorCard sector) {
-		this.sector = sector;
 	}
 
 	public Hex(int id, int lvl) {
@@ -125,10 +93,6 @@ public class Hex {
 		return currentOccupant;
 	}
 
-	public void changeOccupant(Player p) {
-		this.currentOccupant = p;
-	}
-
 	public int getIdHex() {
 		return idHex;
 	}
@@ -137,7 +101,4 @@ public class Hex {
 		return neighbors;
 	}
 
-	public void addShip(Ship ship) {
-		ships.add(ship);
-	}
 }

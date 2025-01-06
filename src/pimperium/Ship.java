@@ -24,17 +24,13 @@ public class Ship {
 		return player;
 	}
 
-	public void invadeSystem(Hex h) {
-
-	}
-
 	@Override
 	public String toString() {
 		return "position : "+this.position+" du joueur "+this.player;
 	}
 
 	public void updatePosition(Hex h) {
-//		this.position = h;
+		this.position = h;
 	}
 
 	public Hex getPosition() {
