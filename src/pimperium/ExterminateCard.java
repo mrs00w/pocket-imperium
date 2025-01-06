@@ -45,30 +45,10 @@ public class ExterminateCard implements CommandCard {
                 return;
             }
             System.out.println("Le bot a décidé de jouer la carte Exterminate.");
-        }else {
-
-            System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
-            System.out.println("1. Passer la carte");
-            System.out.println("2. Jouer la carte");
-
-            Scanner reader = new Scanner(System.in);
-            int choice;
-            try {
-                choice = reader.nextInt();
-            } catch (Exception e) {
-                System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-                return;
-            }
-            if (choice == 1) {
-                System.out.println("Vous avez choisi de passer cette carte.");
-                // Rien à faire ici : le joueur ne joue pas cette carte
-                return;
-            }
         }
         Controller controller = game.getController();
         int n = 0;
         while (n < fleetMovementsAllowed) {
-            System.out.println("Quel système voulez vous envahir ? (ID)");
             Hex targetHex;
             Hex sourceHex;
             List<Ship> invasionFleet = new LinkedList<>();
@@ -123,6 +103,13 @@ public class ExterminateCard implements CommandCard {
                 } catch (Exception e) {
                     System.out.println("Entrée invalide. Veuillez entrer un nombre.");
                     continue;
+                }
+
+                System.out.println("Quel système voulez vous envahir ? (ID) (tapez 0 si vous souhaiter passer ce tour) ");
+
+                if (idHex == 0) {
+                    System.out.println("Vous choisissez de passer votre tour");
+                    return;
                 }
 
                 targetHex = game.getGround().getHexById(idHex);

@@ -6,15 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Automatisation de exterminate, amélioration des Bots, corrections de plusieurs failles">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExpandCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExploreCard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/ExterminateCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Ground.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Ground.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Hex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Hex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pimperium/SectorCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/SectorCard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/hello-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/hello-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,24 +58,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Console.executor": "Run",
-    "Application.GUI.executor": "Run",
-    "Application.Game.executor": "Run",
-    "Application.Main.executor": "Coverage",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "test-feature",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/Téléchargement/openjfx-23.0.1_windows-x64_bin-sdk/javafx-sdk-23.0.1/lib",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Console.executor&quot;: &quot;Run&quot;,
+    &quot;Application.GUI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Game.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Coverage&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;test-feature&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Téléchargement/openjfx-23.0.1_windows-x64_bin-sdk/javafx-sdk-23.0.1/lib&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Samus\eclipse-workspace\pocket-imperium\src" />

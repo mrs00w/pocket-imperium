@@ -109,25 +109,6 @@ public class ExploreCard implements CommandCard {
 				return;
 			}
 			System.out.println("Le bot a décidé de jouer la carte Explore.");
-		}else {
-
-			System.out.println(player.getName() + ", voulez vous jouer cette carte ?");
-			System.out.println("1. Passer la carte");
-			System.out.println("2. Jouer la carte");
-
-			int choice;
-			try {
-				choice = reader.nextInt();
-			} catch (Exception e) {
-				System.out.println("Entrée invalide. Veuillez entrer un nombre.");
-				return;
-			}
-
-			if (choice == 1) {
-				System.out.println("Vous avez choisi de passer cette carte.");
-				// Rien à faire ici : le joueur ne joue pas cette carte
-				return;
-			}
 		}
 
 		System.out.println(player.getName()+" peut déplacer jusqu'à " +fleetMovementsAllowed+ " flottes");
