@@ -89,16 +89,13 @@ public class Game {
 		for (Map.Entry<Player, SectorCard> entry : playerChoices.entrySet()) {
 			Player player = entry.getKey();
 			SectorCard sectorCard = entry.getValue();
-			int points = calculateSectorPoints(player, sectorCard);
-			player.addPoints(points);
-			System.out.println("Le joueur " + player.getName() + "gagne " + points);
+			calculateSectorPoints(player, sectorCard);
 		}
 
 		if (triPrimeController != null) {
 			for (SectorCard extraSector : chosenSectors) {
 				if (triPrimeController.controlsSector(extraSector)) {
-					int points = calculateSectorPoints(triPrimeController, extraSector);
-					triPrimeController.addPoints(points);
+					calculateSectorPoints(triPrimeController, extraSector);
 				}
 			}
 		}
@@ -167,15 +164,17 @@ public class Game {
 		return sectorChoosen;
 	}
 
-	private int calculateSectorPoints(Player player, SectorCard sectorCard) {
+	private void calculateSectorPoints(Player player, SectorCard sectorCard) {
 		int points = 0;
 		for (Hex hex : sectorCard.getHexes()) {
-			if (player.controlsHex(hex)) {
-				System.out.println("Hex: " + hex.getIdHex() + " contrôlé par " + player.getName() + " avec niveau de système: " + hex.getLevelSystem());
+//			if (player.controlsHex(hex)) {
+			Player hexOwner = hex.getCurrentOccupant();
+			if (hex.getLevelSystem() > 0) {
 				points += hex.getLevelSystem();
+				hexOwner.addPoints(points);
+				System.out.println("Le joueur " + hexOwner.getName() + "gagne " + points);
 			}
 		}
-		return points;
 	}
 
 	public List<Player> getPlayers() {

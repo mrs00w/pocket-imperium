@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="Dernière version">
+    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="modification calculateSectorPoints">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -236,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736166563629</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="modification calculateSectorPoints">
+      <option name="closed" value="true" />
+      <created>1736167634666</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1736167634666</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -275,7 +284,8 @@
     <MESSAGE value="maj d'un peu tout. Ajout de la détection des secteurs occupés ou non. Lors du déploiment initial, les joueurs/bots ne peuvent maintenant plus choisir des sectors cards déjà occupés. Les bots sont mtn créés en fonction du nombre de joueurs humains dans la partie. Leur initialShipsDeployment est maintenant automatique." />
     <MESSAGE value="Automatisation de exterminate, amélioration des Bots, corrections de plusieurs failles" />
     <MESSAGE value="Dernière version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dernière version" />
+    <MESSAGE value="modification calculateSectorPoints" />
+    <option name="LAST_COMMIT_MESSAGE" value="modification calculateSectorPoints" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PocketImperium$Main.ic" NAME="Main Coverage Results" MODIFIED="1735654899031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
