@@ -42,6 +42,14 @@ public class Player {
 		//Avant même le premier tour, chaque joueur doit choisir le premier système sur lequel s'installer
 	}
 
+	public void addHexesOccupes(Hex hex) {
+		hexesOccupes.add(hex);
+	}
+
+	public void addHexesOccupes(List<Hex> hexes) {
+		hexesOccupes.addAll(hexes);
+	}
+
 	public void setColor(Color color) {
 		this.color = color;
 	}

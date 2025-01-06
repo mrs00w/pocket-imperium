@@ -203,6 +203,11 @@ public class ExploreCard implements CommandCard {
 						continue;
 					}
 
+					if (!sourceHex.getNeighbors().contains(targetHex)) {
+						System.out.println("Cet Hex n'est un pas un voisin de l'Hex de départ");
+						continue;
+					}
+
 
 //			//On peut avancer de 1 ou 2 hexagones. On doit donc vérifier que l'hexagone cible est bien voisin à 2 hex près
 //			//On a targetHexId l'hex de destination et sourceHexId l'hex de départ
@@ -234,6 +239,8 @@ public class ExploreCard implements CommandCard {
 				if (targetHex.getLevelSystem() == 3){
 					if (Hex.getTriPrimeOccupant() == null || Hex.getTriPrimeOccupant() == player){
 						System.out.println(player.getName()+" controlle le Tri Prime.");
+						player.addControlledSector(targetHex.getSector());
+						player.addHexesOccupes(game.getGround().getTriPrime());
 						boucle=false;
 					}else {
 						System.out.println("Le Tri Prime est déjà controlé par un autre joueur.");
@@ -257,6 +264,7 @@ public class ExploreCard implements CommandCard {
 				// Mettre à jour le contrôle du hex cible
 				if (targetHex.getCurrentOccupant() != player) {
 					targetHex.setCurrentOccupant(player);
+					player.getHexesOccupes().add(targetHex);
 					System.out.println(STR."\{player.getName()} contrôle désormais l'hex \{targetHexId}.");
 				}
 
@@ -280,8 +288,10 @@ public class ExploreCard implements CommandCard {
                 // Retirer le contrôle du hex source s'il est vidé
 				if (sourceHex.getShips().isEmpty()) {
 					sourceHex.setCurrentOccupant(null);
+					player.getHexesOccupes().remove(targetHex);
 					System.out.println(STR."Le hex \{sourceHexId} n'est plus contrôlé.");
 				}
+
                 controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), player);
                 controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), player);
 

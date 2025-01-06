@@ -6,6 +6,7 @@ public class Ground {
 	//faire une liste dynamique pour ajouter les cartes une par une
 	private static List<Hex> hexes;
 	private List<SectorCard> sectorcards;
+	private List<Hex> triPrime;
 //	private int mapWidth = 6; // Largeur de la map en colonnes (maximum)
 //	private int mapHeight = 5;
 
@@ -15,7 +16,12 @@ public class Ground {
 			sectorcards.add(new SectorCard(i));
 		}
 		this.hexes = new ArrayList<Hex>();
+		this.triPrime = new ArrayList<Hex>();
 		this.setupGround();
+	}
+
+	public List<Hex> getTriPrime() {
+		return triPrime;
 	}
 
 	public SectorCard findCentralCard(List<SectorCard> cards) {
@@ -203,6 +209,13 @@ public class Ground {
 		for (Hex h: hexes) {
 			creerListeVoisins(h);
 		}
+
+		getTriPrime().add(hexes.get(19));
+		getTriPrime().add(hexes.get(24));
+		getTriPrime().add(hexes.get(25));
+		getTriPrime().add(hexes.get(30));
+
+//		getTriPrime().ad
 		// Pour vérifier la liste de voisin des hexs
 		/*
 		for (Hex h: hexes){

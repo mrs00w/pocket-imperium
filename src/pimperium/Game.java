@@ -67,10 +67,14 @@ public class Game {
 		Player triPrimeController = getTriPrimeController();
 
 		for (Player player : players) {
-			SectorCard chosenSector = chooseSector(player, chosenSectors);
-			if (chosenSector != null) {
-				chosenSectors.add(chosenSector);
-				playerChoices.put(player, chosenSector);
+			if (player instanceof Bot) {
+				SectorCard chosenSector = chooseSectorBot((Bot) player, chosenSectors);
+			} else {
+				SectorCard chosenSector = chooseSector(player, chosenSectors);
+				if (chosenSector != null) {
+					chosenSectors.add(chosenSector);
+					playerChoices.put(player, chosenSector);
+				}
 			}
 		}
 
@@ -137,12 +141,38 @@ public class Game {
 		return null; // Si aucun secteur valide n'est trouvé
 	}
 
+	private SectorCard chooseSectorBot(Bot bot, Set<SectorCard> chosenSectors) {
+		System.out.println(bot.getName() + "choisi un secteur");
+		Random random = new Random();
+		SectorCard sectorChoosen = null;
+		List<Integer> sectorIdControlledByBot = new ArrayList<>();
+
+		int idSectorById = random.nextInt(9);
+
+		for (SectorCard sector: bot.getControlledSectors()) {
+			sectorIdControlledByBot.add(sector.getId());
+			}
+
+		int sectorIdChoosen = sectorIdControlledByBot.get(random.nextInt(sectorIdControlledByBot.size()));
+
+		for (SectorCard sector: bot.getControlledSectors()) {
+			if (sector.getId() == sectorIdChoosen && sector != centralCard) {
+				sectorChoosen = sector;
+			} else {
+				chooseSectorBot(bot, chosenSectors);
+			}
+		}
+
+		System.out.println(bot.getName() + "a choisi le secteur n°" + idSectorById);
+		return sectorChoosen;
+	}
+
 	private int calculateSectorPoints(Player player, SectorCard sectorCard) {
 		int points = 0;
 		for (Hex hex : sectorCard.getHexes()) {
 			if (player.controlsHex(hex)) {
 				System.out.println("Hex: " + hex.getIdHex() + " contrôlé par " + player.getName() + " avec niveau de système: " + hex.getLevelSystem());
-				points = hex.getLevelSystem();
+				points += hex.getLevelSystem();
 			}
 		}
 		return points;

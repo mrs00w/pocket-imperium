@@ -223,17 +223,14 @@ public class ExterminateCard implements CommandCard {
                 sourceHex.setShips(defendingFleet);
             } else {
                 System.out.println("Invasion réussie ! Vous contrôlez maintenant le système.");
+                player.getHexesOccupes().add(targetHex);
                 targetHex.setCurrentOccupant(player);
                 targetHex.setShips(invasionFleet);
             }
 
             if (targetHex.getShips().isEmpty()) {
                 System.out.println("Le système" + targetHex.getIdHex() + "est désormais innocupé");
-                targetHex.setCurrentOccupant(null);
-            }
-
-            if (sourceHex.getShips().isEmpty()) {
-                System.out.println("Le système" + sourceHex.getIdHex() + "est désormais innocupé");
+                defendingFleet.getFirst().getPlayer().getHexesOccupes().remove(targetHex);
                 targetHex.setCurrentOccupant(null);
             }
 
