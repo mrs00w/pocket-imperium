@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="améliioration + synchronisation TriPrime">
+    <list default="true" id="f9a46df3-4eb3-4521-8df8-efefc9d409cc" name="Changes" comment="calcul des scores">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pimperium/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pimperium/Game.java" afterDir="false" />
     </list>
@@ -253,7 +253,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736199435075</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="calcul des scores">
+      <option name="closed" value="true" />
+      <created>1736206485545</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1736206485545</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -293,7 +301,8 @@
     <MESSAGE value="Automatisation de exterminate, amélioration des Bots, corrections de plusieurs failles" />
     <MESSAGE value="correction failles" />
     <MESSAGE value="améliioration + synchronisation TriPrime" />
-    <option name="LAST_COMMIT_MESSAGE" value="améliioration + synchronisation TriPrime" />
+    <MESSAGE value="calcul des scores" />
+    <option name="LAST_COMMIT_MESSAGE" value="calcul des scores" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PocketImperium$Main.ic" NAME="Main Coverage Results" MODIFIED="1735654899031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
