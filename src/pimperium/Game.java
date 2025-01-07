@@ -106,14 +106,7 @@ public class Game {
 		}
 
 		if (triPrimeController != null) {
-			SectorCard additionalSector;
-            if (triPrimeController instanceof Bot) {
-                additionalSector = chooseSectorBot((Bot) ground.getTriPrimeOccupant(), chosenSectors);
-//                chosenSectors.add(additionalSector);
-            } else {
-				additionalSector = chooseSector(ground.getTriPrimeOccupant(), chosenSectors);
-//				chosenSectors.add(additionalSector);
-			}
+			SectorCard additionalSector = chooseSector(ground.getTriPrimeOccupant(), chosenSectors);
 			for (Hex hex : additionalSector.getHexes()){
 				if (hex.getLevelSystem()>0 && hex.getCurrentOccupant()!=null){
 					hex.getCurrentOccupant().addPoints(hex.getLevelSystem());
@@ -482,28 +475,32 @@ public class Game {
 		System.out.println("Initialisation du terrain");
 		game.initialShipDeployment();
 		//J'ai mis la limite à 2 juste le temps des tests
-		while ((getRound() < 2) && (game.players.size() != 2)) {
+		while ((getRound() < 9) && (game.players.size() != 2)) {
 			game.nextRound();
 		}
 
-// Pour calculer les scores de victoire à la fin
-		Map<String, Integer> tableauScores = new HashMap<>();
-
-		//reparcourir l'ensemble des systèmes pour accorder les points x2
-		for (Player p : game.players){
-			tableauScores.put(p.getName(), Integer.valueOf(p.getScore()));
+		if(getRound()==9) { //C'est à dire qu'on a atteint la fin de la partie
+			//reparcourir l'ensemble des systèmes pour accorder les points x2
+			for (Hex hex : game.getGround().getHexes()) {
+				if (hex.getLevelSystem() > 0 && hex.getLevelSystem() < 3 && hex.getCurrentOccupant() != null) {
+					hex.getCurrentOccupant().addPoints(hex.getLevelSystem() * 2);
+					System.out.println(hex.getCurrentOccupant().getName() + " a gagné " + hex.getLevelSystem() + " points.");
+				}
+				if (hex.getIdHex() == 34 && hex.getCurrentOccupant() != null) {
+					hex.getCurrentOccupant().addPoints(6);
+					System.out.println(hex.getCurrentOccupant().getName() + " a gagné 6 points.");
+				}
+			}
 		}
 
 		String gagnant = null;
 		int scoreMax = 0;
 
-		for (Map.Entry<String, Integer> entry : tableauScores.entrySet()) {
-			String joueur = entry.getKey();
-			int score = entry.getValue();
+		for (Player player : players) {
 
-			if (score > scoreMax) {
-				scoreMax = score;
-				gagnant = joueur;
+			if (player.getScore() > scoreMax) {
+				scoreMax = player.getScore();
+				gagnant = player.getName();
 			}
 		}
 		System.out.println("La partie est terminée");

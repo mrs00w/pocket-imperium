@@ -246,7 +246,9 @@ public class ExterminateCard implements CommandCard {
             if (invasionFleet.isEmpty()) {
                 System.out.println("Invasion échouée.");
                 //La liste de ships de l'hex est mise à jour avec les ships restants au joueur attaqué
-                sourceHex.setShips(defendingFleet);
+                if(!defendingFleet.isEmpty()) {
+                    sourceHex.setShips(defendingFleet);
+                }
             } else {
                 player.getHexesOccupes().add(targetHex);
                 targetHex.setCurrentOccupant(player);
