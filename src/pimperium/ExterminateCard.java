@@ -5,21 +5,54 @@ import gui.Controller;
 import java.util.ArrayList;
 import java.util.*;
 
+/**
+ * Représente la carte Exterminate
+ */
+
 public class ExterminateCard implements CommandCard {
 
-	private Game game;
+    /**
+     * La partie
+     */
+
+    private Game game;
+    /**
+     * Le joueur possédant la carte
+     */
 	private Player player;
+
+    /**
+     * Crée une carte Exterminate
+     * @param player le joueur possédant la carte
+     */
 
 	public ExterminateCard(Player player) {
 		this.game = Game.getInstance();
 		this.player = player;
 	}
 
+    /**
+     * Renvoie la priorité de la carte Exterminate
+     * @return la priorité de la carte
+     */
+
 	public int getPriority() {
 		return 3;
 	}
 
+    /**
+     * Renvoie le nom de la carte
+     * @return le nom de la carte
+     */
+
     public String getName(){return "exterminate";}
+
+    /**
+     * Exécute les instructions de la carte Exterminate. Cette carte permet d'envahir un système adjacent à un système
+     * déjà possédé. Pour récupérer un système, il est préférable d'envoyer une flotte avec un nombre de vaisseaux
+     * supérieur au nombre de vaisseaux présent dans le système attaqué.
+     * @param currentRound La position de la carte à exécuter
+     */
 
 	public void execute(int currentRound) {
         System.out.println(STR."\n\{this.player.getName()} envahit un système");
@@ -287,7 +320,8 @@ public class ExterminateCard implements CommandCard {
             controller.updateHexLabel(targetHex.getIdHex(), targetHex.getShips().size(), targetHex.getCurrentOccupant());
             controller.updateHexLabel(sourceHex.getIdHex(), sourceHex.getShips().size(), sourceHex.getCurrentOccupant());
 
-            //Dans le cas où l'un des deux joueurs participant à l'attaque n'a plus de vaisseaux sur le terrain, celui-ci meurt
+            //Dans le cas où l'un des deux joueurs participant à l'attaque n'a plus de vaisseaux sur le terrain,
+            // celui-ci meurt
             if(currentOccupant!=null) {
                 if (currentOccupant.getShipsSurPlateau().isEmpty()) {
                     game.getPlayers().remove(currentOccupant);
@@ -303,14 +337,5 @@ public class ExterminateCard implements CommandCard {
             invasionFleet.forEach(ship -> ship.setUsed(true));
             n++;
         }
-//        //On fait une liste avec tous les vaisseaux qui ont été utilisés par le joueur lors de ce tour
-//        List<Hex> occupiedHexes = game.getGround().getHexes().stream()
-//                .filter(hex -> hex.getCurrentOccupant() == player)
-//                .toList();
-//
-//        // Remet à false l'attribut isUsed de tous les vaisseaux utilisés
-//        occupiedHexes.forEach(hex ->
-//                hex.getShips().forEach(ship -> ship.setUsed(false))
-//        );
     }
 }

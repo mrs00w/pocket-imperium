@@ -2,13 +2,29 @@ package pimperium;
 
 import java.util.*;
 
+/**
+ * Classe représentant le terrain de jeu.
+ */
 public class Ground {
-	//faire une liste dynamique pour ajouter les cartes une par une
+	/**
+	 * Liste dynamique contenant les hexagones (Hex).
+	 */
 	private static List<Hex> hexes;
-	private List<SectorCard> sectorcards;
-	private List<Hex> triPrime;
-//	private int mapWidth = 6; // Largeur de la map en colonnes (maximum)
-//	private int mapHeight = 5;
+
+	/**
+	 * Liste des cartes de secteur.
+	 */
+	private final List<SectorCard> sectorcards;
+
+	/**
+	 * Liste des hexagones représentant le TriPrime.
+	 */
+	private final List<Hex> triPrime;
+
+	/**
+	 * Constructeur de la classe Ground.
+	 * Initialise les cartes de secteur, les hexagones et configure le terrain.
+	 */
 
 	public Ground() {
 		this.sectorcards = new ArrayList<SectorCard>();
@@ -20,21 +36,21 @@ public class Ground {
 		this.setupGround();
 	}
 
+	/**
+	 * Retourne la liste des hexagones formant le TriPrime.
+	 *
+	 * @return Liste des hexagones du TriPrime.
+	 */
 	public List<Hex> getTriPrime() {
 		return triPrime;
 	}
 
-//	public SectorCard findCentralCard(List<SectorCard> cards) {
-//		int targetPosition = 5; // L'identifiant recherché
-//
-//		// Utiliser Stream pour trouver la carte
-//		Optional<SectorCard> centralCard = cards.stream()
-//				.filter(card -> card.getPositionOnMap() == targetPosition)
-//				.findFirst();
-//
-//		// Retourner la carte ou null si elle n'existe pas
-//		return centralCard.orElse(null);
-//	}
+	/**
+	 * Retourne le joueur occupant actuellement le TriPrime.
+	 *
+	 * @return Joueur occupant le TriPrime, ou null si aucun.
+	 */
+
 	public Player getTriPrimeOccupant() {
 		Player occupant = null;
 		for (Hex hex : triPrime) {
@@ -43,21 +59,21 @@ public class Ground {
 		return occupant;
 	}
 
-	public SectorCard findCentralCard(List<SectorCard> cards) {
-		int targetPosition = 5; // L'identifiant recherché
-
-		// Utiliser Stream pour trouver la carte
-		Optional<SectorCard> centralCard = cards.stream()
-				.filter(card -> card.getPositionOnMap() == targetPosition)
-				.findFirst();
-
-		// Retourner la carte ou null si elle n'existe pas
-		return centralCard.orElse(null);
-	}
-
+	/**
+	 * Retourne la liste de tous les hexagones du terrain.
+	 *
+	 * @return Liste des hexagones.
+	 */
 	public List<Hex> getHexes() {
-			return hexes;
+		return hexes;
 	}
+
+	/**
+	 * Retourne un hexagone en fonction de son identifiant.
+	 *
+	 * @param id Identifiant de l'hexagone recherché.
+	 * @return Hexagone correspondant à l'identifiant, ou null si non trouvé.
+	 */
 
 	public Hex getHexById(int id) {
 		Hex hex = null;
@@ -69,6 +85,13 @@ public class Ground {
 		return hex;  //Si l'hex a été trouvé il est renvoyé sinon on renvoie null
 	}
 
+	/**
+	 * Retourne une carte de secteur en fonction de son identifiant.
+	 *
+	 * @param id Identifiant de la carte de secteur recherchée.
+	 * @return Carte de secteur correspondante, ou null si non trouvée.
+	 */
+
 	public SectorCard getSectorById(int id) {
 		for (SectorCard sc : sectorcards) {
 			if (sc.getId() == id) { //On cherche l'hexagone dont l'ID correspond a celui recherché
@@ -78,22 +101,24 @@ public class Ground {
 		return null;  //Si l'hex a été trouvé il est renvoyé sinon on renvoie null
 	}
 
+	/**
+	 * Retourne la liste des cartes de secteur.
+	 *
+	 * @return Liste des cartes de secteur.
+	 */
 	public List<SectorCard> getSectors() {
 		return sectorcards;
 	}
 
-//	public SectorCard getSectorByPositionOnMap(int positionOnMap) {
-//		return sectorcards.stream()
-//				.filter(sectorCard -> sectorCard.getPositionOnMap() == positionOnMap)
-//				.findFirst()
-//				.orElse(null);
-//	}
-
+	/**
+	 * Configure le terrain en initialisant les hexagones et leurs voisins.
+	 */
 	public void setupGround() {
-		// Initialisation de la map fixe
-        // par convention, l'id est setup comme suis :
-		// le premier chiffre : colonne
-		// le second chiffre : ligne
+		// Initialisation de la carte fixe avec des hexagones et des secteurs
+		// Par convention, l'id est structuré comme suit :
+		// - Premier chiffre : colonne
+		// - Deuxième chiffre : ligne
+
 		hexes.add(new Hex(11, 2, 1, 1, getSectorById(1)));
 		sectorcards.get(0).getHexes().add(hexes.get(0));
 		hexes.add(new Hex(21, 0, 2,1, getSectorById(1)));
@@ -204,48 +229,28 @@ public class Ground {
 		hexes.add(new Hex(69, 1, 5,9, getSectorById(9)));
 		sectorcards.get(8).getHexes().add(hexes.get(49));
 
-		// L'ordre des Secteurs est établi selon le sens de lecture d'un livre
-		// Développement de la posibilité de changer de map
-//		SectorCard sectorCard1 = new SectorCard(1, 3, 5, 1);
-//		SectorCard sectorCardReversed1 = new SectorCard(1, 1, 3, 4);
-//		SectorCard sectorCard2 = new SectorCard(2,1, 3, 4);
-//		SectorCard sectorCardReversed2 = new SectorCard(2,3, 5, 2);
-//		SectorCard sectorCard3 = new SectorCard(3,1,2,5);
-//		SectorCard sectorCardReversed3 = new SectorCard(3,1,2,5);
-//		SectorCard sectorCard4 = new SectorCard(4, 2, 4, 1);
-//		SectorCard sectorCardReversed4 = new SectorCard(4, 2, 4, 1);
-//		SectorCard sectorCard5 = new SectorCard(5);
-//		SectorCard sectorCard6 = new SectorCard(6, 1, 4, 3);
-//		SectorCard sectorCardReversed6 = new SectorCard(6, 1, 4, 3);
-//		SectorCard sectorCard7 = new SectorCard(7,1,2,3);
-//		SectorCard sectorCardReversed7 = new SectorCard(7,1,2,3);
-//		SectorCard sectorCard8 = new SectorCard(8,2,5,3);
-//		SectorCard sectorCardReversed8 = new SectorCard(8,2,5,3);
-//		SectorCard sectorCard9 = new SectorCard(9,4,5,6);
-//		SectorCard sectorCardReversed9 = new SectorCard(9,4,5,6);
+		// Ajout d'autres hexagones...
+		// (Code de configuration détaillé)
 
+		// Définition des voisins pour chaque hexagone
 
 		for (Hex h: hexes) {
 			creerListeVoisins(h);
 		}
-
+		// Ajout des hexagones spécifiques au TriPrime
 		getTriPrime().add(hexes.get(19));
 		getTriPrime().add(hexes.get(24));
 		getTriPrime().add(hexes.get(25));
 		getTriPrime().add(hexes.get(30));
-
-//		getTriPrime().ad
-		// Pour vérifier la liste de voisin des hexs
-		/*
-		for (Hex h: hexes){
-			System.out.print(h.getIdHex() + " et ses voisins : ");
-			for (Hex h1: h.getNeighbors()){
-				System.out.println(h1.getIdHex());
-			}
-		} */
 	}
 
-	// ***************************************************************
+	/**
+	 * Recherche un hexagone en fonction de sa colonne et de sa ligne.
+	 *
+	 * @param col Colonne de l'hexagone recherché.
+	 * @param ligne Ligne de l'hexagone recherché.
+	 * @return Hexagone correspondant, ou null si non trouvé.
+	 */
 
 	private Hex findHexByColAndLigne(int col, int ligne) {
 		return hexes.stream()
@@ -253,6 +258,12 @@ public class Ground {
 				.findFirst()
 				.orElse(null);
 	}
+
+	/**
+	 * Crée la liste des voisins pour un hexagone donné.
+	 *
+	 * @param h Hexagone pour lequel les voisins doivent être définis.
+	 */
 
 	public void creerListeVoisins(Hex h) {
 		for (Hex hex: hexes) {
@@ -284,76 +295,4 @@ public class Ground {
 			hex.setNeighbors(neighbors);
 		}
 	}
-
-//	public void swapCards(int index1, int index2) {
-//		if (index1 == centralCardIndex || index2 == centralCardIndex) {
-//			System.out.println("La carte centrale ne peut pas être déplacée !");
-//			return;
-//		}
-//		SectorCard temp = sectorcards.get(index1);
-//		sectorcards.set(index1, sectorcards.get(index2));
-//		sectorcards.set(index2, temp);
-//	}
-
-//	public void rotateCard(int index) {
-//		if (index == centralCardIndex) {
-//			System.out.println("La carte centrale ne peut pas être tournée !");
-//			return;
-//		}
-//		sectorcards.get(index).rotate();
-//	}
-//
-//	public void swapAndRotateTopBottom(int indexTop, int indexBottom) {
-//		if (indexTop < 0 || indexTop > 2 || indexBottom < 6 || indexBottom > 8) {
-//			System.out.println("Indices invalides ! Les cartes doivent être dans les lignes supérieures ou inférieures.");
-//			return;
-//		}
-//
-//		swapCards(indexTop, indexBottom);
-//
-//		// Faire une rotation de 180° sur les deux cartes
-//		sectorcards.get(indexTop).rotate();
-//		sectorcards.get(indexBottom).rotate();
-//	}
-
-//	public void shuffleMap() {
-//		Random random = new Random();
-//
-//		// Étape 1 : Mélanger les cartes latérales (3 et 5) avec 50% de chance
-//		if (random.nextBoolean()) { // 50% de chance
-//			SectorCard temp = sectorcards.get(3);
-//			sectorcards.set(3, sectorcards.get(5));
-//			sectorcards.set(5, temp);
-//		}
-//
-//		// Étape 2 : Mélanger les cartes du haut (0, 1, 2) et du bas (6, 7, 8)
-//		ArrayList<Integer> topIndices = new ArrayList<>(List.of(0, 1, 2));
-//		ArrayList<Integer> bottomIndices = new ArrayList<>(List.of(6, 7, 8));
-//
-//		// Mélange des cartes en haut
-//		Collections.shuffle(topIndices);
-//		// Mélange des cartes en bas
-//		Collections.shuffle(bottomIndices);
-//
-//		// Étape 3 : Échanger entre le haut et le bas en gérant la rotation
-//		for (int i = 0; i < 3; i++) {
-//			if (random.nextBoolean()) { // 50% chance d'échanger haut <-> bas
-//				// Indices correspondants
-//				int topIndex = topIndices.get(i);
-//				int bottomIndex = bottomIndices.get(i);
-//
-//				// Swap entre haut et bas avec rotation
-//				SectorCard temp = sectorcards.get(topIndex);
-//				sectorcards.set(topIndex, sectorcards.get(bottomIndex));
-//				sectorcards.set(bottomIndex, temp);
-//
-//				// Rotation de 180° pour l'alignement
-//				sectorcards.get(topIndex).rotate();
-//				sectorcards.get(bottomIndex).rotate();
-//			}
-//		}
-//
-//		// Étape 4 : La carte centrale reste fixe (indice 4)
-//		// Rien à faire ici
-//	}
 }

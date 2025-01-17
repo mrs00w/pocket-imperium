@@ -11,29 +11,42 @@ import pimperium.Game;
 
 import java.io.IOException;
 
+/**
+ * La classe principale permettant de lancer l'application avec une interface graphique en utilisant JavaFX.
+ */
+
 public class Main extends Application {
+
+    /**
+     * Point d'entrée principal de l'application JavaFX.
+     * Configure et affiche l'interface graphique principale de l'application.
+     *
+     * @param primaryStage La fenêtre principale de l'application.
+     * @throws IOException Si le fichier FXML ne peut pas être chargé.
+     */
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        // Charger la vue depuis le fichier FXML
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/resources/hello-view.fxml"));
         Parent root = fxmlLoader.load();
 
-        // Configurer la scène
+        // Configurer le contrôleur et lier le jeu à l'interface graphique
         Controller controller = fxmlLoader.getController();
         Game game = Game.getInstance();
         controller.setGame(game);
         game.setController(controller);
 
-        // Si tu utilises JavaFX
+        // Initialiser le jeu dans un thread séparé
         Thread guiThread = new Thread(game::setupGame);
         guiThread.setDaemon(true); // Permet au programme de se fermer si le thread principal termine
         guiThread.start();
 
+        // Créer et configurer la scène
         Scene scene = new Scene(root);
+        primaryStage.setResizable(false); // Empêcher le redimensionnement
+        primaryStage.setFullScreen(false); // Désactiver le mode plein écran par défaut
 
-        primaryStage.setResizable(false);
-        primaryStage.setResizable(false);
-        primaryStage.setFullScreen(false);
         primaryStage.fullScreenProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 primaryStage.setFullScreen(false);
@@ -47,10 +60,17 @@ public class Main extends Application {
             }
         });
 
+        // Configurer les propriétés de la fenêtre principale
         primaryStage.setTitle("Pocket Imperium");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
+    /**
+     * Méthode principale pour lancer l'application.
+     *
+     * @param args Les arguments de la ligne de commande.
+     */
 
     public static void main(String[] args) {
         launch(args);

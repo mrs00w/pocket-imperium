@@ -10,9 +10,17 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contrôleur pour l'interface utilisateur graphique.
+ * Interprète les données saisies par l'utilisateur, met à jour le modèle et reflète ces mises à jour dans la vue.
+ */
+
 public class Controller {
+    /**
+     * Instance du jeu pour la gestion des données et de la logique métier.
+     */
     private Game game;
-    // FXML fields pour chaque label dans le fichier FXML
+    // Champs FXML pour les différents labels hexagonaux dans le fichier FXML
     @FXML
     private Label hex11Label;
     @FXML
@@ -114,10 +122,16 @@ public class Controller {
     @FXML
     private Label hex69Label;
 
-
+    /**
+     * Map qui associe les identifiants des hexagones aux labels correspondants.
+     */
     // Map pour lier les IDs des hexes aux labels
     private final Map<Integer, Label> hexLabels = new HashMap<>();
 
+    /**
+     * Méthode appelée lors de l'initialisation du contrôleur.
+     * Associe chaque identifiant d'hexagone au label correspondant dans la vue.
+     */
     @FXML
     public void initialize() {
         // Associer chaque ID d'hex au label correspondant
@@ -182,9 +196,23 @@ public class Controller {
 
     }
 
+    /**
+     * Définit l'instance du jeu associée à ce contrôleur.
+     *
+     * @param game Instance du jeu à associer.
+     */
+
     public void setGame(Game game) {
         this.game = game;
     }
+
+    /**
+     * Met à jour le label correspondant à un hexagone donné.
+     *
+     * @param hexId             Identifiant de l'hexagone.
+     * @param shipCount         Nombre de vaisseaux présents sur l'hexagone.
+     * @param controllingPlayer Joueur contrôlant l'hexagone (peut être null).
+     */
 
     // Mettre à jour le texte et la visibilité du Label
     public void updateHexLabel(int hexId, int shipCount, Player controllingPlayer) {
@@ -207,6 +235,13 @@ public class Controller {
             }
         });
     }
+
+    /**
+     * Convertit une couleur Java en une chaîne RGB utilisable dans les styles CSS.
+     *
+     * @param color Couleur à convertir.
+     * @return Représentation de la couleur au format CSS (rgb(r, g, b)).
+     */
 
     private String toRgbString(Color color) {
         int r = (int) (color.getRed() * 255);

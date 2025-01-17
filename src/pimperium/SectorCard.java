@@ -2,15 +2,34 @@ package pimperium;
 
 import java.util.*;
 
+/**
+ * Représente une carte Secteur
+ */
+
 public class SectorCard {
-	private String typecard;
+	/**
+	 * Identifiant du secteur
+	 */
 	private int id; // Identifiant unique de la carte
-	private int[] idSystems;// Vrai si c'est la carte centrale
+	/**
+	 * Booléan qui indique si des vaisseaux sont présents dans le secteur
+	 */
+
 	private boolean hasShips=false;
-	private List<Hex> hexes;
-	private String orientation;
-	private int positionOnMap;
-	private Set<Player> playerInSector;
+	/**
+	 * Liste des Hex appartenant secteur
+	 */
+	private final List<Hex> hexes;
+	/**
+	 * Set contenant les joueurs présents dans le secteur
+	 */
+
+	private final Set<Player> playerInSector;
+
+	/**
+	 * Crée un secteur
+	 * @param id identifiant du secteur
+	 */
 
 	public SectorCard(int id) {
 		this.id = id;
@@ -18,46 +37,40 @@ public class SectorCard {
 		this.hexes = new ArrayList<>();
 	}
 
-	// Relique de l'initiolisation de la map en mélangeant les sectorCards
-//	public SectorCard(int id, int positionSystem11, int positionSystem12, int positionSystem2) {
-//		this.id = id;
-//		this.idSystems = new int[3];
-//		idSystems[0] = positionSystem11;
-//		idSystems[1] = positionSystem12;
-//		idSystems[2] = positionSystem2;
-//	}
-
-	public Set<Player> getPlayerInSector() {
-		return playerInSector;
-	}
+	/**
+	 * Renvoie l'id du secteur
+	 * @return l'id du secteur
+	 */
 
 	public int getId() {
 		return id;
 	}
 
+	/**
+	 * Indique si des vaisseaux sont présents dans le secteur
+	 * @param hasShips boolean
+	 */
+
 	public void setHasShips(boolean hasShips) {
 		this.hasShips = hasShips;
 	}
+
+	/**
+	 * Récupère le marqueur qui indique si des vaisseaux sont présents dans le secteur
+	 * @return boolean
+	 */
 
 	public boolean getHasShips(){
 		return this.hasShips;
 	}
 
-	public void setPositionOnMap(int positionOnMap) {
-		this.positionOnMap = positionOnMap;
-	}
-
-	public int getPositionOnMap() {
-		return positionOnMap;
-	}
+	/**
+	 * Renvoie les Hex du secteur
+	 * @return Liste contenant les Hex du secteur
+	 */
 
 	public List<Hex> getHexes() {
 		return hexes;
 	}
-
-	public void setHexes(List<Hex> hexes) {
-		this.hexes = hexes;
-	}
-
 
 }

@@ -2,19 +2,48 @@ package pimperium;
 import gui.Controller;
 import java.util.*;
 
+/**
+ * Représente la Command Card Expand
+ */
+
 public class ExpandCard implements CommandCard{
 
+	/**
+	 * Le nom du joueur qui possède cette Command Card
+	 */
+
 	private final Player player;
+
+	/**
+	 * Crée une carte Expand
+	 * @param player
+	 */
 
 	public ExpandCard(Player player) {
 		this.player = player;
 	}
 
+	/**
+	 * Récupère la priorité de cette carte
+	 * @return la priorité de la carte
+	 */
+
 	public int getPriority() {
         return 1;
 	}
 
+	/**
+	 * Récuère le nom de la carte
+	 * @return le nom de la carte
+	 */
+
 	public String getName(){return "expand";}
+
+	/**
+	 * Exécute les instructions de la carte Expand. Le joueur augmente ses vaisseaux sur le plâteau. Il ne peut en
+	 * ajouter que sur les systèmes qu'il contrôle
+	 * @param currentRound La position de la carte à exécuter
+	 */
 
 	public void execute(int currentRound) {
 		System.out.println(STR."\n\{player.getName()} ajoute de nouveaux vaisseaux sur le plateau");
@@ -33,9 +62,8 @@ public class ExpandCard implements CommandCard{
 			System.out.println("Le bot a décidé de jouer la carte Expand.");
 		}
 
-		//
- 		//Cette partie là on l'utilise pour chaque CommandCard, on peut (je pense) mettre cette méthode dans commandCard et la réutiliser (au lieu de la réécrire)
 		// Filtrer les joueurs ayant choisi la carte Expand
+
 		List<Player> expandPlayers = players.stream()
 				.filter(p -> p.getCard(currentRound) instanceof ExpandCard)
 				.toList();
@@ -48,9 +76,6 @@ public class ExpandCard implements CommandCard{
 			case 2 -> 2;
 			default -> 1;
 		};
-		//Jusqu'ici c'est ce qu'on réécrit
-
-
 
 		// Collecte des hexes contrôlés par le joueur
 		List<Hex> controlledHexes = game.getGround().getHexes().stream()
@@ -59,14 +84,12 @@ public class ExpandCard implements CommandCard{
 				.toList();
 
 		// Vérification : le joueur contrôle-t-il des systèmes ?
-		//dans le cas où le joueur n'est pas mort (donc il a encore des vaisseaux sur la map)
-		//mais il ne controle pas de système
 		if (controlledHexes.isEmpty()) {
 			System.out.println(player.getName()+" ne contrôle aucun hex pour ajouter des vaisseaux.");
 			return;
 		}
 
-//		// Initialisation pour la lecture utilisateur
+		// Initialisation pour la lecture utilisateur
 
 		for (int i = 0; i < shipsToAdd; i++) {
 			if (player.getShipsHorsPlateau().isEmpty()){

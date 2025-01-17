@@ -7,13 +7,66 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.*;
 
+/**
+ * Représente une partie
+ */
+
 public class Game {
+	/**
+	 * Instance statique du jeu.
+	 * Ce champ est utilisé pour accéder à l'instance unique du jeu en cours.
+	 *
+	 * @since 1.0
+	 */
 	private static Game game = null;
+
+	/**
+	 * Liste des joueurs participant à la partie.
+	 * Cette liste contient tous les joueurs actuellement actifs dans le jeu.
+	 *
+	 * @since 1.0
+	 */
 	private final List<Player> players;
+
+	/**
+	 * Terrain sur lequel les joueurs évoluent.
+	 * Cette variable contient les informations relatives au terrain du jeu,
+	 * telles que la disposition des secteurs et des ressources.
+	 *
+	 * @since 1.0
+	 */
 	private Ground ground;
+
+	/**
+	 * Le numéro actuel du tour de jeu.
+	 * Ce champ est utilisé pour suivre le nombre de tours qui se sont écoulés
+	 * depuis le début de la partie.
+	 *
+	 * @since 1.0
+	 */
 	private static int round = 0;
+
+	/**
+	 * Carte centrale du jeu.
+	 * Cette carte contient des informations stratégiques qui influencent le déroulement
+	 * du jeu, et elle est placée au centre du terrain.
+	 *
+	 * @since 1.0
+	 */
 	private SectorCard centralCard;
+
+	/**
+	 * Contrôleur du jeu.
+	 * Ce contrôleur gère l'interaction entre les différentes parties du jeu, les joueurs
+	 * et les événements du jeu.
+	 *
+	 * @since 1.0
+	 */
 	private Controller controller;
+
+	/**
+	 * Constructeur privé pour le singleton de la partie.
+	 */
 
 	private Game() {
 		this.ground = new Ground();
@@ -21,13 +74,31 @@ public class Game {
 		this.centralCard = ground.getSectorById(4);
 	}
 
+	/**
+	 * Définit le contrôleur de l'interface.
+	 *
+	 * @param controller Le contrôleur à associer.
+	 */
+
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}
 
+	/**
+	 * Obtient le contrôleur de l'interface.
+	 *
+	 * @return Le contrôleur actuel.
+	 */
+
 	public Controller getController() {
 		return controller;
 	}
+
+	/**
+	 * Récupère l'instance unique de la classe Game.
+	 *
+	 * @return L'instance unique.
+	 */
 
 	public static Game getInstance() {
 		if (game == null) {
@@ -36,6 +107,10 @@ public class Game {
 		}
 		return game;
 	}
+
+	/**
+	 * Met à jour les secteurs contrôlés par chaque joueur.
+	 */
 
 	public void updateControlledSectors() {
 		// Parcours de tous les hexagones de la carte
@@ -53,56 +128,36 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Réinitialise les secteurs contrôlés par chaque joueur.
+	 */
+
 	public void clearControlledSectors() {
 		for (Player p : Game.getInstance().getPlayers()) {
 			p.getControlledSectors().clear();
 		}
 	}
 
+	/**
+	 * Calcule les scores des joueurs pour un tour donné.
+	 */
+
 	public void calculScore() {
 		System.out.println("Calcul des scores de chaque joueur pour le round");
-
-		//on va bazarder c'te partie :
-
-//		clearControlledSectors();
-//		updateControlledSectors();
-		//Demande à chaque joueur de choisir une sectorCard
-		//Les joueurs n'ont pas droit de choisir une sectorCard qui a déjà été choisie
-		//Le joueur qui contrôle le TriPrime a le droit de sélectionner une sectorCard de plus
-		//Personne ne peut sélectionner le TriPrime
-		//Pour chaque sectorCard, si des systemes sont controlés, le joueur qui le controle gagne autant de point
-		// que le niveau du systeme (peut importe qui a choisi la carte)
 		Set<SectorCard> chosenSectors = new HashSet<>();
-//		Map<Player, SectorCard> playerChoices = new HashMap<>();
 		Player triPrimeController = ground.getTriPrimeOccupant();
 
 		for (Player player : players) {
 
-            //Ma partie
-//            SectorCard chosenSector=null;
-  //          while(chosenSector==null) {
-    //            chosenSector = chooseSector(player, chosenSectors);
-    //        }
-    //        chosenSectors.add(chosenSector);
-    //        playerChoices.put(player, chosenSector);
-//          }
-
             SectorCard chosenSector;
-//			if (player instanceof Bot) {
-//				chosenSector = chooseSectorBot((Bot) player, chosenSectors);
-//                chosenSectors.add(chosenSector);
-//                playerChoices.put(player, chosenSector);
-//            } else {
 			chosenSector = chooseSector(player, chosenSectors);
 			chosenSectors.add(chosenSector);
-//				playerChoices.put(player, chosenSector);
 			for (Hex hex : chosenSector.getHexes()) {
 				if (hex.getLevelSystem() > 0 && hex.getCurrentOccupant() != null) {
 					hex.getCurrentOccupant().addPoints(hex.getLevelSystem());
 					System.out.println(hex.getCurrentOccupant().getName()+" a gagné "+hex.getLevelSystem()+" points.");
 				}
 			}
-//			}
 		}
 
 		if (triPrimeController != null) {
@@ -114,22 +169,13 @@ public class Game {
 				}
 			}
         }
-
-		// Calculer les scores
-//		for (Map.Entry<Player, SectorCard> entry : playerChoices.entrySet()) {
-//			Player player = entry.getKey();
-//			SectorCard sectorCard = entry.getValue();
-//			calculateSectorPoints(sectorCard);
-//		}
-
-//		if (triPrimeController != null) {
-//			for (SectorCard extraSector : chosenSectors) {
-//				if (triPrimeController.controlsSector(extraSector)) {
-//					calculateSectorPoints(extraSector);
-//				}
-//			}
-//		}
 	}
+
+	/**
+	 * Détermine le joueur qui contrôle le secteur central TriPrime.
+	 *
+	 * @return Le joueur contrôlant le TriPrime ou null si aucun joueur ne le contrôle.
+	 */
 
 	public Player getTriPrimeController() {
 		for (Player player : players) {
@@ -139,6 +185,14 @@ public class Game {
 		}
 		return null;
 	}
+
+	/**
+	 * Permet à un joueur de choisir un secteur.
+	 *
+	 * @param player         Le joueur effectuant le choix.
+	 * @param chosenSectors  Les secteurs déjà choisis.
+	 * @return Le secteur choisi.
+	 */
 
 	public SectorCard chooseSector(Player player, Set<SectorCard> chosenSectors) {
 		if(player instanceof Bot) {
@@ -156,24 +210,7 @@ public class Game {
 				return ground.getSectorById(randomId);
 			}
 		}
-//			List<Integer> sectorIdControlledByBot = new ArrayList<>();
-//
-//			int idSectorById = random.nextInt(9);
-//
-//			for (SectorCard sector: player.getControlledSectors()) {
-//				sectorIdControlledByBot.add(sector.getId());
-//			}
-//
-//			int sectorIdChoosen = sectorIdControlledByBot.get(random.nextInt(sectorIdControlledByBot.size()));
-//
-//			for (SectorCard sector: player.getControlledSectors()) {
-//				if (sector.getId() == sectorIdChoosen && sector != centralCard) {
-//					sectorChoosen = sector;
-//				} else {
-//					chooseSector(player, chosenSectors);
-//				}
-//			}
-//		}
+
 		while (true) {
 			System.out.println("Quel secteur voulez-vous choisir " + player.getName() + "? (Entrez l'ID de position sur la carte)");
 			Scanner reader = new Scanner(System.in);
@@ -188,32 +225,22 @@ public class Game {
 			}
 
 			return ground.getSectorById(idSectorById);
-
-//		if (player.getControlledSectors().contains(sector)) {
-//			System.out.println("Le joueur est bien présent dans ce secteur " + idSectorById);
-//		}
-
-			// Vérifie si le secteur est valide
-//		if (sector != null && sector.getId() == idSectorById) { // Vérifie que l'ID correspond
-//			if (!chosenSectors.contains(sector) && sector != centralCard && player.controlsSector(sector)) {
-//				return sector; // Retourne le secteur si toutes les conditions sont respectées
-//			} else {
-//				System.out.println("Ce secteur ne peut pas être choisi (déjà choisi, central, ou non contrôlé par le joueur).");
-//				chooseSector(player, chosenSectors); // Optionnel : Si le secteur n'est pas valide
-//			}
-//		}
-//		System.out.println("Aucun secteur correspondant à cet ID n'a été trouvé.");
-//		return null; // Si aucun secteur valide n'est trouvé
 		}
 	}
+
+	/**
+	 * Choix de secteur pour un bot.
+	 *
+	 * @param bot            Le bot effectuant le choix.
+	 * @param chosenSectors  Les secteurs déjà choisis.
+	 * @return Le secteur choisi par le bot.
+	 */
 
 	private SectorCard chooseSectorBot(Bot bot, Set<SectorCard> chosenSectors) {
 		System.out.println(bot.getName() + "choisi un secteur");
 		Random random = new Random();
 
 		List<SectorCard> sectorControlledbyBotList = new ArrayList<SectorCard>(bot.getControlledSectors());
-
-//        sectorControlledbyBotList.remove(centralCard);
 
 		for (SectorCard s: chosenSectors) {
             sectorControlledbyBotList.remove(s);
@@ -233,9 +260,14 @@ public class Game {
 		return sectorChoosen;
 	}
 
+	/**
+	 * Calcule les points obtenus par les joueurs dans un secteur donné.
+	 *
+	 * @param sectorCard Le secteur à partir duquel les points sont calculés.
+	 */
+
 	private void calculateSectorPoints(SectorCard sectorCard) {
 		for (Hex hex : sectorCard.getHexes()) {
-//			if (player.controlsHex(hex)) {
 			Player hexOwner = hex.getCurrentOccupant();
 			if (hex.getLevelSystem() > 0 && hexOwner != null) {
 				int points = hex.getLevelSystem();
@@ -245,17 +277,40 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Retourne la liste des joueurs participant à la partie.
+	 *
+	 * @return Une liste des joueurs {@link Player}.
+	 */
+
 	public List<Player> getPlayers() {
 		return this.players;
 	}
 
+	/**
+	 * Retourne le plateau de jeu.
+	 *
+	 * @return Le plateau de jeu {@link Ground}.
+	 */
 	public Ground getGround() {
 		return ground;
 	}
 
+	/**
+	 * Retourne le numéro du tour actuel.
+	 *
+	 * @return Le numéro de tour actuel.
+	 */
 	public static int getRound() {
 		return round;
 	}
+
+	/**
+	 * Compare l'ordre des joueurs en fonction de la priorité d'une carte donnée.
+	 *
+	 * @param indiceCard L'indice de la carte à comparer.
+	 * @return Une liste des joueurs triée par ordre de priorité.
+	 */
 
 	public List<Player> compareOrder(int indiceCard) {
 		List<Player> copie = new ArrayList<>(players);
@@ -263,6 +318,10 @@ public class Game {
 				.thenComparingInt(Player::getPriority)); // Comparer la priorité des joueurs en cas d'égalité);
 		return copie;
 	}
+
+	/**
+	 * Gère le maintien des vaisseaux sur le plateau en retirant les excédents.
+	 */
 
 	public void sustainShips() {
 		System.out.println("On retire les vaisseaux en trop");
@@ -294,6 +353,10 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Initialise le déploiement des vaisseaux au début de la partie.
+	 */
+
 	public void initialShipDeployment() {
 		System.out.println("");
 		List<Player> players = game.getPlayers();
@@ -314,17 +377,18 @@ public class Game {
 		updateControlledSectors();
 	}
 
+	/**
+	 * Place les vaisseaux d'un joueur sur le plateau.
+	 *
+	 * @param player Le joueur plaçant les vaisseaux.
+	 * @param ground Le plateau de jeu.
+	 */
+
 	private void placeShips(Player player, Ground ground) {
 		// Obtenez tous les systèmes de niveau 1 non occupés dans des secteurs non occupés
 		List<Hex> availableHexes = ground.getHexes().stream()
 				.filter(hex -> hex.getLevelSystem() == 1 && hex.getCurrentOccupant() == null && !ground.getSectorById(hex.getSectorId()).getHasShips())
 				.toList();
-
-		//ça ça n'arrivera jamais vu qu'on l'utilise qu'au moment de l'initialisation (pour le moment)
-//		if (availableHexes.isEmpty()) {
-//			System.out.println("Aucun hex disponible pour le placement des vaisseaux.");
-//			return;
-//		}
 
 		// Sélectionner un hex disponible pour le placement
 
@@ -359,13 +423,13 @@ public class Game {
 			}
 		}
 
-// Une fois sorti, on a bien validé targetHex
-
 		System.out.println("\nHex sélectionné : " + targetHex.getIdHex());
 
 		for (int i=0; i<2; i++) {//On prend 2 vaisseaux hors du plateau et on les place sur l'Hex choisi
-			player.getShipsHorsPlateau().peek().setPosition(targetHex); //positionne un vaisseau au niveau de l'hexagone cible
-			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek()); //On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
+			player.getShipsHorsPlateau().peek().setPosition(targetHex);
+			// positionne un vaisseau au niveau de l'hexagone cible
+			player.getShipsSurPlateau().add(player.getShipsHorsPlateau().peek());
+			// On ajoute le nouveau vaisseau à la liste des vaisseaux situés sur le plateau
 			targetHex.getShips().add(player.getShipsHorsPlateau().peek());
 			player.addControlledSector(targetHex.getSector());
 			int shipCount = targetHex.getShips().size();
@@ -380,6 +444,10 @@ public class Game {
 
 		System.out.println(STR."\{player.getName()} a placé 2 vaisseaux sur le système \{targetHex.getIdHex()}");
 	}
+
+	/**
+	 * Exécute un nouveau tour
+	 */
 
 	public void nextRound() {
 		round++;
@@ -403,14 +471,25 @@ public class Game {
 		}
 		sustainShips();
 		calculScore();
+		for (Player p : players){
+			System.out.println(p.getName()+" a "+p.getScore()+" points.");
+		}
 		updatePriority(); //Le marqueur "Premier Joueur" passe au joueur suivant
 	}
+
+	/**
+	 * Modifie la priorité des joueurs. Représente la rotation des joueurs.
+	 */
 
 	private void updatePriority() {
 		for (Player p: players){
 			p.updatePrio();
 		}
 	}
+
+	/**
+	 * Méthode principale pour configurer et lancer une partie.
+	 */
 
 	public void setupGame() {
 		Game game = getInstance();
@@ -442,7 +521,7 @@ public class Game {
 		}
 
 		// Ajouter les bots
-		//On complète avec des bots jusqu'à avoir 3 joueurs dans la partie
+		// On complète avec des bots jusqu'à avoir 3 joueurs dans la partie
 		for (int i = 0; i < 3-humanPlayers; i++) {
 			players.add(new Bot(i));
 		}
@@ -454,13 +533,12 @@ public class Game {
 		//Maintenant que la map et les joueurs sont créés on peut initialiser le terrain
 		System.out.println("\nInitialisation du terrain");
 		game.initialShipDeployment();
-		//J'ai mis la limite à 2 juste le temps des tests
 		while ((getRound() < 9) && (game.players.size() != 2)) {
 			game.nextRound();
 		}
 
-		if(getRound()==9) { //C'est à dire qu'on a atteint la fin de la partie
-			//reparcourir l'ensemble des systèmes pour accorder les points x2
+		if(getRound()==9) { // C'est à dire qu'on a atteint la fin de la partie
+			// reparcourir l'ensemble des systèmes pour accorder les points x2
 			for (Hex hex : game.getGround().getHexes()) {
 				if (hex.getLevelSystem() > 0 && hex.getLevelSystem() < 3 && hex.getCurrentOccupant() != null) {
 					hex.getCurrentOccupant().addPoints(hex.getLevelSystem() * 2);
